@@ -8,7 +8,9 @@ import {
   StatusBar,
   TouchableOpacity,
   Alert,
-  Image
+  Image,
+  Modal,
+  Dimensions
 } from 'react-native';
 
 import {
@@ -21,7 +23,8 @@ import {
 import DocumentScanner from "@woonivers/react-native-document-scanner"
 import CustomCrop from "react-native-perspective-image-cropper";
 import ImageSize from 'react-native-image-size'
-import ImgToBase64 from 'react-native-image-base64';
+import ImageViewer from 'react-native-image-zoom-viewer';
+
 
 
 export default class Scanner extends React.Component {
@@ -33,7 +36,6 @@ constructor(props){
       pdfScannerElement: React.createRef(),
       isScannerRendered: true,
       isCropperRendered: false,
-      isImagePreview: false,
 
       originImg: null,
       imgURI: null,
@@ -114,12 +116,15 @@ constructor(props){
       }
 
     updateImage(image, newCoordinates) {
-      this.setState({
+      images = []
+      images.push({url: `data:image/gif;base64,${image}`})
+      this.props.navigation.navigate('ScanStack', {params:{img: images}, screen: 'ScanPreview'})
+    /*   this.setState({
         initialImage: image,
        // rectangleCoordinates: newCoordinates,
         isCropperRendered: false,
         isImagePreview: true,
-      });
+      }); */
     }
    
     crop() {
@@ -128,52 +133,51 @@ constructor(props){
 
     renderCropper(){
       return(
-        <View>
-        <View style = {{flex:1, width: this.state.imageWidth/5, height: this.state.imageHeight/5}}>
-          
-       <CustomCrop
-       style = {{
-         marginTop:100,
-         margin: 100, 
-         
-       }}
-    updateImage={this.updateImage.bind(this)}
-    //rectangleCoordinates={this.state.rectangleCoordinates}
-    initialImage={this.state.initialImage}
-    height={this.state.imageHeight}
-    width={this.state.imageWidth}
-    ref={(ref) => this.customCrop = ref}
-    overlayColor="rgba(18,190,210, 1)"
-    overlayStrokeColor="rgba(20,190,210, 1)"
-    handlerColor="rgba(20,150,160, 1)"
-    enablePanStrict={true}
-      /> 
         
-      </View>
-      <View>
-        <TouchableOpacity  style={styles.cropButton} onPress={this.crop.bind(this)}>
+        <View >
+        <View> 
+          <View style = {{marginBottom:20,}}>
+          <TouchableOpacity  style={styles.cropButton} onPress={this.crop.bind(this)}>
           <Text>CROP IMAGE</Text>
         </TouchableOpacity>
+          </View>
+          <View>
+       <CustomCrop
+              style = {{
+              /*   marginTop:100,
+                margin: 100,  */
+                
+              }}
+            updateImage={this.updateImage.bind(this)}
+            //rectangleCoordinates={this.state.rectangleCoordinates}
+            initialImage={this.state.initialImage}
+            height={this.state.imageHeight}
+            width={this.state.imageWidth}
+            ref={(ref) => this.customCrop = ref}
+            overlayColor="rgba(18,190,210, 1)"
+            overlayStrokeColor="rgba(20,190,210, 1)"
+            handlerColor="rgba(20,150,160, 1)"
+            enablePanStrict={true}
+      /> 
       </View>
+        
+       </View> 
+  
+     {/*  <View>
+       
+      </View> */}
+
       </View>
       )
   }
 
-  renderPreview(){
-    return(
-      <View style = {{alignContent: 'center', justifyContent:'center', alignItems:'center'}}>
-      <Image  style={{ marginTop: 40, width: this.state.imageWidth/5, height: this.state.imageHeight/5, borderWidth:5, borderColor: 'black', resizeMode: 'stretch'}}
-      resizeMode='contain' source={{uri: `data:image/gif;base64,${this.state.initialImage}`}} />
-      </View>
-    )
-  }
+  
 
     render(){
       return(
         <React.Fragment>
              {this.state.isScannerRendered && this.renderScanner()}
              {this.state.isCropperRendered && this.renderCropper()}
-             {this.state.isImagePreview && this.renderPreview()}
         </React.Fragment>
       )
     }
@@ -189,15 +193,15 @@ const styles = StyleSheet.create({
     aspectRatio:undefined
   },
   cropButton:{
-    top: 600,
+  //  top: 600,
     width: 220,
     height: 50,
     backgroundColor: "#711401ff",
-    justifyContent: 'center',
-    alignItems: 'center',
-   marginTop: 20,
+    //justifyContent: 'center',
+   // alignItems: 'center',
+   //marginTop: 20,
    borderRadius:30,
-   marginBottom: 20,
+  // marginBottom: 20,
   },
   scanButton: {
     width: 220,

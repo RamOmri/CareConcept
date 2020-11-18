@@ -12,6 +12,7 @@ import {
 } from 'react-native'
 
 import Scanner from './Scanner'
+import ScanPreview from './ScanPreview'
 import imageCrop from './imageCrop'
 
     const Stack = createStackNavigator()
@@ -21,6 +22,7 @@ import imageCrop from './imageCrop'
         headerShown: false
         }}>
       <Stack.Screen name='Scanner' component={Scanner} />
+      <Stack.Screen name = 'ScanPreview' component = {ScanPreview} />
       <Stack.Screen name= 'imageCrop' component={imageCrop} />
     
     </Stack.Navigator>
