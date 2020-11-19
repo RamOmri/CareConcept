@@ -21,7 +21,6 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 import DocumentScanner from "@woonivers/react-native-document-scanner"
-import CustomCrop from "react-native-perspective-image-cropper";
 import ImageSize from 'react-native-image-size'
 import ImageViewer from 'react-native-image-zoom-viewer';
 
@@ -92,27 +91,7 @@ constructor(props){
 
 
     async handleScannedDocument(base64Img, init){      
-        await ImageSize.getSize(base64Img).then(size => {
-           this.setState({
-             initialImage: base64Img,
-            originImg: init,
-            imageWidth: size.width,
-            imageHeight: size.height,
-            rectangleCoordinates: {
-              topLeft: { x: -10, y: 10 },
-              topRight: { x: 10, y: 10 },
-              bottomRight: { x: 10, y: -10 },
-              bottomLeft: { x: 10, y: -10 }
-            },
-             isScannerRendered: false,
-            isCropperRendered: true 
-          }) 
-          
-      }).
-      catch(err => alert("Something went wrong while attempting to setup image-croper: " + err));
-
-     
-          
+      this.props.navigation.navigate('ScanStack', {params:{img: base64Img}, screen: 'imageCrop'})
       }
 
     updateImage(image, newCoordinates) {

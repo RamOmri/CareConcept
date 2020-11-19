@@ -18,35 +18,25 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 import DocumentScanner from "@woonivers/react-native-document-scanner"
-import CustomCrop from "react-native-perspective-image-cropper";
 import ImageSize from 'react-native-image-size'
+import { CropView } from 'react-native-image-crop-tools';
 
 
 export default class imageCrop extends React.Component {
 constructor(props){
   super(props)
   this.state = {
-    croppedImage: this.props.route.params.cropped,
-    initialImage: this.props.route.params.initial,
+    scannedImage: this.props.route.params.img,
     imageHeight: 0,
     imageWidth: 0,
-    rectangleCoordinates: null
+    cropRef: React.createRef()
     
   }
 
-  ImageSize.getSize(this.props.route.params.initial).then(size => {
-    this.setState({
-      imageWidth: size.width,
-      imageHeight: size.height,
-      rectangleCoordinates: {
-        topLeft: { x: 10, y: 10 },
-        topRight: { x: 10, y: 10 },
-        bottomRight: { x: 10, y: 10 },
-        bottomLeft: { x: 10, y: 10 }
-      }
-    });
-})
+}
 
+componentDidMount(){
+ // alert(this.state.scannedImage)
 }
 
 
@@ -62,31 +52,16 @@ constructor(props){
   }
     render(){
         return(
-          <View>
-         <CustomCrop
-          style={{
-            flex: 0,
-            aspectRatio: 1,
-            backgroundColor: 'red',
-            border: '1px solid red',
-          }}
-          updateImage={()=>{
-
-          }}
-          //rectangleCoordinates={this.state.rectangleCoordinates}
-          initialImage=  {require('./me.jpg')}
-          height={this.state.imageHeight}
-          width={this.state.imageWidth}
-          path={this.state.path}
-          ref={ref => (this.CustomCrop = ref)}
-          overlayColor="rgba(18,190,210, 1)"
-          overlayStrokeColor="rgba(20,190,210, 1)"
-          handlerColor="rgba(20,150,160, 1)"
-          enablePanStrict={false}
-        /> 
-          <TouchableOpacity onPress={this.crop.bind(this)}>
-            <Text>CROP IMAGE</Text>
-          </TouchableOpacity>
+          <View style = {{flex: 1}}>
+            <CropView
+          sourceUrl={this.state.scannedImage}
+          style={{flex: 1,
+            backgroundColor: 'red'}}
+          ref={this.state.cropRef}
+          onImageCrop={(res) => console.warn(res)}
+          //keepAspectRatio
+          aspectRatio={{width: 16, height: 9}}
+        />
         </View>
         )
     }
