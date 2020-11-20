@@ -52,16 +52,44 @@ componentDidMount(){
   }
     render(){
         return(
-          <View style = {{flex: 1}}>
-            <CropView
-          sourceUrl={this.state.scannedImage}
-          style={{flex: 1,
-            backgroundColor: 'red'}}
-          ref={this.state.cropRef}
-          onImageCrop={(res) => console.warn(res)}
-          //keepAspectRatio
-          aspectRatio={{width: 16, height: 9}}
-        />
+          <View style = {{flex:1, backgroundColor:'black', justifyContent:'center',}}>
+              <View style = {{flex: 0.9, margin: 20, justifyContent: 'center', backgroundColor:'black'}}>
+                <CropView
+                    sourceUrl={this.state.scannedImage}
+                    style={{flex: 1,
+                    backgroundColor: 'grey'}}
+                    ref={this.state.cropRef}
+                    onImageCrop={(res) => {
+                      this.setState({scannedImage: res.uri})
+                     // alert(JSON.stringify(res))
+                    }}
+                    aspectRatio={{width: 16, height: 9}}
+                 />
+            </View>
+
+                <View style ={{flex:0.1, alignItems:'center', flexDirection:'row', justifyContent:'center'}}>
+                             <TouchableOpacity
+                                  style={{backgroundColor:'blue', margin: 10}}
+                                  onPress={() =>{
+                                    this.state.cropRef.current.saveImage(true, 100)
+                                  }}
+                                      >
+                                  <Text style={{ fontSize: 18, color: "white", margin: 10 }}>
+                                      Crop
+                                  </Text>
+                              </TouchableOpacity>
+
+                              <TouchableOpacity
+                                  style={{backgroundColor:'blue'}}
+                                  onPress={() =>{
+                                    this.state.cropRef.current.rotateImage(true) // true for clockwise, false for counterclockwise)
+                                  }}
+                                      >
+                                  <Text style={{ fontSize: 18, color: "white", margin: 10 }}>
+                                      Rotate
+                                  </Text>
+                              </TouchableOpacity>
+                                            </View>
         </View>
         )
     }
