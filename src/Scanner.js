@@ -24,6 +24,7 @@ import DocumentScanner from "@woonivers/react-native-document-scanner"
 import ImageSize from 'react-native-image-size'
 import ImageViewer from 'react-native-image-zoom-viewer';
 import RNFetchBlob from 'rn-fetch-blob'
+import ImgToBase64 from 'react-native-image-base64';
 
 
 
@@ -37,19 +38,29 @@ constructor(props){
    
 }
 
-async handleScannedDocument(Img, init){      
-  RNFetchBlob.fs
-  .unlink(Img)
-  .then(() => {
-    alert("File deleted");
-  })
-  .catch(err => {
-    alert(err);
-  }); 
- // alert(Img)
- // this.props.navigation.navigate('ScanStack', {params:{img: Img}, screen: 'imageCrop'})
+async unCacheImg(){
+  await RNFetchBlob.fs
+          .unlink(Img)
+          .then(() => {
+            //do nothing because file was successfully deleted
+          })
+          .catch(err => {
+            alert(err);
+          }); 
   }
 
+async handleScannedDocument(Img, unCroppedImage){   
+  let base64Img = ''   
+ await  ImgToBase64.getBase64String(Img)
+  .then(base64String => {base64Img = base64String})
+  .catch(err => alert(err));
+
+  this.unCacheImg(Img)
+
+  this.props.navigation.navigate('ScanStack', {params:{img: base64Img}, screen: 'imageCrop'})
+  }
+
+  
 
     renderScanner(){
         return(
