@@ -26,26 +26,14 @@ export default class imageCrop extends React.Component {
 constructor(props){
   super(props)
   this.state = {
-    scannedImage: this.props.route.params.img,
+    Image: this.props.route.params.img,
     imageHeight: 0,
     imageWidth: 0,
     cropRef: React.createRef()
     
   }
-
+  alert(this.state.Image)
 }
-
-componentDidMount(){
- // alert(this.state.scannedImage)
-}
-
-
-  updateImage(image, newCoordinates) {
-    this.setState({
-      image,
-      rectangleCoordinates: newCoordinates
-    });
-  }
  
   crop() {
     this.CustomCrop.crop();
@@ -55,13 +43,12 @@ componentDidMount(){
           <View style = {{flex:1, backgroundColor:'black', justifyContent:'center',}}>
               <View style = {{flex: 0.9, margin: 20, justifyContent: 'center', backgroundColor:'black'}}>
                 <CropView
-                    sourceUrl={this.state.scannedImage}
+                    sourceUrl={this.state.Image}
                     style={{flex: 1,
                     backgroundColor: 'grey'}}
                     ref={this.state.cropRef}
                     onImageCrop={(res) => {
-                      this.setState({scannedImage: res.uri})
-                     // alert(JSON.stringify(res))
+                      this.setState({Image: res.uri})
                     }}
                     aspectRatio={{width: 16, height: 9}}
                  />
@@ -89,6 +76,18 @@ componentDidMount(){
                                       Rotate
                                   </Text>
                               </TouchableOpacity>
+
+                              <TouchableOpacity
+                                  style={{backgroundColor:'blue', marginLeft:5}}
+                                  onPress={() =>{
+                                    this.props.navigation.navigate('ScanStack', {params:{img: this.state.Image}, screen: 'ScanPreview'}) // true for clockwise, false for counterclockwise)
+                                  }}
+                                      >
+                                  <Text style={{ fontSize: 18, color: "white", margin: 10 }}>
+                                      Continue
+                                  </Text>
+                              </TouchableOpacity>
+
                                             </View>
         </View>
         )

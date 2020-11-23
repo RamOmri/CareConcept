@@ -23,6 +23,7 @@ import {
 import DocumentScanner from "@woonivers/react-native-document-scanner"
 import ImageSize from 'react-native-image-size'
 import ImageViewer from 'react-native-image-zoom-viewer';
+import RNFetchBlob from 'rn-fetch-blob'
 
 
 
@@ -31,132 +32,66 @@ export default class Scanner extends React.Component {
 constructor(props){
  super(props)
   this.state = {
-      image: null,
-      pdfScannerElement: React.createRef(),
-      isScannerRendered: true,
-      isCropperRendered: false,
-
-      originImg: null,
-      imgURI: null,
-      croppedImage: null,
-      initialImage: null,
-      imageHeight: 0,
-      imageWidth: 0,
-      rectangleCoordinates: null
+      pdfScannerReference: React.createRef(),
     }
    
 }
 
-  
+async handleScannedDocument(Img, init){      
+  RNFetchBlob.fs
+  .unlink(Img)
+  .then(() => {
+    alert("File deleted");
+  })
+  .catch(err => {
+    alert(err);
+  }); 
+ // alert(Img)
+ // this.props.navigation.navigate('ScanStack', {params:{img: Img}, screen: 'imageCrop'})
+  }
 
 
     renderScanner(){
         return(
          <React.Fragment>
           <DocumentScanner
-          useBase64 = {true}
-            ref={this.state.pdfScannerElement}
+            useBase64
+            ref={this.state.pdfScannerReference}
             style={styles.scanner}
-            onPictureTaken={(data) =>{
-              this.handleScannedDocument(data.croppedImage, data.initialImage)
-              //this.props.navigation.navigate('ScanStack', {params:{cropped:data.croppedImage, initial:data.initialImage}, screen: 'imageCrop'})
+            onPictureTaken={(picture) =>{
+              this.handleScannedDocument(picture.croppedImage, picture.initialImage)
             }}
             overlayColor="rgba(255,130,0, 0.7)"
             enableTorch={false}
             quality={1}
             detectionRefreshRateInMS = {10000}
             detectionCountBeforeCapture={-1}
-            detectionRefreshRateInMS={50}
+            detectionRefreshRateInMS={50000}
           /> 
            
            <View style ={{flex:0.1}}>
-                                        <TouchableOpacity
-                                  style={styles.scanButton}
-                                  onPress={() =>{
-                                         this.state.pdfScannerElement.current.capture()
-                                  }}
+                   <TouchableOpacity
+                       style={styles.scanButton}
+                       onPress={() =>{
+                                  this.state.pdfScannerReference.current.capture()
+                                }}
                                       >
-                                  <Text style={{ fontSize: 18, color: "white", margin: 10 }}>
-                                      Scan
-                                  </Text>
-                              </TouchableOpacity>
-                                            </View>
+                        <Text style={{ fontSize: 18, color: "white", margin: 10 }}>
+                                  Scan
+                        </Text>
+                  </TouchableOpacity>
+            </View>
           
           
           </React.Fragment>
         )
-        this.setState({ScanView : this.renderScanner()})
+
     }
-
-
-
-    async handleScannedDocument(base64Img, init){      
-      this.props.navigation.navigate('ScanStack', {params:{img: base64Img}, screen: 'imageCrop'})
-      }
-
-    updateImage(image, newCoordinates) {
-      images = []
-      images.push({url: `data:image/gif;base64,${image}`})
-      this.props.navigation.navigate('ScanStack', {params:{img: images}, screen: 'ScanPreview'})
-    /*   this.setState({
-        initialImage: image,
-       // rectangleCoordinates: newCoordinates,
-        isCropperRendered: false,
-        isImagePreview: true,
-      }); */
-    }
-   
-    crop() {
-      this.customCrop.crop();
-    }
-
-    renderCropper(){
-      return(
-        
-        <View >
-        <View> 
-          <View style = {{marginBottom:20,}}>
-          <TouchableOpacity  style={styles.cropButton} onPress={this.crop.bind(this)}>
-          <Text>CROP IMAGE</Text>
-        </TouchableOpacity>
-          </View>
-          <View>
-       <CustomCrop
-              style = {{
-              /*   marginTop:100,
-                margin: 100,  */
-                
-              }}
-            updateImage={this.updateImage.bind(this)}
-            //rectangleCoordinates={this.state.rectangleCoordinates}
-            initialImage={this.state.initialImage}
-            height={this.state.imageHeight}
-            width={this.state.imageWidth}
-            ref={(ref) => this.customCrop = ref}
-            overlayColor="rgba(18,190,210, 1)"
-            overlayStrokeColor="rgba(20,190,210, 1)"
-            handlerColor="rgba(20,150,160, 1)"
-            enablePanStrict={true}
-      /> 
-      </View>
-        
-       </View> 
-  
-     {/*  <View>
-       
-      </View> */}
-
-      </View>
-      )
-  }
-
-  
 
     render(){
       return(
         <React.Fragment>
-             {this.state.isScannerRendered && this.renderScanner()}
-             {this.state.isCropperRendered && this.renderCropper()}
+             {this.renderScanner()}
         </React.Fragment>
       )
     }

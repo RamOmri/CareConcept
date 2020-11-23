@@ -24,7 +24,7 @@ import ImageViewer from 'react-native-image-zoom-viewer';
 export default class ScanPreview extends React.Component {
 
   state = {
-    finalImage: this.props.route.params.img
+    finalImage: [{url: this.props.route.params.img}]
   }
 
   componentDidMount(){
