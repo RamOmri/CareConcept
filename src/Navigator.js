@@ -25,7 +25,6 @@ import SummaryScreen from './SummaryScreen'
         headerShown: false
         }}>
       <Stack.Screen name='Scanner' component={Scanner} />
-      <Stack.Screen name = 'ScanPreview' component = {ScanPreview} />
       <Stack.Screen name= 'imageCrop' component={imageCrop} />
     
     </Stack.Navigator>
@@ -38,6 +37,7 @@ import SummaryScreen from './SummaryScreen'
         }}>
       <Stack.Screen name='PolicyInfo' component={PolicyInfo} />
       <Stack.Screen name = 'SummaryScreen' component = {SummaryScreen} />
+      <Stack.Screen name = 'ScanPreview' component = {ScanPreview} />
     
     </Stack.Navigator>
     )

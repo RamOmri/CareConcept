@@ -20,19 +20,20 @@ import {
 import DocumentScanner from "@woonivers/react-native-document-scanner"
 import ImageSize from 'react-native-image-size'
 import { CropView } from 'react-native-image-crop-tools';
+import CameraRoll from "@react-native-community/cameraroll";
 
 
 export default class imageCrop extends React.Component {
 constructor(props){
   super(props)
   this.state = {
-    Image: this.props.route.params.img,
+    Images: this.props.route.params.images,
     imageHeight: 0,
     imageWidth: 0,
     cropRef: React.createRef()
     
   }
-  alert(this.state.Image)
+
 }
  
   crop() {
@@ -40,47 +41,56 @@ constructor(props){
   }
     render(){
         return(
-          <View style = {{flex:1, backgroundColor:'black', justifyContent:'center',}}>
-              <View style = {{flex: 0.9, margin: 20, justifyContent: 'center', backgroundColor:'black'}}>
+          
+          <View style = {{flex:1, backgroundColor:'#E5ECF5', justifyContent:'center',}}>
+              <View style ={{flex:0.06, alignItems:'center', flexDirection:'row', justifyContent:'center'}}>
+                                    <TouchableOpacity
+                                        style={{flex:1, backgroundColor:'#f59b00', alignItems:'center', borderRightWidth:2, borderRightColor:'white'}}
+                                        onPress={() =>{
+                                          this.state.cropRef.current.saveImage(true, 100)
+                                        }}
+                                            >
+                                        <Text style={{ fontSize: 18, color: "white", margin: 10 }}>
+                                            Crop
+                                        </Text>
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity
+                                        style={{backgroundColor:'#f59b00', flex: 1, alignItems:'center', borderLeftWidth:2, borderLeftColor:'white'}}
+                                        onPress={() =>{
+                                          this.state.cropRef.current.rotateImage(true) 
+                                          this.state.cropRef.current.saveImage()
+                                          
+                                        }}
+                                            >
+                                        <Text style={{ fontSize: 18, color: "white", margin: 10 }}>
+                                            Rotate
+                                        </Text>
+                    </TouchableOpacity>
+              </View>
+
+              <View style = {{flex: 0.88, margin: 20, justifyContent: 'center', backgroundColor:'black'}}>
                 <CropView
-                    sourceUrl={this.state.Image}
+                    sourceUrl={this.state.Images[this.state.Images.length - 1].url}
                     style={{flex: 1,
-                    backgroundColor: 'grey'}}
+                    backgroundColor: '#E5ECF5'}}
                     ref={this.state.cropRef}
                     onImageCrop={(res) => {
-                      this.setState({Image: res.uri})
+                      this.state.Images[this.state.Images.length - 1] = {url: res.uri}
+                      this.forceUpdate()
                     }}
                     aspectRatio={{width: 16, height: 9}}
                  />
-            </View>
+               </View>
 
-                <View style ={{flex:0.1, alignItems:'center', flexDirection:'row', justifyContent:'center'}}>
-                             <TouchableOpacity
-                                  style={{backgroundColor:'blue', margin: 10}}
-                                  onPress={() =>{
-                                    this.state.cropRef.current.saveImage(true, 100)
-                                  }}
-                                      >
-                                  <Text style={{ fontSize: 18, color: "white", margin: 10 }}>
-                                      Crop
-                                  </Text>
-                              </TouchableOpacity>
+                <View style ={{flex:0.06, alignItems:'center', flexDirection:'row', justifyContent:'center'}}>
+                            
 
                               <TouchableOpacity
-                                  style={{backgroundColor:'blue'}}
+                                  style={{backgroundColor:'#f59b00', flex: 1, alignItems:'center'}}
                                   onPress={() =>{
-                                    this.state.cropRef.current.rotateImage(true) // true for clockwise, false for counterclockwise)
-                                  }}
-                                      >
-                                  <Text style={{ fontSize: 18, color: "white", margin: 10 }}>
-                                      Rotate
-                                  </Text>
-                              </TouchableOpacity>
-
-                              <TouchableOpacity
-                                  style={{backgroundColor:'blue', marginLeft:5}}
-                                  onPress={() =>{
-                                    this.props.navigation.navigate('ScanStack', {params:{img: this.state.Image}, screen: 'ScanPreview'}) // true for clockwise, false for counterclockwise)
+                                   // CameraRoll.save(this.state.Images[this.state.Images.length - 1].uri) // uncomment this to save the image to your phone library (for testing)
+                                    this.props.navigation.navigate('ClaimStack', {params:{img: this.state.Images}, screen: 'ScanPreview'})
                                   }}
                                       >
                                   <Text style={{ fontSize: 18, color: "white", margin: 10 }}>
@@ -88,7 +98,7 @@ constructor(props){
                                   </Text>
                               </TouchableOpacity>
 
-                                            </View>
+              </View>
         </View>
         )
     }

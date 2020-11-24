@@ -60,7 +60,7 @@ constructor(props){
                                     <View style = {styles.button}>
                                                         <TouchableOpacity
                                                             onPress = {()=>{
-                                                                this.props.navigation.navigate('ScanStack', {params:{}, screen: 'Scanner'})
+                                                                this.props.navigation.navigate('ScanStack', {params:{images: new Array()}, screen: 'Scanner'})
                                                             }}
                                                             >
                                                                     <Text

@@ -7,7 +7,8 @@ import {
   Text,
   StatusBar,
   Image,
-  Modal
+  Modal,
+  TouchableOpacity
 } from 'react-native';
 
 import {
@@ -23,19 +24,67 @@ import ImageViewer from 'react-native-image-zoom-viewer';
 
 export default class ScanPreview extends React.Component {
 
-  state = {
-    finalImage: [{url: this.props.route.params.img}]
+  constructor(props){
+      super(props)
+      this.state = {
+      finalImages: this.props.route.params.img
+    }
+    
   }
+  
+    componentDidMount(){
+      this.state.finalImages.reverse()
+    }
 
-  componentDidMount(){
-   // alert(this.state.finalImage[0].url)
-  }
   
     render(){
         return(
       
             <Modal visible={true} transparent={true}>
-              <ImageViewer imageUrls={this.state.finalImage}/>
+               <View style ={{flex:0.06, alignItems:'center', flexDirection:'row', justifyContent:'center'}}>
+                                    <TouchableOpacity
+                                       style={{flex:1, backgroundColor:'#f59b00', alignItems:'center', borderRightWidth:2, borderRightColor:'black'}}
+                                        onPress={() =>{
+                                          this.state.finalImages.reverse()
+                                          this.props.navigation.navigate('ScanStack', {params:{img: [{url: this.state.finalImages}]}, screen: 'Scanner'})
+                                        }}
+                                            >
+                                        <Text style={{ fontSize: 18, color: "white", margin: 10 }}>
+                                            Add Page
+                                        </Text>
+                                    </TouchableOpacity>      
+
+                                    <TouchableOpacity
+                                        style={{backgroundColor:'#f59b00', flex: 1, alignItems:'center', borderLeftWidth:2, borderLeftColor:'black'}}
+                                        onPress={() =>{ 
+                                          this.state.finalImages = []                                        
+                                          this.props.navigation.navigate('ClaimStack', {params:{}, screen: 'SummaryScreen'})
+                                        }}
+                                            >
+                                        <Text style={{ fontSize: 18, color: "white", margin: 10 }}>
+                                            Delete all Pages
+                                        </Text>
+                    </TouchableOpacity>  
+              </View>
+              <View style ={{flex:1}}>
+                
+                <ImageViewer imageUrls={this.state.finalImages}/>
+              </View>
+              <View style ={{flex:0.06, alignItems:'center', flexDirection:'row', justifyContent:'center'}}>
+                            
+
+                              <TouchableOpacity
+                                  style={{backgroundColor:'#f59b00', flex: 1, alignItems:'center'}}
+                                  onPress={() =>{
+                                    this.props.navigation.navigate('ClaimStack', {params:{images: this.state.finalImages}, screen: 'SummaryScreen'})
+                                  }}
+                                      >
+                                  <Text style={{ fontSize: 18, color: "white", margin: 10 }}>
+                                      Continue...
+                                  </Text>
+                              </TouchableOpacity>
+
+              </View>
             </Modal>
             
         )

@@ -23,8 +23,6 @@ import {
 import DocumentScanner from "@woonivers/react-native-document-scanner"
 import ImageSize from 'react-native-image-size'
 import ImageViewer from 'react-native-image-zoom-viewer';
-import RNFetchBlob from 'rn-fetch-blob'
-import ImgToBase64 from 'react-native-image-base64';
 
 
 
@@ -34,39 +32,22 @@ constructor(props){
  super(props)
   this.state = {
       pdfScannerReference: React.createRef(),
+      Images: this.props.route.params.images
     }
    
 }
 
-async unCacheImg(){
-  await RNFetchBlob.fs
-          .unlink(Img)
-          .then(() => {
-            //do nothing because file was successfully deleted
-          })
-          .catch(err => {
-            alert(err);
-          }); 
-  }
-
-async handleScannedDocument(Img, unCroppedImage){   
-  let base64Img = ''   
- await  ImgToBase64.getBase64String(Img)
-  .then(base64String => {base64Img = base64String})
-  .catch(err => alert(err));
-
-  this.unCacheImg(Img)
-
-  this.props.navigation.navigate('ScanStack', {params:{img: base64Img}, screen: 'imageCrop'})
-  }
-
+ handleScannedDocument(Img, init){    
+  this.state.Images.push({url: Img})  
   
+  this.props.navigation.navigate('ScanStack', {params:{images: this.state.Images}, screen: 'imageCrop'})
+  }
+
 
     renderScanner(){
         return(
          <React.Fragment>
           <DocumentScanner
-            useBase64
             ref={this.state.pdfScannerReference}
             style={styles.scanner}
             onPictureTaken={(picture) =>{
@@ -80,7 +61,7 @@ async handleScannedDocument(Img, unCroppedImage){
             detectionRefreshRateInMS={50000}
           /> 
            
-           <View style ={{flex:0.1}}>
+           <View style ={{flex:0.12}}>
                    <TouchableOpacity
                        style={styles.scanButton}
                        onPress={() =>{
@@ -117,26 +98,12 @@ const styles = StyleSheet.create({
     flex: 0.9,
     aspectRatio:undefined
   },
-  cropButton:{
-  //  top: 600,
-    width: 220,
-    height: 50,
-    backgroundColor: "#711401ff",
-    //justifyContent: 'center',
-   // alignItems: 'center',
-   //marginTop: 20,
-   borderRadius:30,
-  // marginBottom: 20,
-  },
   scanButton: {
-    width: 220,
-    height: 50,
-    backgroundColor: "#711401ff",
+    flex:1,
+    backgroundColor: "#f59b00",
     justifyContent: 'center',
     alignItems: 'center',
-   marginTop: 20,
-   borderRadius:30,
-   marginBottom: 20,
+  
   },
   buttonText: {
     backgroundColor: "rgba(245, 252, 255, 0.7)",
