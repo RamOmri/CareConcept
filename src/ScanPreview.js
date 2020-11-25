@@ -27,9 +27,13 @@ export default class ScanPreview extends React.Component {
   constructor(props){
       super(props)
       this.state = {
-      finalImages: this.props.route.params.img
+      finalImages: this.props.route.params.img,
+      Index: this.props.route.params.index
     }
-    
+    const navigateToScreen = this.props.navigation.addListener('focus', () => {
+     this.state.Index = this.props.route.params.index
+        
+  });         
   }
   
     componentDidMount(){
@@ -57,8 +61,13 @@ export default class ScanPreview extends React.Component {
                                     <TouchableOpacity
                                         style={{backgroundColor:'#f59b00', flex: 1, alignItems:'center', borderLeftWidth:2, borderLeftColor:'black'}}
                                         onPress={() =>{ 
-                                          this.state.finalImages = []                                        
-                                          this.props.navigation.navigate('ClaimStack', {params:{}, screen: 'SummaryScreen'})
+                                          this.state.finalImages = []    
+                                              if(this.state.index == -1){                                    
+                                                this.props.navigation.navigate('ClaimStack', {params:{Document: []}, screen: 'SummaryScreen'})
+                                              }
+                                              else{
+                                                this.props.navigation.navigate('ClaimStack', {params:{Document: [], index: this.state.Index}, screen: 'SummaryScreen'})
+                                              }
                                         }}
                                             >
                                         <Text style={{ fontSize: 18, color: "white", margin: 10 }}>
@@ -76,7 +85,8 @@ export default class ScanPreview extends React.Component {
                               <TouchableOpacity
                                   style={{backgroundColor:'#f59b00', flex: 1, alignItems:'center'}}
                                   onPress={() =>{
-                                    this.props.navigation.navigate('ClaimStack', {params:{images: this.state.finalImages}, screen: 'SummaryScreen'})
+                                    this.state.finalImages.reverse()
+                                    this.props.navigation.navigate('ClaimStack', {params:{Document: this.state.finalImages, index: -1}, screen: 'SummaryScreen'})
                                   }}
                                       >
                                   <Text style={{ fontSize: 18, color: "white", margin: 10 }}>

@@ -28,17 +28,26 @@ constructor(props){
   super(props)
   this.state = {
     Images: this.props.route.params.images,
-    imageHeight: 0,
-    imageWidth: 0,
-    cropRef: React.createRef()
-    
+    imageHeight: 1,
+    imageWidth: 1,
+    cropRef: React.createRef(),
   }
 
 }
  
-  crop() {
-    this.CustomCrop.crop();
-  }
+componentDidMount = () => {
+  this.getImageSize()
+}
+
+async getImageSize(){
+  await Image.getSize(this.state.Images[this.state.Images.length - 1].url, (width, height) => {
+    this.setState({
+      imageHeight: height,
+      imageWidth: width
+    })
+  });
+ // alert(this.state.imageHeight + " " + this.state.imageWidth)
+}
     render(){
         return(
           
@@ -59,7 +68,7 @@ constructor(props){
                                         style={{backgroundColor:'#f59b00', flex: 1, alignItems:'center', borderLeftWidth:2, borderLeftColor:'white'}}
                                         onPress={() =>{
                                           this.state.cropRef.current.rotateImage(true) 
-                                          this.state.cropRef.current.saveImage()
+                                          
                                           
                                         }}
                                             >
@@ -69,17 +78,24 @@ constructor(props){
                     </TouchableOpacity>
               </View>
 
-              <View style = {{flex: 0.88, margin: 20, justifyContent: 'center', backgroundColor:'black'}}>
+              <View style = {{flex: 0.88, margin: 20, justifyContent: 'center', backgroundColor:'white', alignItems:'center'}}>
                 <CropView
                     sourceUrl={this.state.Images[this.state.Images.length - 1].url}
-                    style={{flex: 1,
+                    style={{aspectRatio: this.state.imageWidth/this.state.imageHeight,
+                      flex:1,
+                      width: this.state.imageWidth,
                     backgroundColor: '#E5ECF5'}}
                     ref={this.state.cropRef}
                     onImageCrop={(res) => {
                       this.state.Images[this.state.Images.length - 1] = {url: res.uri}
                       this.forceUpdate()
                     }}
-                    aspectRatio={{width: 16, height: 9}}
+                    onImageRotate={(res)=>{
+                        this.state.Images[this.state.Images.length - 1] = {url: res.uri}
+                      this.forceUpdate()
+                    }}
+                   // keepAspectRatio
+                    //aspectRatio={{width: this.state.imageWidth, height: this.state.imageHeight}}
                  />
                </View>
 
@@ -90,7 +106,7 @@ constructor(props){
                                   style={{backgroundColor:'#f59b00', flex: 1, alignItems:'center'}}
                                   onPress={() =>{
                                    // CameraRoll.save(this.state.Images[this.state.Images.length - 1].uri) // uncomment this to save the image to your phone library (for testing)
-                                    this.props.navigation.navigate('ClaimStack', {params:{img: this.state.Images}, screen: 'ScanPreview'})
+                                    this.props.navigation.navigate('ScanStack', {params:{img: this.state.Images, index: -1}, screen: 'ScanPreview'})
                                   }}
                                       >
                                   <Text style={{ fontSize: 18, color: "white", margin: 10 }}>

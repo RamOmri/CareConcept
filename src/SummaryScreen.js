@@ -9,7 +9,8 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
-  ImageBackground
+  ImageBackground,
+  FlatList
 } from 'react-native';
 
 import {
@@ -29,38 +30,52 @@ import {
     MenuTrigger,
     MenuProvider
   } from 'react-native-popup-menu';
+
  
 
 
 export default class PolicyInfo extends React.Component {
 constructor(props){
-  super(props)
-  this.state = {
-    insuranceNumber: '',
-    gender: 'please select gender',
-    firstName: '',
-    surName: ''
-  }
+          super(props)
+          this.state = {
+            insuranceNumber: '',
+            gender: 'please select gender',
+            firstName: '',
+            surName: '',
+            Documents: new Array(),
+            Index: -2,
+          }
+          const navigateToScreen = this.props.navigation.addListener('focus', () => {
+            this.state.Index = this.props.route.params.index
+              if(this.props.route.params.Document.length != 0 && this.state.Index == -1){
+                  this.state.Documents.push(this.props.route.params.Document)
+                  this.state.Index = -2
+                }
+                else if(this.state.Index >= 0){
+                 /// alert(this.state.Index+ 'here')
+                    this.state.Documents.splice(this.state.Index, 1)
+                    this.state.Index = -2
+                }
+                this.forceUpdate()
+          });         
+     }
 
-}
- 
-  crop() {
-    this.CustomCrop.crop();
-  }
     render(){
         return(
                 <ImageBackground style={styles.container}
-            source={require('./img/background.jpg')}
-            style={{ resizeMode: 'stretch', flex: 1, }}
-        >                        
+                    source={require('./img/background.jpg')}
+                    style={{ resizeMode: 'stretch', flex: 1, }}
+                 >
+
+                                         
                             <Image  source = {require('./img/CareConceptLogo.png')} style = {styles.logo} />
 
                             <View style = {{flexDirection:'row', justifyContent:'center'}}>
-                                
+                             
                                     <View style = {styles.button}>
                                                         <TouchableOpacity
                                                             onPress = {()=>{
-                                                                this.props.navigation.navigate('ScanStack', {params:{images: new Array()}, screen: 'Scanner'})
+                                                                this.props.navigation.navigate('ScanStack', {params:{images: new Array(),}, screen: 'Scanner'})
                                                             }}
                                                             >
                                                                     <Text
@@ -68,7 +83,7 @@ constructor(props){
                                                                     >Scan other documents.</Text>
                                                         </TouchableOpacity>
                                     </View>
-
+                            
                                     <View style = {styles.button}>
                                                         <TouchableOpacity
                                                             onPress = {()=>{
@@ -82,11 +97,36 @@ constructor(props){
                                     </View>
                         </View>
                         
-                        <ScrollView>
-
-                        </ScrollView>
-
-                        <View style = {{flex: 1, justifyContent: 'flex-end', marginBottom: 10, alignItems: 'center'}}>
+                        <ScrollView style ={{margin:5}}>
+                                
+                                      <FlatList
+                                          extraData={this.state} 
+                                          data = {this.state.Documents}
+                          
+                                          renderItem = {({item, index}) => (                                         
+                                            <TouchableOpacity onPress={()=>{ 
+                                              //alert(JSON.stringify(item))
+                                              this.props.navigation.navigate('ClaimStack', {params:{document: item, index: index}, screen: 'editPreviewScreen'})          
+                                                }  
+                                              }>
+                                             <View style = {{marginTop: 10, justifyContent:'center', alignItems:'center'}}>
+                                               {/*  <Text> press</Text> */}
+                                                  <Image                                             
+                                                  source={{uri: item[0].url}}
+                                                  style={{flex: 1,
+                                                    width: 200,
+                                                    height: 400,
+                                                    margin: 10,
+                                                    resizeMode: 'contain'}}
+                                                />
+                                              </View>
+                                            </TouchableOpacity>   
+                                              )}
+                                      />
+                                  
+                       
+                                        </ScrollView>
+                        <View style = {{flex: 1, justifyContent: 'flex-end', marginBottom: 10, alignItems: 'center', marginTop: 3}}>
                                 
                                 <View style = {styles.button}>
                                                     <TouchableOpacity
@@ -100,6 +140,7 @@ constructor(props){
                                                     </TouchableOpacity>
                                 </View>
                     </View>
+                
             </ImageBackground>
         )
     }

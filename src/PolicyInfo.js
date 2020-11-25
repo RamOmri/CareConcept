@@ -29,6 +29,7 @@ import {
     MenuTrigger,
     MenuProvider
   } from 'react-native-popup-menu';
+  import { NavigationEvents } from "@react-navigation/native";
  
 
 
@@ -113,7 +114,7 @@ constructor(props){
                                             <View style = {styles.button}>
                                                 <TouchableOpacity
                                                     onPress = {()=>{
-                                                        this.props.navigation.navigate('ClaimStack', {params:{}, screen: 'SummaryScreen'})
+                                                        this.props.navigation.navigate('ClaimStack', {params:{Document: [], index: -1}, screen: 'SummaryScreen'})
                                                     }}
                                                     >
                                                             <Text
