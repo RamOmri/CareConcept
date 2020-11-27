@@ -97,7 +97,7 @@ constructor(props){
                                     </View>
                         </View>
                         
-                        <ScrollView style ={{margin:5}}>
+                       
                                 
                                       <FlatList
                                           extraData={this.state} 
@@ -125,7 +125,6 @@ constructor(props){
                                       />
                                   
                        
-                                        </ScrollView>
                         <View style = {{flex: 1, justifyContent: 'flex-end', marginBottom: 10, alignItems: 'center', marginTop: 3}}>
                                 
                                 <View style = {styles.button}>
