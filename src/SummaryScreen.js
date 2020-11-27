@@ -30,7 +30,7 @@ import {
     MenuTrigger,
     MenuProvider
   } from 'react-native-popup-menu';
-
+  import {connect} from 'react-redux'
  
 
 
