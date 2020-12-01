@@ -42,7 +42,13 @@ constructor(props){
   
   this.props.navigation.navigate('ScanStack', {params:{images: this.state.Images}, screen: 'imageCrop'})
   }
-
+  render(){
+        return(
+          <React.Fragment>
+              {this.renderScanner()}
+          </React.Fragment>
+        )
+      }
 
     renderScanner(){
         return(
@@ -80,13 +86,7 @@ constructor(props){
 
     }
 
-    render(){
-      return(
-        <React.Fragment>
-             {this.renderScanner()}
-        </React.Fragment>
-      )
-    }
+    
   }
 
   

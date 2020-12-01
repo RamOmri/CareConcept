@@ -5,26 +5,28 @@ const initState = {
     docList: []
 }
 
-const docReducer = (state = initState, action) =>{
+const docReducers = (state = initState, action) =>{
     switch(action.type){
         case ADD_DOC:
             return {
                 ...state,
-                doctList: state.docList.concat({
-                    key: Math.random(),
-                    name: action.data
-                })
+                  docList: state.docList.concat({
+                  key: Math.random(),
+                  pages: action.data
+                    }
+                )
             
             }
 
         case DELETE_DOC:
             return{
-                ... state,
-                docList: state.foodList.splice(action.data, 1)
+                ...state,
+                  docList: state.docList.filter((item) =>
+                  item.key !== action.key)
             };
-        default:
-            return state;
+            default: 
+                return state
     }
 }
 
-export default docReducer;
+export default docReducers;

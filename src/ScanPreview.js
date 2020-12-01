@@ -20,21 +20,21 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 import DocumentScanner from "@woonivers/react-native-document-scanner"
 import ImageViewer from 'react-native-image-zoom-viewer';
+import {connect} from 'react-redux'
+import {addDoc} from './actions/claimActions'
+import { deleteDoc } from './actions/claimActions';
+import { StackActions} from 'react-navigation';
+import { CommonActions } from '@react-navigation/native';
 
-
-export default class ScanPreview extends React.Component {
+ class ScanPreview extends React.Component {
 
   constructor(props){
       super(props)
       this.state = {
       finalImages: this.props.route.params.img,
-      Index: this.props.route.params.index
-    }
-    const navigateToScreen = this.props.navigation.addListener('focus', () => {
-     this.state.Index = this.props.route.params.index
-        
-  });         
+    }        
   }
+  
   
     componentDidMount(){
       this.state.finalImages.reverse()
@@ -50,7 +50,21 @@ export default class ScanPreview extends React.Component {
                                        style={{flex:1, backgroundColor:'#f59b00', alignItems:'center', borderRightWidth:2, borderRightColor:'black'}}
                                         onPress={() =>{
                                           this.state.finalImages.reverse()
-                                          this.props.navigation.navigate('ScanStack', {params:{img: [{url: this.state.finalImages}]}, screen: 'Scanner'})
+
+                                          
+
+                                         // this.props.navigation.reset('ScanStack', {params:{img: [{url: this.state.finalImages}]}, screen: 'Scanner'})
+                                         const resetAction =   CommonActions.reset({
+                                                                                  index: 1,
+                                                                                  routes: [
+                                                                                    {
+                                                                                      name: 'Scanner',
+                                                                                      params: { images: this.state.finalImages },
+                                                                                    },
+                                                                                  ],
+                                                                                })
+                                            this.props.navigation.dispatch(resetAction);
+                                         // this.props.navigation.push('Scanner', {params:{img: [{url: this.state.finalImages}]}});
                                         }}
                                             >
                                         <Text style={{ fontSize: 18, color: "white", margin: 10 }}>
@@ -60,14 +74,9 @@ export default class ScanPreview extends React.Component {
 
                                     <TouchableOpacity
                                         style={{backgroundColor:'#f59b00', flex: 1, alignItems:'center', borderLeftWidth:2, borderLeftColor:'black'}}
-                                        onPress={() =>{ 
-                                          this.state.finalImages = []    
-                                              if(this.state.index == -1){                                    
-                                                this.props.navigation.navigate('ClaimStack', {params:{Document: []}, screen: 'SummaryScreen'})
-                                              }
-                                              else{
-                                                this.props.navigation.navigate('ClaimStack', {params:{Document: [], index: this.state.Index}, screen: 'SummaryScreen'})
-                                              }
+                                        onPress={() =>{                                      
+                                          this.props.navigation.navigate('ClaimStack', {params:{}, screen: 'SummaryScreen'})
+                                          
                                         }}
                                             >
                                         <Text style={{ fontSize: 18, color: "white", margin: 10 }}>
@@ -86,7 +95,8 @@ export default class ScanPreview extends React.Component {
                                   style={{backgroundColor:'#f59b00', flex: 1, alignItems:'center'}}
                                   onPress={() =>{
                                     this.state.finalImages.reverse()
-                                    this.props.navigation.navigate('ClaimStack', {params:{Document: this.state.finalImages, index: -1}, screen: 'SummaryScreen'})
+                                    this.props.add(this.state.finalImages)
+                                    this.props.navigation.navigate('ClaimStack', {params:{Document: this.state.finalImages}, screen: 'SummaryScreen'})
                                   }}
                                       >
                                   <Text style={{ fontSize: 18, color: "white", margin: 10 }}>
@@ -134,3 +144,20 @@ const styles = StyleSheet.create({
     alignItems: "center"
   }
 })
+
+const mapStateToProps = (state) =>{
+  console.log(state)
+  return{
+    docs: state.docReducer.docList
+  }
+}
+
+const mapDispatchToProps = (dispatch) =>{
+  return {
+    add: (doc) => dispatch(addDoc(doc)),
+    delete: (key) => dispatch(deleteFood(key))
+  }
+}  
+
+export default connect(mapStateToProps, mapDispatchToProps)(ScanPreview)
+

@@ -31,10 +31,12 @@ import {
     MenuProvider
   } from 'react-native-popup-menu';
   import {connect} from 'react-redux'
- 
+  import {addDoc} from './actions/claimActions'
+  import {deleteDoc} from './actions/claimActions'
+  import { StackActions, NavigationActions } from 'react-navigation';
 
 
-export default class PolicyInfo extends React.Component {
+ class SummaryScreen extends React.Component {
 constructor(props){
           super(props)
           this.state = {
@@ -42,22 +44,12 @@ constructor(props){
             gender: 'please select gender',
             firstName: '',
             surName: '',
-            Documents: new Array(),
-            Index: -2,
           }
-          const navigateToScreen = this.props.navigation.addListener('focus', () => {
-            this.state.Index = this.props.route.params.index
-              if(this.props.route.params.Document.length != 0 && this.state.Index == -1){
-                  this.state.Documents.push(this.props.route.params.Document)
-                  this.state.Index = -2
-                }
-                else if(this.state.Index >= 0){
-                 /// alert(this.state.Index+ 'here')
-                    this.state.Documents.splice(this.state.Index, 1)
-                    this.state.Index = -2
-                }
-                this.forceUpdate()
-          });         
+         /*  const resetAction = StackActions.reset({
+            index: 0,
+            actions: [NavigationActions.navigate({ routeName: 'ScanStack' })],
+          });
+          this.props.navigation.dispatch(resetAction); */
      }
 
     render(){
@@ -96,23 +88,24 @@ constructor(props){
                                                         </TouchableOpacity>
                                     </View>
                         </View>
-                        
-                       
-                                
-                                      <FlatList
+                                       <FlatList
                                           extraData={this.state} 
-                                          data = {this.state.Documents}
+                                          data = {this.props.docs}
                           
                                           renderItem = {({item, index}) => (                                         
                                             <TouchableOpacity onPress={()=>{ 
-                                              //alert(JSON.stringify(item))
-                                              this.props.navigation.navigate('ClaimStack', {params:{document: item, index: index}, screen: 'editPreviewScreen'})          
+                                                  let pagesInDoc = new Array()
+                                                  for(let i = 0; i < item.pages.length; i++){
+                                                    pagesInDoc.push({url: item.pages[i].url})
+                                                  }
+                                                  //alert(JSON.stringify(pagesInDoc))
+                                                  this.props.delete(item.key)
+                                                  this.props.navigation.navigate('ScanStack', {params:{img:  pagesInDoc}, screen: 'ScanPreview'})          
                                                 }  
                                               }>
                                              <View style = {{marginTop: 10, justifyContent:'center', alignItems:'center'}}>
-                                               {/*  <Text> press</Text> */}
                                                   <Image                                             
-                                                  source={{uri: item[0].url}}
+                                                  source={{uri: item.pages[0].url}}
                                                   style={{flex: 1,
                                                     width: 200,
                                                     height: 400,
@@ -123,7 +116,8 @@ constructor(props){
                                             </TouchableOpacity>   
                                               )}
                                       />
-                                  
+                                      
+                                    
                        
                         <View style = {{flex: 1, justifyContent: 'flex-end', marginBottom: 10, alignItems: 'center', marginTop: 3}}>
                                 
@@ -197,3 +191,18 @@ const styles = StyleSheet.create({
     alignItems: "center"
   }
 })
+
+const mapStateToProps = (state) => {
+  console.log(state);
+  return {
+    docs: state.docReducer.docList
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    delete: (key) => dispatch(deleteDoc(key))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SummaryScreen)

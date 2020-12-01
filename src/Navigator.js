@@ -17,17 +17,20 @@ import imageCrop from './imageCrop'
 
 import PolicyInfo from './PolicyInfo'
 import SummaryScreen from './SummaryScreen'
-import editPreviewScreen from './editPreviewScreen'
 
     const Stack = createStackNavigator()
 
  const ScanStack = () => (
       <Stack.Navigator screenOptions={{
-        headerShown: false
+        headerShown: false,
+        initial:false,
+        lazy: false
         }}>
+       
       <Stack.Screen name='Scanner' component={Scanner} />
       <Stack.Screen name= 'imageCrop' component={imageCrop} />
-       <Stack.Screen name = 'ScanPreview' component = {ScanPreview} />
+      <Stack.Screen name = 'ScanPreview' component = {ScanPreview} />
+       
     
     </Stack.Navigator>
 
@@ -35,11 +38,12 @@ import editPreviewScreen from './editPreviewScreen'
 
     const ClaimStack = () => (
       <Stack.Navigator screenOptions={{
-        headerShown: false
+        headerShown: false,
+        initial:false,
+        lazy: false
         }}>
       <Stack.Screen name='PolicyInfo' component={PolicyInfo} />
       <Stack.Screen name = 'SummaryScreen' component = {SummaryScreen} />
-      <Stack.Screen name = 'editPreviewScreen' component = {editPreviewScreen} />
      
     
     </Stack.Navigator>
