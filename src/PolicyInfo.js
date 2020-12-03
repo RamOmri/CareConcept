@@ -29,18 +29,14 @@ import {
     MenuTrigger,
     MenuProvider
   } from 'react-native-popup-menu';
-  import { NavigationEvents } from "@react-navigation/native";
- 
+ import {connect} from 'react-redux'
+import { changeSurname, changeInsuranceNumber,changeGender, changeName } from './actions/policInfoActions';
 
 
-export default class PolicyInfo extends React.Component {
+class PolicyInfo extends React.Component {
 constructor(props){
   super(props)
   this.state = {
-    insuranceNumber: '',
-    gender: 'please select gender',
-    firstName: '',
-    surName: '',
     menuStyle: {
         triggerText: {
             color: 'white',
@@ -61,7 +57,7 @@ constructor(props){
         
     }
   }
-
+  
 }
  
 
@@ -80,16 +76,16 @@ constructor(props){
                                                     placeholder = 'Insurance Number'
                                                     placeholderTextColor="#004799"
                                                     secureTextEntry = {false}
-                                                    onChangeText={number => this.setState({insuranceNumber: number})}
-                                                    value={this.state.password}
+                                                    onChangeText={number => this.props.changeInsuranceNumber(number)}
+                                                    value={this.props.insuranceNumber}
                                                     />
                                 
                                     <Menu >
-                                        <MenuTrigger text={this.state.gender} customStyles = {this.state.menuStyle} />
+                                        <MenuTrigger text={this.props.gender} customStyles = {this.state.menuStyle} />
                                             <MenuOptions>
-                                                <MenuOption onSelect={() => this.setState({gender: 'Male'})} text='Male' />
-                                                <MenuOption onSelect={() => this.setState({gender: 'Female'})} text='Female' />
-                                                <MenuOption onSelect={() => this.setState({gender: 'Unspecified'})} text='Unspecified' />
+                                                <MenuOption onSelect={() => this.props.changeGender('Male')} text='Male' />
+                                                <MenuOption onSelect={() => this.props.changeGender('Female')} text='Female' />
+                                                <MenuOption onSelect={() => this.props.changeGender('Unspecified')} text='Unspecified' />
                                             </MenuOptions>
                                     </Menu>
                              
@@ -98,16 +94,16 @@ constructor(props){
                                                             placeholder = 'First name'
                                                             placeholderTextColor="#004799"
                                                             secureTextEntry = {false}
-                                                            onChangeText={name => this.setState({firstName: name })}
-                                                            value={this.state.password}
+                                                            onChangeText={name => this.props.changeName(name)}
+                                                            value={this.props.FirstName}
                                                             />
                                         <TextInput
                                                         style = {styles.nameInput}
                                                             placeholder = 'Surname'
                                                             placeholderTextColor="#004799"
                                                             secureTextEntry = {false}
-                                                            onChangeText={name => this.setState({surName: name})}
-                                                            value={this.state.password}
+                                                            onChangeText={surname => this.props.changeSurname(surname)}
+                                                            value={this.props.Surname}
                                                             />
                            
                         
@@ -180,3 +176,24 @@ const styles = StyleSheet.create({
     alignItems: "center"
   }
 })
+
+const mapStateToProps = (state) =>{
+  //alert(JSON.stringify(state))
+  return{
+    insuranceNumber: state.policyInfoReducers.policyInfo.insuranceNumber,
+    gender: state.policyInfoReducers.policyInfo.gender, 
+    FirstName: state.policyInfoReducers.policyInfo.FirstName,
+    Surname: state.policyInfoReducers.policyInfo.Surname
+  }
+}
+
+const mapDispatchToProps = (dispatch) =>{
+  return {
+    changeInsuranceNumber: (num) => dispatch(changeInsuranceNumber(num)),
+    changeGender: (gender) => dispatch(changeGender(gender)),
+    changeName: (name) => dispatch(changeName(name)),
+    changeSurname: (surname) => dispatch(changeSurname(surname)),
+  }
+}  
+
+export default connect(mapStateToProps, mapDispatchToProps)(PolicyInfo)

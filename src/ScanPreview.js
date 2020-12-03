@@ -22,8 +22,7 @@ import DocumentScanner from "@woonivers/react-native-document-scanner"
 import ImageViewer from 'react-native-image-zoom-viewer';
 import {connect} from 'react-redux'
 import {addDoc} from './actions/claimActions'
-import { deleteDoc } from './actions/claimActions';
-import { StackActions} from 'react-navigation';
+
 import { CommonActions } from '@react-navigation/native';
 
  class ScanPreview extends React.Component {
@@ -146,7 +145,6 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = (state) =>{
-  console.log(state)
   return{
     docs: state.docReducer.docList
   }

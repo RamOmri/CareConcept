@@ -1,4 +1,4 @@
-import {ADD_DOC, DELETE_DOC} from './types'
+import {ADD_DOC, DELETE_DOC, CHANGE_INSURANCE_NUMBER} from './types'
 
 export const addDoc = (doc) =>(
     {
@@ -13,3 +13,10 @@ export const deleteDoc = (key) =>(
      key: key
     }
 );
+
+export const changeInsuranceNumber = (insuranceNumber) =>(
+    {
+        type: CHANGE_INSURANCE_NUMBER,
+        data: insuranceNumber
+    }
+)

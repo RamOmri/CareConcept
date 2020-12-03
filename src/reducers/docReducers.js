@@ -2,7 +2,7 @@ import { Switch } from 'react-native-paper';
 import {ADD_DOC, DELETE_DOC} from '../actions/types';
 
 const initState = {
-    docList: []
+    docList: [],
 }
 
 const docReducers = (state = initState, action) =>{
@@ -28,5 +28,7 @@ const docReducers = (state = initState, action) =>{
                 return state
     }
 }
+
+
 
 export default docReducers;
