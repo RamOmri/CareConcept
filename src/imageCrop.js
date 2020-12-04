@@ -30,9 +30,10 @@ constructor(props){
   super(props)
   this.state = {
     Images: this.props.route.params.images,
-    imageHeight: 1,
-    imageWidth: 1,
+    imageHeight: 0,
+    imageWidth: 0,
     cropRef: React.createRef(),
+    loading: true
   }
     
 }
@@ -42,7 +43,7 @@ async componentDidMount(){
   
 }
 
-async onDone(croppedImageUri){
+ async onDone(croppedImageUri){
  
   await this.getImageSize(croppedImageUri)
   this.state.Images[this.state.Images.length - 1].url = croppedImageUri
@@ -53,7 +54,8 @@ async getImageSize(img){
   await ImageSize.getSize(img).then(size => {
     this.setState({
       imageHeight: size.height,
-      imageWidth: size.width
+      imageWidth: size.width,
+      loading: false
     })
   }).catch(err => alert(err))
   //alert(this.state.imageHeight + " " + this.state.imageWidth)
@@ -70,28 +72,38 @@ onContinue = () =>{
 
 
     render(){
-        return(
-          
-          <React.Fragment>
-     
-          
-                  <AmazingCropper
-                      footerComponent={<CustomCropperFooter />}
-                      onDone={croppedImg => this.onDone(croppedImg)}
-                      onError={this.onError}
-                      onCancel = {() => this.onContinue()}
-                      //onCancel={this.onCancel}
-                      imageUri={this.state.Images[this.state.Images.length - 1].url}
-                      imageWidth={this.state.imageWidth}
-                     imageHeight={this.state.imageHeight}
-                      NOT_SELECTED_AREA_OPACITY={0.3}
-                      BORDER_WIDTH={20}
-                    />
-        
-          </React.Fragment>
+      if(!this.state.loading){
+            return(         
+              <React.Fragment>
+              <View style ={{flex:1}}>
+              
+                      <AmazingCropper
+                          footerComponent={<CustomCropperFooter />}
+                          onDone={croppedImg => this.onDone(croppedImg)}
+                          onError={this.onError}
+                          onCancel = {() => this.onContinue()}
+                          //onCancel={this.onCancel}
+                          imageUri={this.state.Images[this.state.Images.length - 1].url}
+                          imageWidth={this.state.imageWidth}
+                        imageHeight={this.state.imageHeight}
+                          NOT_SELECTED_AREA_OPACITY={0.3}
+                          initialRotation = {0}
+                          BORDER_WIDTH={20}
+                        />
+                </View>
             
+              </React.Fragment>
+         
+         
+         )
+      }
+      else return(
+        <View>
+          <Text> please wait...</Text>
+        </View>
+      );
       
-        )
+        
     }
 }
 

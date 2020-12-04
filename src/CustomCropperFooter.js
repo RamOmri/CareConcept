@@ -3,11 +3,10 @@ import { View, TouchableOpacity, Text, Platform, StyleSheet } from 'react-native
 import PropTypes from 'prop-types';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const CustomCropperFooter = (props) => (
+const CustomCropperFooter = (props) => ({rotate: props.onRotate},
   <View style={styles.buttonsContainer}>
     <TouchableOpacity onPress={()=>{
         props.onRotate()
-       // props.onDone()
     }} style={styles.touchable}>
     <Text style={styles.text}>Rotate</Text>
     </TouchableOpacity>

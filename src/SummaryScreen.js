@@ -67,9 +67,11 @@ constructor(props){
                                     <View style = {styles.button}>
                                                         <TouchableOpacity
                                                             onPress = {()=>{
-                                                                this.props.navigation.navigate('ScanStack', {params:{images: new Array(),}, screen: 'Scanner'})
-                                                            }}
-                                                            >
+                                                                //this.props.navigation.navigate('ScanStack', {params:{images: new Array(),}, screen: 'Scanner'})
+                                                                this.props.navigation.navigate('ClaimStack', {params:{isEditing: false,}, screen: 'OtherInfoScreen'})
+                                                            
+                                                              }}
+                                                           >
                                                                     <Text
                                                                     style={{color: 'white', fontSize: 12}}
                                                                     >Scan other documents.</Text>
@@ -79,7 +81,7 @@ constructor(props){
                                     <View style = {styles.button}>
                                                         <TouchableOpacity
                                                             onPress = {()=>{
-                                                                this.props.navigation.navigate('ClaimStack', {params:{}, screen: 'SummaryScreen'})
+                                                                this.props.navigation.navigate('ClaimStack', {params:{}, screen: 'ClaimInfoScreen'})
                                                             }}
                                                             >
                                                                     <Text
@@ -100,7 +102,7 @@ constructor(props){
                                                   }
                                                   //alert(JSON.stringify(pagesInDoc))
                                                   this.props.delete(item.key)
-                                                  this.props.navigation.navigate('ScanStack', {params:{img:  pagesInDoc}, screen: 'ScanPreview'})          
+                                                  this.props.navigation.navigate('ClaimStack', {params:{isEditing:  true, pages: pagesInDoc}, screen: 'OtherInfoScreen'})          
                                                 }  
                                               }>
                                              <View style = {{marginTop: 10, justifyContent:'center', alignItems:'center'}}>

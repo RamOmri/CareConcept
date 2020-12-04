@@ -17,6 +17,8 @@ import imageCrop from './imageCrop'
 
 import PolicyInfo from './PolicyInfo'
 import SummaryScreen from './SummaryScreen'
+import ClaimInfo from './ClaimInfoScreen'
+import OtherInfoScreen from './OtherInfoScreen'
 
     const Stack = createStackNavigator()
 
@@ -44,6 +46,8 @@ import SummaryScreen from './SummaryScreen'
         }}>
       <Stack.Screen name='PolicyInfo' component={PolicyInfo} />
       <Stack.Screen name = 'SummaryScreen' component = {SummaryScreen} />
+      <Stack.Screen name = 'ClaimInfoScreen' component = {ClaimInfo} />
+      <Stack.Screen name = 'OtherInfoScreen' component = {OtherInfoScreen} />
      
     
     </Stack.Navigator>
