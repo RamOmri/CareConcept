@@ -14,6 +14,7 @@ import {
   View,
   Text,
   StatusBar,
+  KeyboardAvoidingView
 } from 'react-native';
 
 import {
@@ -33,7 +34,11 @@ const App: () => React$Node = () => {
     
   return (
     <MenuProvider>
+      <KeyboardAvoidingView
+        behavior= {(Platform.OS === 'ios')? "padding" : null}
+        style={{flex: 1}}>
       <Navigator />
+      </KeyboardAvoidingView>
     </MenuProvider>
   );
 };

@@ -39,15 +39,17 @@ constructor(props){
   this.state = {
     menuStyle: {
         triggerText: {
-            color: 'white',
+            color: '#f59b00',
         },
         triggerWrapper: {
             padding: 5,
             height: 40,
+            width: 80,
             justifyContent: 'center',
-            backgroundColor: '#f59b00',
+            backgroundColor: 'white',
+            borderColor: '#f59b00',
+            borderWidth:5,
             borderRadius: 7,
-            marginTop:10
         },
         triggerTouchable: {
             underlayColor: 'darkblue',
@@ -69,7 +71,7 @@ constructor(props){
         >                        
                             <Image  source = {require('./img/CareConceptLogo.png')} style = {styles.logo} />
 
-                            <View style = {{justifyContent:'center', alignItems:'center'}}>
+                            <View style = {{flex: 1, alignItems:'center'}}>
                                 
                                 <TextInput
                                                 style = {styles.policyInput}
@@ -79,7 +81,7 @@ constructor(props){
                                                     onChangeText={number => this.props.changeInsuranceNumber(number)}
                                                     value={this.props.insuranceNumber}
                                                     />
-                                
+                                    <Text style = {styles.questionText}>Please select your sex</Text>
                                     <Menu >
                                         <MenuTrigger text={this.props.gender} customStyles = {this.state.menuStyle} />
                                             <MenuOptions>
@@ -129,6 +131,12 @@ const styles = StyleSheet.create({
         margin: 10,
         marginBottom:50
   },
+  questionText: {
+    margin: 10,
+    fontSize: 16,
+    color: '#E67F00',
+
+  },
   button: {
     width: 160,
     height: 45,
@@ -143,7 +151,7 @@ const styles = StyleSheet.create({
     marginTop:12,
     margin:2,
     borderWidth: 1,
-    width: 200,
+    width: 250,
     height:40,
     borderColor:'#f59b00',
     backgroundColor:'#E5ECF5'

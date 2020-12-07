@@ -62,31 +62,17 @@ constructor(props){
                                          
                             <Image  source = {require('./img/CareConceptLogo.png')} style = {styles.logo} />
 
-                            <View style = {{flexDirection:'row', justifyContent:'center'}}>
-                             
-                                    <View style = {styles.button}>
-                                                        <TouchableOpacity
-                                                            onPress = {()=>{
-                                                                //this.props.navigation.navigate('ScanStack', {params:{images: new Array(),}, screen: 'Scanner'})
-                                                                this.props.navigation.navigate('ClaimStack', {params:{isEditing: false,}, screen: 'OtherInfoScreen'})
-                                                            
-                                                              }}
-                                                           >
-                                                                    <Text
-                                                                    style={{color: 'white', fontSize: 12}}
-                                                                    >Scan other documents.</Text>
-                                                        </TouchableOpacity>
-                                    </View>
+                            <View style = {{flexDirection:'row', justifyContent:'center',}}>
                             
-                                    <View style = {styles.button}>
+                                    <View style = {styles.documentScanButton}>
                                                         <TouchableOpacity
                                                             onPress = {()=>{
-                                                                this.props.navigation.navigate('ClaimStack', {params:{}, screen: 'ClaimInfoScreen'})
+                                                                this.props.navigation.navigate('ClaimStack', {params:{isEditig: false}, screen: 'DocumentInfo'})
                                                             }}
                                                             >
                                                                     <Text
-                                                                    style={{color: 'white', fontSize: 12}}
-                                                                    >Scan Claim documents.</Text>
+                                                                    style={{color: 'white', fontSize: 16}}
+                                                                    >Scan a Document.</Text>
                                                         </TouchableOpacity>
                                     </View>
                         </View>
@@ -102,7 +88,7 @@ constructor(props){
                                                   }
                                                   //alert(JSON.stringify(pagesInDoc))
                                                   this.props.delete(item.key)
-                                                  this.props.navigation.navigate('ClaimStack', {params:{isEditing:  true, pages: pagesInDoc}, screen: 'OtherInfoScreen'})          
+                                                  this.props.navigation.navigate('ClaimStack', {params:{isEditing:  true, pages: pagesInDoc}, screen: 'DocumentInfo'})          
                                                 }  
                                               }>
                                              <View style = {{marginTop: 10, justifyContent:'center', alignItems:'center'}}>
@@ -145,6 +131,16 @@ const styles = StyleSheet.create({
   logo:{
         margin: 10,
         
+  },
+  documentScanButton: {
+    flex:1,
+    height: 50,
+    backgroundColor: "#E67F00",
+    justifyContent: 'center',
+    alignItems: 'center',
+   marginTop: 30,
+   borderRadius:15,
+   margin: 10,
   },
   button: {
     width: 150,

@@ -44,28 +44,7 @@ constructor(props){
             isEditing: this.props.route.params.isEditing,
             pages: [],
 
-        menuStyle: {
-            triggerText: {
-                color: 'white',
-            },
-            triggerWrapper: {
-                padding: 5,
-                height: 40,
-                width: 100,
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: '#f59b00',
-                borderRadius: 7,
-                margin:10,
-                marginBottom: 20,
-            },
-            triggerTouchable: {
-                underlayColor: 'darkblue',
-                activeOpacity: 70,
-            },
-            
-            
-        }
+        
     }
   }
 
