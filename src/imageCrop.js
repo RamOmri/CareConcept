@@ -44,10 +44,9 @@ async componentDidMount(){
 }
 
  async onDone(croppedImageUri){
- 
-  await this.getImageSize(croppedImageUri)
-  this.state.Images[this.state.Images.length - 1].url = croppedImageUri
-  this.forceUpdate()
+   this.setState({loading: true})
+ this.state.Images.splice(this.state.Images.length - 1, 1, {url: croppedImageUri})
+  await this.getImageSize(croppedImageUri) 
 }
 
 async getImageSize(img){
@@ -82,13 +81,10 @@ onContinue = () =>{
                           onDone={croppedImg => this.onDone(croppedImg)}
                           onError={this.onError}
                           onCancel = {() => this.onContinue()}
-                          //onCancel={this.onCancel}
                           imageUri={this.state.Images[this.state.Images.length - 1].url}
                           imageWidth={this.state.imageWidth}
                         imageHeight={this.state.imageHeight}
-                          NOT_SELECTED_AREA_OPACITY={0.3}
                           initialRotation = {0}
-                          BORDER_WIDTH={20}
                         />
                 </View>
             

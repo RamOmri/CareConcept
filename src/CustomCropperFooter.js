@@ -5,11 +5,6 @@ import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIc
 
 const CustomCropperFooter = (props) => ({rotate: props.onRotate},
   <View style={styles.buttonsContainer}>
-    <TouchableOpacity onPress={()=>{
-        props.onRotate()
-    }} style={styles.touchable}>
-    <Text style={styles.text}>Rotate</Text>
-    </TouchableOpacity>
     <TouchableOpacity onPress={props.onDone} style={styles.touchable}>
       <Text style={styles.text}>Crop</Text>
     </TouchableOpacity>
