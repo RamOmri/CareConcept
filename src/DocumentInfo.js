@@ -42,14 +42,13 @@ constructor(props){
         isDocumentGerman: 'Select...',
         isDocumentPaid: 'Select...',
         sendMoneyToOriginalBank: 'Select...',
-        isClaimDocument: 'Select...',
+        docType: 'Select...',
         isDatePickerVisible: false,
-        pages: [],
         dateStatus: 'select...',
-        bankDetails:{
-            bankNumber: ''
+        IBAN: '',
+        infoObj: {
+          pages: [],
         },
-
         menuStyle: {
           triggerText: {
               color: '#f59b00',
@@ -72,8 +71,13 @@ constructor(props){
       }
     }
       if(this.state.isEditing){
-        this.state.pages = this.props.route.params.pages
+        this.state = {
+          ...this.state,
+          infoObj: this.props.route.params.infoObj.document
+        }
+        delete this.state.infoObj.key
       }
+    //  alert(JSON.stringify(this.state))
   }
   
   renderIsFromSameAccount = () =>{
@@ -83,10 +87,22 @@ constructor(props){
                     Would you like us to transfer the money to the same bank account you used to pay for your insurance?
                     </Text>
                     <Menu >
-                        <MenuTrigger text={this.state.sendMoneyToOriginalBank} customStyles = {this.state.menuStyle}/>
+                        <MenuTrigger text={this.state.isEditing && this.state.infoObj.sendMoneyToOriginalBank || this.state.sendMoneyToOriginalBank} customStyles = {this.state.menuStyle}/>
                             <MenuOptions>
-                                <MenuOption onSelect={() => this.setState({sendMoneyToOriginalBank: 'Yes'})} text='Yes' />
-                                <MenuOption onSelect={() => this.setState({sendMoneyToOriginalBank: 'No'})} text='No' />
+                                <MenuOption onSelect={() => {
+                                  this.state.infoObj = {
+                                    ...this.state.infoObj,
+                                    sendMoneyToOriginalBank: 'Yes'
+                                  }
+                                  this.setState({sendMoneyToOriginalBank: 'Yes'})
+                                  }} text='Yes' />
+                                <MenuOption onSelect={() => {
+                                  this.state.infoObj = {
+                                    ...this.state.infoObj,
+                                    sendMoneyToOriginalBank: 'No'
+                                  }
+                                  this.setState({sendMoneyToOriginalBank: 'No'})
+                                  }} text='No' />
                             </MenuOptions>
                     </Menu>
           </View>
@@ -97,16 +113,44 @@ constructor(props){
       <View style = {{justifyContent: 'center', alignItems:'center'}}>
           <TextInput
             style = {styles.policyInput}
-            placeholder = 'Insurance Number'
+            placeholder = 'please enter your IBAN'
             placeholderTextColor="#004799"
             secureTextEntry = {false}
-            onChangeText={number => this.props.changeInsuranceNumber(number)}
-            value={this.props.insuranceNumber}
+            onChangeText={iban =>{
+               this.setState({IBAN: iban})
+               this.state.infoObj = {
+                ...this.state.infoObj,
+                IBAN: iban
+              }
+              }}
+            value={this.state.isEditing && this.state.infoObj.IBAN || this.state.IBAN}
             />
+           <View style = {styles.button}>
+                <TouchableOpacity
+                    onPress = {()=>{
+                          if(this.state.isEditing){
+                              this.props.navigation.navigate('ScanStack', {params:{infoObj: this.state.infoObj,}, screen: 'ScanPreview'})
+                          }
+                          else{
+                              this.props.navigation.navigate('ScanStack', {params:{infoObj: this.state.infoObj,}, screen: 'Scanner'})
+                          }
+                    }}
+                    >
+                      
+                            <Text
+                            style={{color: 'white', fontSize: 12}}
+                            >Continue...</Text>
+            </TouchableOpacity>
+            </View>   
         </View>
     )
 }
-
+handleConfirm = (date) => {
+    this.state.isDatePickerVisible = false
+    this.setState({dateStatus: date.getDate().toString() + '/' + (date.getMonth() + 1).toString() + '/' + date.getFullYear().toString() })
+        
+   
+  };
 renderClaimInfo(){
   return(
     <View>
@@ -114,32 +158,65 @@ renderClaimInfo(){
           Is the document you are about to scan from Germany?
       </Text>
       <Menu >
-          <MenuTrigger text={this.state.isDocumentGerman } customStyles = {this.state.menuStyle} />
+          <MenuTrigger text={this.state.isEditing && this.state.infoObj.isDocumentGerman || this.state.isDocumentGerman } customStyles = {this.state.menuStyle} />
               <MenuOptions>
-                  <MenuOption onSelect={() => this.setState({isDocumentGerman: 'Yes'})} text='Yes' />
-                  <MenuOption onSelect={() => this.setState({isDocumentGerman: 'No'})} text='No' />
+                  <MenuOption onSelect={() =>{
+                                  this.state.infoObj = {
+                                    ...this.state.infoObj,
+                                    isDocumentGerman: 'Yes'
+                                  }
+                                  this.setState({isDocumentGerman: 'Yes'})
+                                  }} text='Yes' />
+                  <MenuOption onSelect={() => {
+                                              this.state.infoObj = {
+                                                ...this.state.infoObj,
+                                                isDocumentGerman: 'No'
+                                              }
+                                              this.setState({isDocumentGerman: 'No'})
+                                              }} text='No' />
               </MenuOptions>
       </Menu>
       <Text style = {styles.questionText}> 
           Have you already paid for the invoice?
       </Text>
       <Menu >
-          <MenuTrigger text={this.state.isDocumentPaid } customStyles = {this.state.menuStyle} />
+          <MenuTrigger text={this.state.isEditing && this.state.infoObj.isDocumentPaid || this.state.isDocumentPaid } customStyles = {this.state.menuStyle} />
               <MenuOptions>
-                  <MenuOption onSelect={() => this.setState({isDocumentPaid: 'Yes'})} text='Yes' />
-                  <MenuOption onSelect={() => this.setState({isDocumentPaid: 'No'})} text='No' />
+                  <MenuOption onSelect={() => {
+                                              this.state.infoObj = {
+                                                ...this.state.infoObj,
+                                                isDocumentPaid: 'Yes'
+                                              }
+                                              this.setState({isDocumentPaid: 'Yes'})
+                                              }} text='Yes' />
+                  <MenuOption onSelect={() => {
+                                              this.state.infoObj = {
+                                                ...this.state.infoObj,
+                                                isDocumentPaid: 'No'
+                                              }
+                                              this.setState({isDocumentPaid: 'No'})
+                                              }} text='No' />
               </MenuOptions>
       </Menu>
     </View>
   )
 }
-
+handleConfirm = (date) => {
+  this.state.isDatePickerVisible = false
+  let birthDate =  date.getDate().toString() + '/' + (date.getMonth() + 1).toString() + '/' + date.getFullYear().toString() 
+  this.state.infoObj ={
+    ...this.state.infoObj,
+    dateStatus: birthDate
+  }
+  this.setState({dateStatus: birthDate})
+     
+};
 renderAge(){
   return(
     <View style = {{alignItems: 'center', justifyContent:'center'}}>
     <Text style = {styles.questionText}>Please enter the birthdate of the insured person: </Text>
               <Button color = '#f59b00'
-                title={this.state.dateStatus} 
+                title={this.state.isEditing && this.state.infoObj.dateStatus || this.state.dateStatus} 
                 onPress={()=>{
                 this.setState({isDatePickerVisible: true})
                 }} />
@@ -147,11 +224,32 @@ renderAge(){
                     isVisible={this.state.isDatePickerVisible}
                     mode="date"
                     date = {new Date()}
-                    onConfirm={date => this.handleConfirm(date)}
+                    onConfirm={date => {
+                      this.handleConfirm(date)
+                    }}
                     onCancel={() =>{
                     this.setState({isDatePickerVisible: false})
                     }}
                 />
+
+
+            <View style = {styles.button}>
+                <TouchableOpacity
+                    onPress = {()=>{
+                      if(this.state.isEditing){
+                        this.props.navigation.navigate('ScanStack', {params:{infoObj: this.state.infoObj,}, screen: 'ScanPreview'})
+                    }
+                    else{
+                        this.props.navigation.navigate('ScanStack', {params:{infoObj: this.state.infoObj,}, screen: 'Scanner'})
+                    }
+                    }}
+                    >
+                      
+                            <Text
+                            style={{color: 'white', fontSize: 12}}
+                            >Continue...</Text>
+            </TouchableOpacity>
+            </View>   
 </View>
   )
 }
@@ -169,35 +267,31 @@ renderAge(){
                           What type of Invoice are you about to scan?
                       </Text>
                       <Menu >
-                          <MenuTrigger text={this.state.isClaimDocument} customStyles = {this.state.menuStyle} />
+                          <MenuTrigger text={this.state.isEditing && this.state.infoObj.docType || this.state.docType} customStyles = {this.state.menuStyle} />
                               <MenuOptions>
-                                  <MenuOption onSelect={() => this.setState({isClaimDocument: 'Claim Document'})} text='Claim Document' />
-                                  <MenuOption onSelect={() => this.setState({isClaimDocument: 'Other Document'})} text='Other Document' />
+                                  <MenuOption onSelect={() =>{
+                                                              this.state.infoObj ={
+                                                                ...this.state.infoObj,
+                                                                docType: 'Claim Document'
+                                                              }
+                                                              this.setState({docType: 'Claim Document'})
+                                                            }} text='Claim Document' />
+                                  <MenuOption onSelect={() =>{
+                                                              this.state.infoObj ={
+                                                                ...this.state.infoObj,
+                                                                docType: 'Other Document'
+                                                              }
+                                                              this.setState({docType: 'Other Document'})
+                                                            }} text='Other Document' />
                               </MenuOptions>
                       </Menu>
               
-                          {(this.state.isClaimDocument == 'Other Document') && this.renderAge()}
-                          {(this.state.isClaimDocument == 'Claim Document') && this.renderClaimInfo()}
+                          {(this.state.infoObj.docType  == 'Other Document' || this.state.docType == 'Other Document') && this.renderAge()}
+                          {(this.state.infoObj.docType == 'Claim Document' || this.state.docType == 'Claim Document') && this.renderClaimInfo()}
 
-                          {(this.state.isDocumentPaid == 'Yes') && this.renderIsFromSameAccount()}                      
-                          {(this.state.sendMoneyToOriginalBank == 'No') && this.renderBankAccountDetails()}
-                   <View style = {styles.button}>
-                <TouchableOpacity
-                    onPress = {()=>{
-                        if(this.state.isEditing){
-                            this.props.navigation.navigate('ScanStack', {params:{img: this.state.pages,}, screen: 'ScanPreview'})
-                        }
-                        else{
-                            this.props.navigation.navigate('ScanStack', {params:{images: new Array(),}, screen: 'Scanner'})
-                        }
-                    }}
-                    >
-                      
-                            <Text
-                            style={{color: 'white', fontSize: 12}}
-                            >Continue...</Text>
-            </TouchableOpacity>
-            </View>   
+                          {(this.state.infoObj.isDocumentPaid == 'Yes' && this.state.infoObj.docType == 'Claim Document' || this.state.isDocumentPaid == 'Yes'  &&  this.state.docType == 'Claim Document') && this.renderIsFromSameAccount()}                      
+                          {(this.state.infoObj.sendMoneyToOriginalBank == 'No' && this.state.infoObj.docType == 'Claim Document' || this.state.sendMoneyToOriginalBank == 'No' &&  this.state.docType == 'Claim Document') && this.renderBankAccountDetails()}
+                  
                   </ScrollView>
               </KeyboardAvoidingView>
 
@@ -219,6 +313,7 @@ const styles = StyleSheet.create({
     height: 45,
     backgroundColor: "#E67F00",
     justifyContent: 'center',
+    alignSelf: 'center',
     alignItems: 'center',
    marginTop: 500,
    borderRadius:15,

@@ -32,15 +32,15 @@ constructor(props){
  super(props)
   this.state = {
       pdfScannerReference: React.createRef(),
-      Images: this.props.route.params.images
+      infoObj: this.props.route.params.infoObj
     }
    
 }
 
  handleScannedDocument(Img, init){    
-  this.state.Images.push({url: Img})  
+  this.state.infoObj.pages.push({url: Img})  
   
-  this.props.navigation.navigate('ScanStack', {params:{images: this.state.Images}, screen: 'imageCrop'})
+  this.props.navigation.navigate('ScanStack', {params:{infoObj: this.state.infoObj}, screen: 'imageCrop'})
   }
   render(){
         return(

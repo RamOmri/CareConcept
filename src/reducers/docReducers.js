@@ -12,7 +12,7 @@ const docReducers = (state = initState, action) =>{
                 ...state,
                   docList: state.docList.concat({
                   key: Math.random(),
-                  pages: action.data
+                  document: action.data
                     }
                 )
             

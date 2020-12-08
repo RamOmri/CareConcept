@@ -45,11 +45,7 @@ constructor(props){
             firstName: '',
             surName: '',
           }
-         /*  const resetAction = StackActions.reset({
-            index: 0,
-            actions: [NavigationActions.navigate({ routeName: 'ScanStack' })],
-          });
-          this.props.navigation.dispatch(resetAction); */
+        // alert(JSON.stringify(this.props.docs[0].key))
      }
 
     render(){
@@ -82,18 +78,16 @@ constructor(props){
                           
                                           renderItem = {({item, index}) => (                                         
                                             <TouchableOpacity onPress={()=>{ 
-                                                  let pagesInDoc = new Array()
-                                                  for(let i = 0; i < item.pages.length; i++){
-                                                    pagesInDoc.push({url: item.pages[i].url})
-                                                  }
-                                                  //alert(JSON.stringify(pagesInDoc))
+                                                  let info = item
+                                                 
                                                   this.props.delete(item.key)
-                                                  this.props.navigation.navigate('ClaimStack', {params:{isEditing:  true, pages: pagesInDoc}, screen: 'DocumentInfo'})          
+                                                  this.props.navigation.navigate('ClaimStack', {params:{isEditing:  true, infoObj: info}, screen: 'DocumentInfo'})          
                                                 }  
                                               }>
                                              <View style = {{marginTop: 10, justifyContent:'center', alignItems:'center'}}>
+                                                <Text style = {styles.questionText}>{`This is a ${item.document.docType} with ${item.document.pages.length} page/s`}</Text>
                                                   <Image                                             
-                                                  source={{uri: item.pages[0].url}}
+                                                  source={{uri: item.document.pages[0].url}}
                                                   style={{flex: 1,
                                                     width: 200,
                                                     height: 400,
@@ -131,6 +125,13 @@ const styles = StyleSheet.create({
   logo:{
         margin: 10,
         
+  },
+  questionText: {
+    width: 300,
+    color: '#E67F00',
+    justifyContent: 'center',
+    alignItems: 'center',
+    
   },
   documentScanButton: {
     flex:1,

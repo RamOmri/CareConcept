@@ -29,23 +29,23 @@ export default class imageCrop extends React.Component {
 constructor(props){
   super(props)
   this.state = {
-    Images: this.props.route.params.images,
+    infoObj: this.props.route.params.infoObj,
     imageHeight: 0,
     imageWidth: 0,
     cropRef: React.createRef(),
     loading: true
   }
-    
+    //alert(JSON.stringify(this.state.infoObj.pages[this.state.infoObj.pages.length - 1].url))
 }
  
 async componentDidMount(){
-  await this.getImageSize(this.state.Images[this.state.Images.length - 1].url)
+  await this.getImageSize(this.state.infoObj.pages[this.state.infoObj.pages.length - 1].url)
   
 }
 
  async onDone(croppedImageUri){
    this.setState({loading: true})
- this.state.Images.splice(this.state.Images.length - 1, 1, {url: croppedImageUri})
+ this.state.infoObj.pages.splice(this.state.infoObj.pages.length - 1, 1, {url: croppedImageUri})
   await this.getImageSize(croppedImageUri) 
 }
 
@@ -64,7 +64,7 @@ onError = (err) => {
   console.log(err);
 }
 onContinue = () =>{
-  this.props.navigation.navigate('ScanStack', {params:{img: this.state.Images}, screen: 'ScanPreview'})
+  this.props.navigation.navigate('ScanStack', {params:{infoObj: this.state.infoObj}, screen: 'ScanPreview'})
 }
 
 
@@ -81,7 +81,7 @@ onContinue = () =>{
                           onDone={croppedImg => this.onDone(croppedImg)}
                           onError={this.onError}
                           onCancel = {() => this.onContinue()}
-                          imageUri={this.state.Images[this.state.Images.length - 1].url}
+                          imageUri={this.state.infoObj.pages[this.state.infoObj.pages.length - 1].url}
                           imageWidth={this.state.imageWidth}
                         imageHeight={this.state.imageHeight}
                           initialRotation = {0}

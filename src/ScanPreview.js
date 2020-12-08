@@ -30,13 +30,13 @@ import { CommonActions } from '@react-navigation/native';
   constructor(props){
       super(props)
       this.state = {
-      finalImages: this.props.route.params.img,
+      infoObj: this.props.route.params.infoObj,
     }        
   }
   
   
     componentDidMount(){
-      this.state.finalImages.reverse()
+      this.state.infoObj.pages.reverse()
     }
 
   
@@ -48,7 +48,7 @@ import { CommonActions } from '@react-navigation/native';
                                     <TouchableOpacity
                                        style={{flex:1, backgroundColor:'#f59b00', alignItems:'center', borderRightWidth:2, borderRightColor:'black'}}
                                         onPress={() =>{
-                                          this.state.finalImages.reverse()
+                                          this.state.infoObj.pages.reverse()
 
                                           
 
@@ -58,7 +58,7 @@ import { CommonActions } from '@react-navigation/native';
                                                                                   routes: [
                                                                                     {
                                                                                       name: 'Scanner',
-                                                                                      params: { images: this.state.finalImages },
+                                                                                      params: { infoObj: this.state.infoObj },
                                                                                     },
                                                                                   ],
                                                                                 })
@@ -85,7 +85,7 @@ import { CommonActions } from '@react-navigation/native';
               </View>
               <View style ={{flex:1}}>
                 
-                <ImageViewer imageUrls={this.state.finalImages}/>
+                <ImageViewer imageUrls={this.state.infoObj.pages}/>
               </View>
               <View style ={{flex:0.06, alignItems:'center', flexDirection:'row', justifyContent:'center'}}>
                             
@@ -93,9 +93,9 @@ import { CommonActions } from '@react-navigation/native';
                               <TouchableOpacity
                                   style={{backgroundColor:'#f59b00', flex: 1, alignItems:'center'}}
                                   onPress={() =>{
-                                    this.state.finalImages.reverse()
-                                    this.props.add(this.state.finalImages)
-                                    this.props.navigation.navigate('ClaimStack', {params:{Document: this.state.finalImages}, screen: 'SummaryScreen'})
+                                    this.state.infoObj.pages.reverse()
+                                    this.props.add(this.state.infoObj)
+                                    this.props.navigation.navigate('ClaimStack', {params:{}, screen: 'SummaryScreen'})
                                   }}
                                       >
                                   <Text style={{ fontSize: 18, color: "white", margin: 10 }}>
