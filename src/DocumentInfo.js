@@ -80,6 +80,29 @@ constructor(props){
     //  alert(JSON.stringify(this.state))
   }
   
+  renderContinue = () =>{
+    return(
+      <TouchableOpacity
+      onPress = {()=>{
+            if(this.state.isEditing){
+                this.props.navigation.navigate('ScanStack', {params:{infoObj: this.state.infoObj,}, screen: 'ScanPreview'})
+            }
+            else{
+                this.props.navigation.navigate('ScanStack', {params:{infoObj: this.state.infoObj,}, screen: 'Scanner'})
+            }
+      }}
+      >
+      <View style = {styles.button}>
+        
+                
+                      <Text
+                      style={{color: 'white', fontSize: 12}}
+                      >Continue...</Text>
+
+      </View>  
+      </TouchableOpacity> 
+          )
+  }
   renderIsFromSameAccount = () =>{
       return(
         <View style = {{justifyContent: 'center', alignItems:'center'}}>
@@ -105,6 +128,7 @@ constructor(props){
                                   }} text='No' />
                             </MenuOptions>
                     </Menu>
+                    {this.state.sendMoneyToOriginalBank == 'Yes' && this.renderContinue()}
           </View>
       )
   }
@@ -125,32 +149,15 @@ constructor(props){
               }}
             value={this.state.isEditing && this.state.infoObj.IBAN || this.state.IBAN}
             />
-           <View style = {styles.button}>
-                <TouchableOpacity
-                    onPress = {()=>{
-                          if(this.state.isEditing){
-                              this.props.navigation.navigate('ScanStack', {params:{infoObj: this.state.infoObj,}, screen: 'ScanPreview'})
-                          }
-                          else{
-                              this.props.navigation.navigate('ScanStack', {params:{infoObj: this.state.infoObj,}, screen: 'Scanner'})
-                          }
-                    }}
-                    >
-                      
-                            <Text
-                            style={{color: 'white', fontSize: 12}}
-                            >Continue...</Text>
-            </TouchableOpacity>
-            </View>   
+             {this.renderContinue()}
         </View>
     )
 }
 handleConfirm = (date) => {
     this.state.isDatePickerVisible = false
-    this.setState({dateStatus: date.getDate().toString() + '/' + (date.getMonth() + 1).toString() + '/' + date.getFullYear().toString() })
-        
-   
+    this.setState({dateStatus: date.getDate().toString() + '/' + (date.getMonth() + 1).toString() + '/' + date.getFullYear().toString() })  
   };
+
 renderClaimInfo(){
   return(
     <View>
@@ -198,6 +205,7 @@ renderClaimInfo(){
                                               }} text='No' />
               </MenuOptions>
       </Menu>
+
     </View>
   )
 }
@@ -233,23 +241,7 @@ renderAge(){
                 />
 
 
-            <View style = {styles.button}>
-                <TouchableOpacity
-                    onPress = {()=>{
-                      if(this.state.isEditing){
-                        this.props.navigation.navigate('ScanStack', {params:{infoObj: this.state.infoObj,}, screen: 'ScanPreview'})
-                    }
-                    else{
-                        this.props.navigation.navigate('ScanStack', {params:{infoObj: this.state.infoObj,}, screen: 'Scanner'})
-                    }
-                    }}
-                    >
-                      
-                            <Text
-                            style={{color: 'white', fontSize: 12}}
-                            >Continue...</Text>
-            </TouchableOpacity>
-            </View>   
+            {this.renderContinue()}
 </View>
   )
 }

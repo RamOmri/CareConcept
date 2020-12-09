@@ -108,18 +108,19 @@ constructor(props){
                                                             value={this.props.Surname}
                                                             />
                            
-                        
-                                            <View style = {styles.button}>
                                                 <TouchableOpacity
-                                                    onPress = {()=>{
-                                                        this.props.navigation.navigate('ClaimStack', {params:{Document: [], index: -1}, screen: 'SummaryScreen'})
-                                                    }}
-                                                    >
+                                                              onPress = {()=>{
+                                                                  this.props.navigation.navigate('ClaimStack', {params:{Document: [], index: -1}, screen: 'SummaryScreen'})
+                                                              }}
+                                                              >
+                                            <View style = {styles.button}>
+                                               
                                                             <Text
                                                             style={{color: 'white', fontSize: 15}}
                                                             >Continue...</Text>
-                                                </TouchableOpacity>
+                                               
                                             </View>
+                                             </TouchableOpacity>
                         </View>
             </ImageBackground>
         )
