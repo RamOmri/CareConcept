@@ -45,7 +45,7 @@ constructor(props){
             firstName: '',
             surName: '',
           }
-        // alert(JSON.stringify(this.props.docs[0].key))
+          
      }
 
     render(){
@@ -60,17 +60,20 @@ constructor(props){
 
                             <View style = {{flexDirection:'row', justifyContent:'center',}}>
                             
-                                    <View style = {styles.documentScanButton}>
-                                                        <TouchableOpacity
-                                                            onPress = {()=>{
-                                                                this.props.navigation.navigate('ClaimStack', {params:{isEditig: false}, screen: 'DocumentInfo'})
-                                                            }}
-                                                            >
+                                   <View style = {styles.documentScanButton}>
+                                                    <TouchableOpacity
+                                                        onPress = {()=>{
+                                                            this.props.navigation.navigate('ClaimStack', {params:{isEditing: false}, screen: 'DocumentInfo'})
+                                                        }}
+                                                        > 
+                                                            
                                                                     <Text
                                                                     style={{color: 'white', fontSize: 16}}
                                                                     >Scan a Document.</Text>
-                                                        </TouchableOpacity>
-                                    </View>
+                                                             
+                                                    </TouchableOpacity>
+                                                    </View>
+                                   
                         </View>
                                        <FlatList
                                           extraData={this.state} 
@@ -103,17 +106,19 @@ constructor(props){
                        
                         <View style = {{flex: 1, justifyContent: 'flex-end', marginBottom: 10, alignItems: 'center', marginTop: 3}}>
                                 
-                                <View style = {styles.button}>
-                                                    <TouchableOpacity
-                                                        onPress = {()=>{
-                                                            this.props.navigation.navigate('ClaimStack', {params:{}, screen: 'SummaryScreen'})
-                                                        }}
-                                                        >
+                                
+                                                <TouchableOpacity
+                                                    onPress = {()=>{
+                                                        this.props.navigation.navigate('ClaimStack', {params:{}, screen: 'SummaryScreen'})
+                                                    }}
+                                                    >
+                                                        <View style = {styles.button}>
                                                                 <Text
                                                                 style={{color: 'white', fontSize: 12}}
                                                                 >Send...</Text>
-                                                    </TouchableOpacity>
-                                </View>
+                                                      </View>
+                                                </TouchableOpacity>
+                                
                     </View>
                 
             </ImageBackground>

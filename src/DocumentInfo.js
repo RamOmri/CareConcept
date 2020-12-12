@@ -11,7 +11,8 @@ import {
   TextInput,
   ImageBackground,
   KeyboardAvoidingView,
-  Button
+  Button,
+  BackHandler
 } from 'react-native';
 
 import {
@@ -32,6 +33,8 @@ import {
     MenuProvider
   } from 'react-native-popup-menu';
   import DateTimePickerModal from "react-native-modal-datetime-picker";
+  import {connect} from 'react-redux'
+  import {addDoc} from './actions/claimActions'
 
 
 class DocumentInfo extends React.Component {
@@ -77,86 +80,96 @@ constructor(props){
         }
         delete this.state.infoObj.key
       }
-    //  alert(JSON.stringify(this.state))
   }
-  
-  renderContinue = () =>{
-    return(
-      <TouchableOpacity
-      onPress = {()=>{
-            if(this.state.isEditing){
-                this.props.navigation.navigate('ScanStack', {params:{infoObj: this.state.infoObj,}, screen: 'ScanPreview'})
-            }
-            else{
-                this.props.navigation.navigate('ScanStack', {params:{infoObj: this.state.infoObj,}, screen: 'Scanner'})
-            }
-      }}
-      >
-      <View style = {styles.button}>
-        
-                
-                      <Text
-                      style={{color: 'white', fontSize: 12}}
-                      >Continue...</Text>
 
-      </View>  
-      </TouchableOpacity> 
-          )
-  }
-  renderIsFromSameAccount = () =>{
-      return(
-        <View style = {{justifyContent: 'center', alignItems:'center'}}>
-            <Text style = {styles.questionText}> 
-                    Would you like us to transfer the money to the same bank account you used to pay for your insurance?
-                    </Text>
-                    <Menu >
-                        <MenuTrigger text={this.state.isEditing && this.state.infoObj.sendMoneyToOriginalBank || this.state.sendMoneyToOriginalBank} customStyles = {this.state.menuStyle}/>
-                            <MenuOptions>
-                                <MenuOption onSelect={() => {
-                                  this.state.infoObj = {
-                                    ...this.state.infoObj,
-                                    sendMoneyToOriginalBank: 'Yes'
-                                  }
-                                  this.setState({sendMoneyToOriginalBank: 'Yes'})
-                                  }} text='Yes' />
-                                <MenuOption onSelect={() => {
-                                  this.state.infoObj = {
-                                    ...this.state.infoObj,
-                                    sendMoneyToOriginalBank: 'No'
-                                  }
-                                  this.setState({sendMoneyToOriginalBank: 'No'})
-                                  }} text='No' />
-                            </MenuOptions>
-                    </Menu>
-                    {this.state.sendMoneyToOriginalBank == 'Yes' && this.renderContinue()}
-          </View>
-      )
-  }
-  renderBankAccountDetails = () =>{
+  render(){
     return(
-      <View style = {{justifyContent: 'center', alignItems:'center'}}>
-          <TextInput
-            style = {styles.policyInput}
-            placeholder = 'please enter your IBAN'
-            placeholderTextColor="#004799"
-            secureTextEntry = {false}
-            onChangeText={iban =>{
-               this.setState({IBAN: iban})
-               this.state.infoObj = {
-                ...this.state.infoObj,
-                IBAN: iban
-              }
-              }}
-            value={this.state.isEditing && this.state.infoObj.IBAN || this.state.IBAN}
-            />
-             {this.renderContinue()}
-        </View>
+        <ImageBackground style={styles.container}
+        source={require('./img/background.jpg')}
+        style={{ resizeMode: 'stretch', flex: 1,  }}
+         >
+        <Image  source = {require('./img/CareConceptLogo.png')} style = {styles.logo} />
+            <View  style = {{justifyContent: 'center', alignItems:'center'}}>
+            <KeyboardAvoidingView>
+              <ScrollView>
+                  <Text style = {styles.questionText}> 
+                      What type of Invoice are you about to scan?
+                  </Text>
+                  <Menu >
+                      <MenuTrigger text={this.state.isEditing && this.state.infoObj.docType || this.state.docType} customStyles = {this.state.menuStyle} />
+                          <MenuOptions>
+                              <MenuOption onSelect={() =>{
+                                                          this.state.infoObj ={
+                                                            ...this.state.infoObj,
+                                                            docType: 'Claim Document'
+                                                          }
+                                                          this.setState({docType: 'Claim Document'})
+                                                        }} text='Claim Document' />
+                              <MenuOption onSelect={() =>{
+                                                          this.state.infoObj ={
+                                                            ...this.state.infoObj,
+                                                            docType: 'Other Document'
+                                                          }
+                                                          this.setState({docType: 'Other Document'})
+                                                        }} text='Other Document' />
+                          </MenuOptions>
+                  </Menu>
+          
+                      {(this.state.infoObj.docType  == 'Other Document' || this.state.docType == 'Other Document') && this.renderAge()}
+                      {(this.state.infoObj.docType == 'Claim Document' || this.state.docType == 'Claim Document') && this.renderClaimInfo()}
+
+                      {(this.state.infoObj.isDocumentPaid == 'Yes' && this.state.infoObj.docType == 'Claim Document' || this.state.isDocumentPaid == 'Yes'  &&  this.state.docType == 'Claim Document') && this.renderIsFromSameAccount()}                      
+                      {(this.state.infoObj.sendMoneyToOriginalBank == 'No' && this.state.infoObj.docType == 'Claim Document' && this.state.infoObj.isDocumentPaid == 'Yes' || this.state.sendMoneyToOriginalBank == 'No' &&  this.state.docType == 'Claim Document' && this.state.isDocumentPaid == 'Yes') && this.renderBankAccountDetails()}
+              
+              </ScrollView>
+          </KeyboardAvoidingView>
+
+        
+           </View>
+      </ImageBackground>
+          
     )
 }
+
+renderAge(){
+    return(
+      <View style = {{alignItems: 'center', justifyContent:'center'}}>
+      <Text style = {styles.questionText}>Please enter the birthdate of the insured person: </Text>
+                <Button color = '#f59b00'
+                  title={this.state.isEditing && this.state.infoObj.dateStatus || this.state.dateStatus} 
+                  onPress={()=>{
+                  this.setState({isDatePickerVisible: true})
+                  }} />
+                  <DateTimePickerModal
+                      isVisible={this.state.isDatePickerVisible}
+                      mode="date"
+                      date = {new Date()}
+                      onConfirm={date => {
+                        this.handleConfirm(date)
+                      }}
+                      onCancel={() =>{
+                      this.setState({isDatePickerVisible: false})
+                      }}
+                  />
+
+
+              {this.renderContinue()}
+      </View>
+    )
+}
+
 handleConfirm = (date) => {
-    this.state.isDatePickerVisible = false
-    this.setState({dateStatus: date.getDate().toString() + '/' + (date.getMonth() + 1).toString() + '/' + date.getFullYear().toString() })  
-  };
+  this.state.isDatePickerVisible = false
+  let birthDate =  date.getDate().toString() + '/' + (date.getMonth() + 1).toString() + '/' + date.getFullYear().toString() 
+  this.state.infoObj ={
+    ...this.state.infoObj,
+    dateStatus: birthDate
+  }
+  this.setState({dateStatus: birthDate})
+     
+};
+
+
 
 renderClaimInfo(){
   return(
@@ -205,94 +218,100 @@ renderClaimInfo(){
                                               }} text='No' />
               </MenuOptions>
       </Menu>
+      {(this.state.isDocumentPaid == 'No' || this.state.infoObj.isDocumentPaid == "No") && this.renderContinue()}
 
     </View>
   )
 }
-handleConfirm = (date) => {
-  this.state.isDatePickerVisible = false
-  let birthDate =  date.getDate().toString() + '/' + (date.getMonth() + 1).toString() + '/' + date.getFullYear().toString() 
-  this.state.infoObj ={
-    ...this.state.infoObj,
-    dateStatus: birthDate
-  }
-  this.setState({dateStatus: birthDate})
-     
-};
-renderAge(){
+
+renderIsFromSameAccount = () =>{
   return(
-    <View style = {{alignItems: 'center', justifyContent:'center'}}>
-    <Text style = {styles.questionText}>Please enter the birthdate of the insured person: </Text>
-              <Button color = '#f59b00'
-                title={this.state.isEditing && this.state.infoObj.dateStatus || this.state.dateStatus} 
-                onPress={()=>{
-                this.setState({isDatePickerVisible: true})
-                }} />
-                <DateTimePickerModal
-                    isVisible={this.state.isDatePickerVisible}
-                    mode="date"
-                    date = {new Date()}
-                    onConfirm={date => {
-                      this.handleConfirm(date)
-                    }}
-                    onCancel={() =>{
-                    this.setState({isDatePickerVisible: false})
-                    }}
-                />
-
-
-            {this.renderContinue()}
-</View>
+    <View style = {{justifyContent: 'center', alignItems:'center'}}>
+        <Text style = {styles.questionText}> 
+                Would you like us to transfer the money to the same bank account you used to pay for your insurance?
+                </Text>
+                <Menu >
+                    <MenuTrigger text={this.state.isEditing && this.state.infoObj.sendMoneyToOriginalBank || this.state.sendMoneyToOriginalBank} customStyles = {this.state.menuStyle}/>
+                        <MenuOptions>
+                            <MenuOption onSelect={() => {
+                              this.state.infoObj = {
+                                ...this.state.infoObj,
+                                sendMoneyToOriginalBank: 'Yes'
+                              }
+                              this.setState({sendMoneyToOriginalBank: 'Yes'})
+                              }} text='Yes' />
+                            <MenuOption onSelect={() => {
+                              this.state.infoObj = {
+                                ...this.state.infoObj,
+                                sendMoneyToOriginalBank: 'No'
+                              }
+                              this.setState({sendMoneyToOriginalBank: 'No'})
+                              }} text='No' />
+                        </MenuOptions>
+                </Menu>
+                {this.state.sendMoneyToOriginalBank == 'Yes' && this.renderContinue()}
+      </View>
   )
 }
-    render(){
-        return(
-            <ImageBackground style={styles.container}
-            source={require('./img/background.jpg')}
-            style={{ resizeMode: 'stretch', flex: 1,  }}
-             >
-            <Image  source = {require('./img/CareConceptLogo.png')} style = {styles.logo} />
-                <View  style = {{justifyContent: 'center', alignItems:'center'}}>
-                <KeyboardAvoidingView>
-                  <ScrollView>
-                      <Text style = {styles.questionText}> 
-                          What type of Invoice are you about to scan?
-                      </Text>
-                      <Menu >
-                          <MenuTrigger text={this.state.isEditing && this.state.infoObj.docType || this.state.docType} customStyles = {this.state.menuStyle} />
-                              <MenuOptions>
-                                  <MenuOption onSelect={() =>{
-                                                              this.state.infoObj ={
-                                                                ...this.state.infoObj,
-                                                                docType: 'Claim Document'
-                                                              }
-                                                              this.setState({docType: 'Claim Document'})
-                                                            }} text='Claim Document' />
-                                  <MenuOption onSelect={() =>{
-                                                              this.state.infoObj ={
-                                                                ...this.state.infoObj,
-                                                                docType: 'Other Document'
-                                                              }
-                                                              this.setState({docType: 'Other Document'})
-                                                            }} text='Other Document' />
-                              </MenuOptions>
-                      </Menu>
-              
-                          {(this.state.infoObj.docType  == 'Other Document' || this.state.docType == 'Other Document') && this.renderAge()}
-                          {(this.state.infoObj.docType == 'Claim Document' || this.state.docType == 'Claim Document') && this.renderClaimInfo()}
+renderBankAccountDetails = () =>{
+return(
+  <View style = {{justifyContent: 'center', alignItems:'center'}}>
+      <TextInput
+        style = {styles.policyInput}
+        placeholder = 'please enter your IBAN'
+        placeholderTextColor="#004799"
+        secureTextEntry = {false}
+        onChangeText={iban =>{
+           this.setState({IBAN: iban})
+           this.state.infoObj = {
+            ...this.state.infoObj,
+            IBAN: iban
+          }
+          }}
+        value={this.state.isEditing && this.state.infoObj.IBAN || this.state.IBAN}
+        />
+         {this.renderContinue()}
+    </View>
+)
+}
 
-                          {(this.state.infoObj.isDocumentPaid == 'Yes' && this.state.infoObj.docType == 'Claim Document' || this.state.isDocumentPaid == 'Yes'  &&  this.state.docType == 'Claim Document') && this.renderIsFromSameAccount()}                      
-                          {(this.state.infoObj.sendMoneyToOriginalBank == 'No' && this.state.infoObj.docType == 'Claim Document' || this.state.sendMoneyToOriginalBank == 'No' &&  this.state.docType == 'Claim Document') && this.renderBankAccountDetails()}
-                  
-                  </ScrollView>
-              </KeyboardAvoidingView>
+renderContinue = () =>{
+  return(
+    <TouchableOpacity
+    onPress = {()=>{
+          if(this.state.isEditing){
+              this.props.navigation.navigate('ScanStack', {params:{infoObj: this.state.infoObj,}, screen: 'ScanPreview'})
+          }
+          else{
+              this.props.navigation.navigate('ScanStack', {params:{infoObj: this.state.infoObj,}, screen: 'Scanner'})
+          }
+    }}
+    >
+      <View style = {styles.button}>
+                      <Text
+                      style={{color: 'white', fontSize: 12}}
+                      >Continue...</Text>
 
-            
-               </View>
-          </ImageBackground>
-              
+      </View>  
+    </TouchableOpacity> 
         )
+}
+  componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
+  }
+
+  onBackPress = () => {
+    if(this.state.isEditing){
+      this.props.add(this.state.infoObj)
     }
+    this.props.navigation.navigate('ClaimStack', {params:{}, screen: 'SummaryScreen'})
+    return true;
+  }
+  
 }
 
 const styles = StyleSheet.create({
@@ -368,14 +387,14 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) =>{
   return{
-   
+    docs: state.docReducer.docList
   }
 }
 
 const mapDispatchToProps = (dispatch) =>{
   return {
-    
+    add: (doc) => dispatch(addDoc(doc)),
   }
-}  
+}   
 
-export default DocumentInfo
+export default connect(mapStateToProps, mapDispatchToProps)(DocumentInfo)

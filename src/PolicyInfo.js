@@ -9,7 +9,9 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
-  ImageBackground
+  ImageBackground,
+  PermissionsAndroid,
+  Platform
 } from 'react-native';
 
 import {
@@ -59,72 +61,95 @@ constructor(props){
         
     }
   }
-  
-}
  
+}
 
-    render(){
-        return(
-                <ImageBackground style={styles.container}
-            source={require('./img/background.jpg')}
-            style={{ resizeMode: 'stretch', flex: 1, }}
-        >                        
-                            <Image  source = {require('./img/CareConceptLogo.png')} style = {styles.logo} />
+render(){
+  return(
+          <ImageBackground style={styles.container}
+      source={require('./img/background.jpg')}
+      style={{ resizeMode: 'stretch', flex: 1, }}
+  >                        
+                      <Image  source = {require('./img/CareConceptLogo.png')} style = {styles.logo} />
 
-                            <View style = {{flex: 1, alignItems:'center'}}>
-                                
-                                <TextInput
-                                                style = {styles.policyInput}
-                                                    placeholder = 'Insurance Number'
-                                                    placeholderTextColor="#004799"
-                                                    secureTextEntry = {false}
-                                                    onChangeText={number => this.props.changeInsuranceNumber(number)}
-                                                    value={this.props.insuranceNumber}
-                                                    />
-                                    <Text style = {styles.questionText}>Please select your sex</Text>
-                                    <Menu >
-                                        <MenuTrigger text={this.props.gender} customStyles = {this.state.menuStyle} />
-                                            <MenuOptions>
-                                                <MenuOption onSelect={() => this.props.changeGender('Male')} text='Male' />
-                                                <MenuOption onSelect={() => this.props.changeGender('Female')} text='Female' />
-                                                <MenuOption onSelect={() => this.props.changeGender('Unspecified')} text='Unspecified' />
-                                            </MenuOptions>
-                                    </Menu>
-                             
-                                        <TextInput
-                                                        style = {styles.nameInput}
-                                                            placeholder = 'First name'
-                                                            placeholderTextColor="#004799"
-                                                            secureTextEntry = {false}
-                                                            onChangeText={name => this.props.changeName(name)}
-                                                            value={this.props.FirstName}
-                                                            />
-                                        <TextInput
-                                                        style = {styles.nameInput}
-                                                            placeholder = 'Surname'
-                                                            placeholderTextColor="#004799"
-                                                            secureTextEntry = {false}
-                                                            onChangeText={surname => this.props.changeSurname(surname)}
-                                                            value={this.props.Surname}
-                                                            />
-                           
-                                                <TouchableOpacity
-                                                              onPress = {()=>{
-                                                                  this.props.navigation.navigate('ClaimStack', {params:{Document: [], index: -1}, screen: 'SummaryScreen'})
-                                                              }}
-                                                              >
-                                            <View style = {styles.button}>
-                                               
-                                                            <Text
-                                                            style={{color: 'white', fontSize: 15}}
-                                                            >Continue...</Text>
-                                               
-                                            </View>
-                                             </TouchableOpacity>
-                        </View>
-            </ImageBackground>
-        )
+                      <View style = {{flex: 1, alignItems:'center'}}>
+                          
+                          <TextInput
+                                          style = {styles.policyInput}
+                                              placeholder = 'Insurance Number'
+                                              placeholderTextColor="#004799"
+                                              secureTextEntry = {false}
+                                              onChangeText={number => this.props.changeInsuranceNumber(number)}
+                                              value={this.props.insuranceNumber}
+                                              />
+                              <Text style = {styles.questionText}>Please select your sex</Text>
+                              <Menu >
+                                  <MenuTrigger text={this.props.gender} customStyles = {this.state.menuStyle} />
+                                      <MenuOptions>
+                                          <MenuOption onSelect={() => this.props.changeGender('Male')} text='Male' />
+                                          <MenuOption onSelect={() => this.props.changeGender('Female')} text='Female' />
+                                          <MenuOption onSelect={() => this.props.changeGender('Unspecified')} text='Unspecified' />
+                                      </MenuOptions>
+                              </Menu>
+                       
+                                  <TextInput
+                                                  style = {styles.nameInput}
+                                                      placeholder = 'First name'
+                                                      placeholderTextColor="#004799"
+                                                      secureTextEntry = {false}
+                                                      onChangeText={name => this.props.changeName(name)}
+                                                      value={this.props.FirstName}
+                                                      />
+                                  <TextInput
+                                                  style = {styles.nameInput}
+                                                      placeholder = 'Surname'
+                                                      placeholderTextColor="#004799"
+                                                      secureTextEntry = {false}
+                                                      onChangeText={surname => this.props.changeSurname(surname)}
+                                                      value={this.props.Surname}
+                                                      />
+                     
+                                          <TouchableOpacity
+                                                        onPress = {()=>{
+                                                            this.requestCameraPermission()
+                                                        }}
+                                                        >
+                                      <View style = {styles.button}>
+                                         
+                                                      <Text
+                                                      style={{color: 'white', fontSize: 15}}
+                                                      >Continue...</Text>
+                                         
+                                      </View>
+                                       </TouchableOpacity>
+                  </View>
+      </ImageBackground>
+  )
+}
+
+requestCameraPermission = async () => {
+  try {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.CAMERA,
+      {
+        title: "Request Camera permision",
+        message:
+          "CareConcept needs to access your phone's camera",
+        buttonNegative: "Cancel",
+        buttonPositive: "OK"
+      }
+    );
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      this.props.navigation.navigate('ClaimStack', {params:{Document: [], index: -1}, screen: 'SummaryScreen'})
+    } else {
+        //do nothing
     }
+  } catch (err) {
+    console.warn(err);
+  }
+};
+
+   
 }
 
 const styles = StyleSheet.create({

@@ -59,9 +59,7 @@ constructor(props){
 }
 handleConfirm = (date) => {
     this.state.isDatePickerVisible = false
-    this.setState({dateStatus: date.getDate().toString() + '/' + (date.getMonth() + 1).toString() + '/' + date.getFullYear().toString() })
-        
-   
+    this.setState({dateStatus: date.getDate().toString() + '/' + (date.getMonth() + 1).toString() + '/' + date.getFullYear().toString() }) 
   };
 
   

@@ -65,22 +65,24 @@ constructor(props){
             detectionRefreshRateInMS = {10000}
             detectionCountBeforeCapture={-1}
             detectionRefreshRateInMS={50000}
-          /> 
-           
-           <View style ={{flex:0.12}}>
-                   <TouchableOpacity
-                       style={styles.scanButton}
-                       onPress={() =>{
-                                  this.state.pdfScannerReference.current.capture()
-                                }}
-                                      >
-                        <Text style={{ fontSize: 18, color: "white", margin: 10 }}>
-                                  Scan
-                        </Text>
-                  </TouchableOpacity>
-            </View>
+          />  
           
-          
+          <View style ={{flex:0.12}}>
+            <TouchableOpacity
+                        style={styles.scanButton}
+                        onPress={() =>{
+                                    this.state.pdfScannerReference.current.capture()
+                                  }}
+                                        > 
+            
+                    
+                          <Text style={{ fontSize: 18, color: "white", margin: 10 }}>
+                                    Scan
+                          </Text>
+                  
+              
+            </TouchableOpacity>
+          </View>
           </React.Fragment>
         )
 
