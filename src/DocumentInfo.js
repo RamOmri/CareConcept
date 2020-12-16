@@ -34,7 +34,7 @@ import {
   } from 'react-native-popup-menu';
   import DateTimePickerModal from "react-native-modal-datetime-picker";
   import {connect} from 'react-redux'
-  import {addDoc} from './actions/claimActions'
+  import {addDoc, setIBAN, setDate} from './actions/claimActions'
 
 
 class DocumentInfo extends React.Component {
@@ -43,12 +43,9 @@ constructor(props){
   this.state = {
         isEditing: this.props.route.params.isEditing,
         isDocumentGerman: 'Select...',
-        isDocumentPaid: 'Select...',
-        sendMoneyToOriginalBank: 'Select...',
         docType: 'Select...',
+        sendMoneyToContractualServices: 'Select...',
         isDatePickerVisible: false,
-        dateStatus: 'select...',
-        IBAN: '',
         infoObj: {
           pages: [],
         },
@@ -92,6 +89,7 @@ constructor(props){
             <View  style = {{justifyContent: 'center', alignItems:'center'}}>
             <KeyboardAvoidingView>
               <ScrollView>
+                {this.renderAge()}
                   <Text style = {styles.questionText}> 
                       What type of Invoice are you about to scan?
                   </Text>
@@ -115,11 +113,10 @@ constructor(props){
                           </MenuOptions>
                   </Menu>
           
-                      {(this.state.infoObj.docType  == 'Other Document' || this.state.docType == 'Other Document') && this.renderAge()}
-                      {(this.state.infoObj.docType == 'Claim Document' || this.state.docType == 'Claim Document') && this.renderClaimInfo()}
-
-                      {(this.state.infoObj.isDocumentPaid == 'Yes' && this.state.infoObj.docType == 'Claim Document' || this.state.isDocumentPaid == 'Yes'  &&  this.state.docType == 'Claim Document') && this.renderIsFromSameAccount()}                      
-                      {(this.state.infoObj.sendMoneyToOriginalBank == 'No' && this.state.infoObj.docType == 'Claim Document' && this.state.infoObj.isDocumentPaid == 'Yes' || this.state.sendMoneyToOriginalBank == 'No' &&  this.state.docType == 'Claim Document' && this.state.isDocumentPaid == 'Yes') && this.renderBankAccountDetails()}
+                      {(this.state.infoObj.docType == 'Claim Document' || this.state.docType == 'Claim Document') && this.renderClaimInfo()}   
+                      {(this.state.docType == 'Other Document' || this.state.infoObj.docType == 'Other Document') && this.renderContinue()}                      
+                                      
+                     
               
               </ScrollView>
           </KeyboardAvoidingView>
@@ -135,11 +132,6 @@ renderAge(){
     return(
       <View style = {{alignItems: 'center', justifyContent:'center'}}>
       <Text style = {styles.questionText}>Please enter the birthdate of the insured person: </Text>
-               {/*  <Button color = '#f59b00'
-                  title={this.state.isEditing && this.state.infoObj.dateStatus || this.state.dateStatus} 
-                  onPress={()=>{
-                  this.setState({isDatePickerVisible: true})
-                  }} /> */}
                   <TouchableOpacity
                         onPress = {()=>{
                           this.setState({isDatePickerVisible: true})
@@ -148,7 +140,7 @@ renderAge(){
       <View style = {{margin: 10, borderColor: '#f59b00', borderWidth: 5, height: 40, width: 120, justifyContent: "center", alignItems:"center"}}>
                       <Text
                       style={{color: '#f59b00', fontSize: 12}}
-                      >{this.state.isEditing && this.state.infoObj.dateStatus || this.state.dateStatus} </Text>
+                      >{this.state.isEditing && this.state.infoObj.dateStatus || this.props.date} </Text>
 
       </View>  
     </TouchableOpacity> 
@@ -163,9 +155,6 @@ renderAge(){
                       this.setState({isDatePickerVisible: false})
                       }}
                   />
-
-
-              {this.renderContinue()}
       </View>
     )
 }
@@ -177,8 +166,7 @@ handleConfirm = (date) => {
     ...this.state.infoObj,
     dateStatus: birthDate
   }
-  this.setState({dateStatus: birthDate})
-     
+   this.props.set_date(birthDate)  
 };
 
 
@@ -207,30 +195,8 @@ renderClaimInfo(){
                                               this.setState({isDocumentGerman: 'No'})
                                               }} text='No' />
               </MenuOptions>
+              {this.renderIsFromSameAccount()}
       </Menu>
-      <Text style = {styles.questionText}> 
-          Have you already paid for the invoice?
-      </Text>
-      <Menu >
-          <MenuTrigger text={this.state.isEditing && this.state.infoObj.isDocumentPaid || this.state.isDocumentPaid } customStyles = {this.state.menuStyle} />
-              <MenuOptions>
-                  <MenuOption onSelect={() => {
-                                              this.state.infoObj = {
-                                                ...this.state.infoObj,
-                                                isDocumentPaid: 'Yes'
-                                              }
-                                              this.setState({isDocumentPaid: 'Yes'})
-                                              }} text='Yes' />
-                  <MenuOption onSelect={() => {
-                                              this.state.infoObj = {
-                                                ...this.state.infoObj,
-                                                isDocumentPaid: 'No'
-                                              }
-                                              this.setState({isDocumentPaid: 'No'})
-                                              }} text='No' />
-              </MenuOptions>
-      </Menu>
-      {(this.state.isDocumentPaid == 'No' || this.state.infoObj.isDocumentPaid == "No") && this.renderContinue()}
 
     </View>
   )
@@ -240,51 +206,55 @@ renderIsFromSameAccount = () =>{
   return(
     <View style = {{justifyContent: 'center', alignItems:'center'}}>
         <Text style = {styles.questionText}> 
-                Would you like us to transfer the money to the same bank account you used to pay for your insurance?
+              Should contractual services be reimbursed to the biller (physician/hospital, etc.)?
                 </Text>
                 <Menu >
-                    <MenuTrigger text={this.state.isEditing && this.state.infoObj.sendMoneyToOriginalBank || this.state.sendMoneyToOriginalBank} customStyles = {this.state.menuStyle}/>
+                    <MenuTrigger text={this.state.isEditing && this.state.infoObj.sendMoneyToContractualServices || this.state.sendMoneyToContractualServices} customStyles = {this.state.menuStyle}/>
                         <MenuOptions>
                             <MenuOption onSelect={() => {
                               this.state.infoObj = {
                                 ...this.state.infoObj,
-                                sendMoneyToOriginalBank: 'Yes'
+                                sendMoneyToContractualServices: 'Yes'
                               }
-                              this.setState({sendMoneyToOriginalBank: 'Yes'})
+                              this.setState({sendMoneyToContractualServices: 'Yes'})
                               }} text='Yes' />
                             <MenuOption onSelect={() => {
                               this.state.infoObj = {
                                 ...this.state.infoObj,
-                                sendMoneyToOriginalBank: 'No'
+                                sendMoneyToContractualServices: 'No'
                               }
-                              this.setState({sendMoneyToOriginalBank: 'No'})
+                              this.setState({sendMoneyToContractualServices: 'No'})
                               }} text='No' />
                         </MenuOptions>
                 </Menu>
-                {this.state.sendMoneyToOriginalBank == 'Yes' && this.renderContinue()}
+                {(this.state.sendMoneyToContractualServices == 'Yes' || this.state.infoObj.sendMoneyToContractualServices == 'Yes') && this.renderContinue()}
+                {(this.state.sendMoneyToContractualServices == 'No' || this.state.infoObj.sendMoneyToContractualServices == 'No') && this.renderBankAccountDetails()}
       </View>
   )
 }
 renderBankAccountDetails = () =>{
 return(
-  <View style = {{justifyContent: 'center', alignItems:'center'}}>
-      <TextInput
-        style = {styles.policyInput}
-        placeholder = 'please enter your IBAN'
-        placeholderTextColor="#004799"
-        secureTextEntry = {false}
-        onChangeText={iban =>{
-           this.setState({IBAN: iban})
-           this.state.infoObj = {
-            ...this.state.infoObj,
-            IBAN: iban
-          }
-          }}
-        value={this.state.isEditing && this.state.infoObj.IBAN || this.state.IBAN}
-        />
-         {this.renderContinue()}
-    </View>
-)
+    <View style = {{justifyContent: 'center', alignItems:'center'}}>
+      <Text style = {styles.questionText}> 
+        Please enter your IBAN
+      </Text>
+        <TextInput
+          style = {styles.policyInput}
+          placeholder = 'IBAN'
+          placeholderTextColor="#004799"
+          secureTextEntry = {false}
+          onChangeText={iban =>{
+            this.props.set_iban(iban)
+            this.state.infoObj = {
+              ...this.state.infoObj,
+              IBAN: iban
+            }
+            }}
+          value={this.state.isEditing && this.state.infoObj.IBAN || this.props.iban || ''}
+          />
+          {this.renderContinue()}
+      </View>
+  )
 }
 
 renderContinue = () =>{
@@ -338,9 +308,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'center',
     alignItems: 'center',
-   marginTop: 500,
+   marginTop: 30,
    borderRadius:15,
-   marginBottom: 20,
+   marginBottom: 200,
   },
   questionText: {
     width: 300,
@@ -348,16 +318,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     margin: 10,
-  },
-  button: {
-    width: 160,
-    height: 45,
-    backgroundColor: "#E67F00",
-    justifyContent: 'center',
-    alignItems: 'center',
-   marginTop: 30,
-   borderRadius:15,
-   marginBottom: 20,
   },
   nameInput:{
     marginTop:12,
@@ -369,7 +329,7 @@ const styles = StyleSheet.create({
     backgroundColor:'#E5ECF5'
   },
   policyInput:{
-    margin:20,
+    margin:10,
     borderWidth: 1,
     width: 250,
     height:40,
@@ -399,13 +359,17 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) =>{
   return{
-    docs: state.docReducer.docList
+    docs: state.docReducer.docList,
+    iban: state.docReducer.IBAN,
+    date: state.docReducer.date
   }
 }
 
 const mapDispatchToProps = (dispatch) =>{
   return {
     add: (doc) => dispatch(addDoc(doc)),
+    set_iban: (iban) => dispatch(setIBAN(iban)),
+    set_date: (date) => dispatch(setDate(date)),
   }
 }   
 

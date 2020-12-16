@@ -45,8 +45,12 @@ constructor(props){
             firstName: '',
             surName: '',
           }
-          
+          {[
+            {},
+            {},
+          ]}
      }
+     
 
     render(){
         return(
@@ -57,24 +61,23 @@ constructor(props){
 
                                          
                             <Image  source = {require('./img/CareConceptLogo.png')} style = {styles.logo} />
-
-                            <View style = {{flexDirection:'row', justifyContent:'center',}}>
+                              
                             
-                                   <View style = {styles.documentScanButton}>
+                                  
                                                     <TouchableOpacity
                                                         onPress = {()=>{
                                                             this.props.navigation.navigate('ClaimStack', {params:{isEditing: false}, screen: 'DocumentInfo'})
                                                         }}
                                                         > 
-                                                            
+                                                            <View style = {styles.documentScanButton}>
                                                                     <Text
                                                                     style={{color: 'white', fontSize: 16}}
                                                                     >Scan a Document.</Text>
+                                                            </View>
                                                              
                                                     </TouchableOpacity>
-                                                    </View>
-                                   
-                        </View>
+                                       
+                  
                                        <FlatList
                                           extraData={this.state} 
                                           data = {this.props.docs}

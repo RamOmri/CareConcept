@@ -1,13 +1,13 @@
 import { Switch } from 'react-native-paper';
 import { changeInsuranceNumber } from '../actions/policInfoActions';
-import {CHANGE_INSURANCE_NUMBER, CHANGE_GENDER, CHANGE_NAME, CHANGE_SURNAME} from '../actions/types';
+import {CHANGE_INSURANCE_NUMBER, CHANGE_GENDER, CHANGE_NAME, CHANGE_SURNAME, SET_DATE} from '../actions/types';
 
 const initState = {
     policyInfo: {
         insuranceNumber: '',
         gender: 'select...',
         FirstName: '',
-        Surname: ''
+        Surname: '',
     }
 }
 
@@ -45,6 +45,7 @@ const policyInfoReducer = (state = initState, action) =>{
                                             Surname: action.data
                                         }        
                                     };
+                                   
             default: 
                 return state
     }
