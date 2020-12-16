@@ -48,6 +48,7 @@ constructor(props){
         isDatePickerVisible: false,
         infoObj: {
           pages: [],
+
         },
         menuStyle: {
           triggerText: {
@@ -70,13 +71,33 @@ constructor(props){
           },   
       }
     }
-      if(this.state.isEditing){
-        this.state = {
-          ...this.state,
-          infoObj: this.props.route.params.infoObj.document
-        }
-        delete this.state.infoObj.key
+      this.check_if_editing()
+      this.setPrefilledDateAndBankDetails()
+  }
+
+  setPrefilledDateAndBankDetails(){
+    if(this.props.date){
+      this.state.infoObj ={
+        ...this.state.infoObj,
+        dateStatus: this.props.date
       }
+    }
+    if(this.props.iban){
+      this.state.infoObj = {
+        ...this.state.infoObj,
+        IBAN: this.props.iban
+      }
+    }
+  }
+
+  check_if_editing(){
+    if(this.state.isEditing){
+      this.state = {
+        ...this.state,
+        infoObj: this.props.route.params.infoObj.document
+      }
+      delete this.state.infoObj.key
+    }
   }
 
   render(){

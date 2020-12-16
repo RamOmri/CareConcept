@@ -10,7 +10,8 @@ import {
   TouchableOpacity,
   TextInput,
   ImageBackground,
-  FlatList
+  FlatList,
+  Button
 } from 'react-native';
 
 import {
@@ -34,9 +35,9 @@ import {
   import {addDoc} from './actions/claimActions'
   import {deleteDoc} from './actions/claimActions'
   import { StackActions, NavigationActions } from 'react-navigation';
+  import ImgToBase64 from 'react-native-image-base64';
 
-
- class SummaryScreen extends React.Component {
+class SummaryScreen extends React.Component {
 constructor(props){
           super(props)
           this.state = {
@@ -45,10 +46,7 @@ constructor(props){
             firstName: '',
             surName: '',
           }
-          {[
-            {},
-            {},
-          ]}
+         
      }
      
 
@@ -64,20 +62,15 @@ constructor(props){
                               
                             
                                   
-                                                    <TouchableOpacity
-                                                        onPress = {()=>{
-                                                            this.props.navigation.navigate('ClaimStack', {params:{isEditing: false}, screen: 'DocumentInfo'})
-                                                        }}
-                                                        > 
-                                                            <View style = {styles.documentScanButton}>
-                                                                    <Text
-                                                                    style={{color: 'white', fontSize: 16}}
-                                                                    >Scan a Document.</Text>
-                                                            </View>
-                                                             
-                                                    </TouchableOpacity>
+                                                     <Button color = '#f59b00'
+                                                            title={'Scan a Document'} 
+                                                            onPress={()=>{
+                                                              this.props.navigation.navigate('ClaimStack', {params:{isEditing: false}, screen: 'DocumentInfo'})
+                                                            }} />
                                        
-                  
+                            <ScrollView
+                              contentContainerStyle={{ flexGrow: 1, justifyContent: 'space-between', flexDirection: 'column' }}
+                            >
                                        <FlatList
                                           extraData={this.state} 
                                           data = {this.props.docs}
@@ -112,7 +105,7 @@ constructor(props){
                                 
                                                 <TouchableOpacity
                                                     onPress = {()=>{
-                                                        this.props.navigation.navigate('ClaimStack', {params:{}, screen: 'SummaryScreen'})
+                                                        this.constructObject()
                                                     }}
                                                     >
                                                         <View style = {styles.button}>
@@ -123,10 +116,60 @@ constructor(props){
                                                 </TouchableOpacity>
                                 
                     </View>
-                
+              </ScrollView>
             </ImageBackground>
         )
     }
+ 
+    async constructObject(){
+      let arrayOfBase64Documents = await this.makePagesBase64()
+      let objectToSend = {
+        apikey:'GCrzJC4Jb.un4Gd%8njJ',
+        payLoad:[]
+      }
+      for(let i = 0; i < arrayOfBase64Documents.length; i++){
+        let document = {
+          vorname: 'Omri',
+          nachname: 'ram',
+          geshlecht: 'm',
+          dokumenart: 1,
+          auslandsbeleg: 0,
+          bezahlt: 0,
+          iban: 'DE05200300000000128751',
+          bic: 'HYVEDEMM300',
+          dokument: arrayOfBase64Documents[i]
+        }
+        objectToSend.payLoad.push(document)
+      }
+      this.sendObject(objectToSend)
+    }
+  async sendObject(objectToSend){
+   await fetch('https://www.care-concept.de/service/erstattungsannehmer.php', {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              apikey: 'GCrzJC4Jb.un4Gd%8njJ',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(objectToSend)
+          })
+          .then((response) => alert(JSON.stringify(response)))
+          .catch((error) => console.log(error))
+  }
+
+  async  makePagesBase64(){
+      let documentsArray = [] 
+      for(let i = 0; i < this.props.docs.length; i++){
+        let pagesArray = []
+        for(let j = 0; j < this.props.docs[i].document.pages.length; j++){
+         await ImgToBase64.getBase64String(this.props.docs[i].document.pages[j].url)
+                      .then(base64String => pagesArray.push(base64String))
+                      .catch(err => alert(err));
+        }
+        documentsArray.push(pagesArray)
+      }
+     return documentsArray
+    } 
 }
 
 const styles = StyleSheet.create({
