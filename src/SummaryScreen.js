@@ -36,6 +36,10 @@ import {
   import {deleteDoc} from './actions/claimActions'
   import { StackActions, NavigationActions } from 'react-navigation';
   import ImgToBase64 from 'react-native-image-base64';
+  import base64Image from './base64Example';
+
+  const sha256 = require('sha256')
+
 
 class SummaryScreen extends React.Component {
 constructor(props){
@@ -124,20 +128,26 @@ constructor(props){
     async constructObject(){
       let arrayOfBase64Documents = await this.makePagesBase64()
       let objectToSend = {
-        apikey:'GCrzJC4Jb.un4Gd%8njJ',
-        payLoad:[]
+        apikey:sha256('GCrzJC4Jb.un4Gd%8njJ'),
+        payload:[]
       }
       for(let i = 0; i < arrayOfBase64Documents.length; i++){
         let document = {
+          VNR:"AP209099999",
           vorname: 'Omri',
           nachname: 'ram',
-          geshlecht: 'm',
-          dokumenart: 1,
+          geschlecht: 'm',
+          dokumentenart: 1,
           auslandsbeleg: 0,
           bezahlt: 0,
           iban: 'DE05200300000000128751',
           bic: 'HYVEDEMM300',
-          dokument: arrayOfBase64Documents[i]
+          vp_geburtsdatum_tag:"01",
+          vp_geburtsdatum_monat:"12",
+          vp_geburtsdatum_jahr:"1990",
+          kto_inhaber:"t_nachname",
+
+          dokument: base64Image
         }
         objectToSend.payLoad.push(document)
       }
@@ -148,12 +158,14 @@ constructor(props){
             method: 'POST',
             headers: {
               Accept: 'application/json',
-              apikey: 'GCrzJC4Jb.un4Gd%8njJ',
               'Content-Type': 'application/json'
             },
             body: JSON.stringify(objectToSend)
           })
-          .then((response) => alert(JSON.stringify(response)))
+          .then((response) => {
+            console.log(JSON.stringify(objectToSend))
+            alert(JSON.stringify(response))
+          })
           .catch((error) => console.log(error))
   }
 
@@ -166,8 +178,10 @@ constructor(props){
                       .then(base64String => pagesArray.push(base64String))
                       .catch(err => alert(err));
         }
+        console.log(pagesArray[0])
         documentsArray.push(pagesArray)
       }
+     
      return documentsArray
     } 
 }

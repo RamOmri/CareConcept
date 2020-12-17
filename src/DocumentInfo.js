@@ -34,7 +34,7 @@ import {
   } from 'react-native-popup-menu';
   import DateTimePickerModal from "react-native-modal-datetime-picker";
   import {connect} from 'react-redux'
-  import {addDoc, setIBAN, setDate} from './actions/claimActions'
+  import {addDoc, setIBAN, setDate, setBIC, setAccountHolder} from './actions/claimActions'
 
 
 class DocumentInfo extends React.Component {
@@ -85,9 +85,11 @@ constructor(props){
     if(this.props.iban){
       this.state.infoObj = {
         ...this.state.infoObj,
-        IBAN: this.props.iban
+        IBAN: this.props.iban,
+        BIC: this.props.bic
       }
     }
+    
   }
 
   check_if_editing(){
@@ -257,6 +259,25 @@ renderBankAccountDetails = () =>{
 return(
     <View style = {{justifyContent: 'center', alignItems:'center'}}>
       <Text style = {styles.questionText}> 
+        Please enter your BIC
+      </Text>
+        <TextInput
+          style = {styles.policyInput}
+          placeholder = 'BIC'
+          placeholderTextColor="#004799"
+          secureTextEntry = {false}
+          onChangeText={bic =>{
+            this.props.set_bic(bic)
+            this.state.infoObj = {
+              ...this.state.infoObj,
+              BIC: bic
+            }
+            }}
+          value={this.state.isEditing && this.state.infoObj.BIC || this.props.bic || ''}
+          />
+
+
+      <Text style = {styles.questionText}> 
         Please enter your IBAN
       </Text>
         <TextInput
@@ -273,6 +294,7 @@ return(
             }}
           value={this.state.isEditing && this.state.infoObj.IBAN || this.props.iban || ''}
           />
+
           {this.renderContinue()}
       </View>
   )
@@ -382,7 +404,9 @@ const mapStateToProps = (state) =>{
   return{
     docs: state.docReducer.docList,
     iban: state.docReducer.IBAN,
-    date: state.docReducer.date
+    date: state.docReducer.date,
+    bic: state.docReducer.BIC,
+    AccountHolder: state.docReducer.AccountHolder
   }
 }
 
@@ -390,6 +414,8 @@ const mapDispatchToProps = (dispatch) =>{
   return {
     add: (doc) => dispatch(addDoc(doc)),
     set_iban: (iban) => dispatch(setIBAN(iban)),
+    set_bic: (bic) => dispatch(setBIC(bic)),
+    set_AccountHolder: (accountHolder) => dispatch(setAccountHolder(accountHolder)),
     set_date: (date) => dispatch(setDate(date)),
   }
 }   

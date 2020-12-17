@@ -1,4 +1,5 @@
-import {ADD_DOC, DELETE_DOC, CHANGE_INSURANCE_NUMBER, SET_IBAN, SET_DATE} from './types'
+import {ADD_DOC, DELETE_DOC, CHANGE_INSURANCE_NUMBER, 
+    SET_IBAN, SET_DATE, SET_BIC, SET_ACCOUNT_HOLDER} from './types'
 
 export const addDoc = (doc) =>(
     {
@@ -32,5 +33,19 @@ export const setDate= (date) =>(
     {
         type: SET_DATE,
         data: date
+    }
+)
+
+export const setBIC= (bic) =>(
+    {
+        type: SET_BIC,
+        data: bic
+    }
+)
+
+export const setAccountHolder= (accountHolder) =>(
+    {
+        type: SET_ACCOUNT_HOLDER,
+        data: accountHolder
     }
 )
