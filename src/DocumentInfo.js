@@ -71,8 +71,9 @@ constructor(props){
           },   
       }
     }
+    this.setPrefilledDateAndBankDetails()
       this.check_if_editing()
-      this.setPrefilledDateAndBankDetails()
+      
   }
 
   setPrefilledDateAndBankDetails(){
@@ -82,14 +83,14 @@ constructor(props){
         dateStatus: this.props.date
       }
     }
-    if(this.props.iban){
+    if(this.props.iban && this.props.bic && this.props.AccountHolder){
       this.state.infoObj = {
         ...this.state.infoObj,
         IBAN: this.props.iban,
-        BIC: this.props.bic
+        BIC: this.props.bic,
+        AccountHolder: this.props.AccountHolder
       }
     }
-    
   }
 
   check_if_editing(){
@@ -258,6 +259,24 @@ renderIsFromSameAccount = () =>{
 renderBankAccountDetails = () =>{
 return(
     <View style = {{justifyContent: 'center', alignItems:'center'}}>
+    <Text style = {styles.questionText}> 
+            Please enter the full name of the account holder
+    </Text>
+            <TextInput
+              style = {styles.policyInput}
+              placeholder = 'Full name'
+              placeholderTextColor="#004799"
+              secureTextEntry = {false}
+              onChangeText={name =>{
+                this.props.set_AccountHolder(name)
+                this.state.infoObj = {
+                  ...this.state.infoObj,
+                  AccountHolder: name
+                }
+                }}
+              value={this.state.isEditing && this.state.infoObj.AccountHolder || this.props.AccountHolder || ''}
+              />
+
       <Text style = {styles.questionText}> 
         Please enter your BIC
       </Text>

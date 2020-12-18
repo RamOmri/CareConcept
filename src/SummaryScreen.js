@@ -129,7 +129,7 @@ constructor(props){
       let arrayOfBase64Documents = await this.makePagesBase64()
       let objectToSend = {
         apikey:sha256('GCrzJC4Jb.un4Gd%8njJ'),
-        payload:[]
+        payload: new Array()
       }
       for(let i = 0; i < arrayOfBase64Documents.length; i++){
         let document = {
@@ -149,11 +149,13 @@ constructor(props){
 
           dokument: base64Image
         }
-        objectToSend.payLoad.push(document)
+        objectToSend.payload.push(document)
       }
       this.sendObject(objectToSend)
     }
+
   async sendObject(objectToSend){
+    console.log(objectToSend)
    await fetch('https://www.care-concept.de/service/erstattungsannehmer.php', {
             method: 'POST',
             headers: {
@@ -162,9 +164,11 @@ constructor(props){
             },
             body: JSON.stringify(objectToSend)
           })
-          .then((response) => {
-            console.log(JSON.stringify(objectToSend))
-            alert(JSON.stringify(response))
+          .then((response) => 
+              response.json()
+          ).then((jsonData) =>{
+            alert(JSON.stringify(jsonData))
+            console.log(jsonData)
           })
           .catch((error) => console.log(error))
   }
@@ -178,7 +182,7 @@ constructor(props){
                       .then(base64String => pagesArray.push(base64String))
                       .catch(err => alert(err));
         }
-        console.log(pagesArray[0])
+        //console.log(pagesArray[0])
         documentsArray.push(pagesArray)
       }
      
