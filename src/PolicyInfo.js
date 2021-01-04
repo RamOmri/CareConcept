@@ -33,7 +33,7 @@ import {
   } from 'react-native-popup-menu';
  import {connect} from 'react-redux'
 import { changeSurname, changeInsuranceNumber,changeGender, changeName } from './actions/policInfoActions';
-
+import { getStatusBarHeight } from 'react-native-status-bar-height';
 
 class PolicyInfo extends React.Component {
 constructor(props){
@@ -70,6 +70,10 @@ render(){
       source={require('./img/background.jpg')}
       style={{ resizeMode: 'stretch', flex: 1, }}
   >                        
+    {(Platform.OS != "android") && 
+              <View style = {{paddingTop: getStatusBarHeight()}}>
+                 <StatusBar />
+               </View>}
                       <Image  source = {require('./img/CareConceptLogo.png')} style = {styles.logo} />
 
                       <View style = {{flex: 1, alignItems:'center'}}>
@@ -111,7 +115,12 @@ render(){
                      
                                           <TouchableOpacity
                                                         onPress = {()=>{
-                                                            this.requestCameraPermission()
+                                                            if(Platform.OS === "android"){
+                                                              this.requestCameraPermissionAndroid()
+                                                            }
+                                                            else{
+                                                              this.handleCameraPermissionIOS()
+                                                            }
                                                         }}
                                                         >
                                       <View style = {styles.button}>
@@ -127,15 +136,14 @@ render(){
   )
 }
 
-requestCameraPermission = async () => {
-  this.props.navigation.navigate('ClaimStack', {params:{Document: [], index: -1}, screen: 'SummaryScreen'})
-/*   try {
+requestCameraPermissionAndroid = async () => {
+  try {
     const granted = await PermissionsAndroid.request(
       PermissionsAndroid.PERMISSIONS.CAMERA,
       {
         title: "Request Camera permision",
         message:
-          "CareConcept needs to access your phone's camera",
+          "CareConcept needs to access your phone's camera in order to scan documents",
         buttonNegative: "Cancel",
         buttonPositive: "OK"
       }
@@ -147,8 +155,35 @@ requestCameraPermission = async () => {
     }
   } catch (err) {
     console.warn(err);
-  } */
+  }
 };
+handleCameraPermissionIOS = async () => {
+  const res = await check(PERMISSIONS.IOS.CAMERA);
+
+  if (res === RESULTS.GRANTED) {
+    this.setState({cameraPermissionGranted:true});
+    this.props.navigation.navigate('ClaimStack', {params:{Document: [], index: -1}, screen: 'SummaryScreen'})
+  } 
+  else if (res === RESULTS.DENIED) {
+
+    const res2 = await request(PERMISSIONS.IOS.CAMERA);
+    if(res2 === RESULTS.GRANTED){
+       this.setState({cameraPermissionGranted:true});
+       this.props.navigation.navigate('ClaimStack', {params:{Document: [], index: -1}, screen: 'SummaryScreen'})
+    }
+    else{
+      this.setState({cameraPermissionGranted:false});
+    }
+
+
+  }
+  else if(res == RESULTS.BLOCKED){
+    alert("Could not access camera, please grant permission through phone settings ")
+  }
+};
+
+
+
 
    
 }

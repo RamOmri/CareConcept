@@ -37,7 +37,7 @@ import {
   import { StackActions, NavigationActions } from 'react-navigation';
   import ImgToBase64 from 'react-native-image-base64';
   import base64Image from './base64Example';
-
+  import { getStatusBarHeight } from 'react-native-status-bar-height';
   const sha256 = require('sha256')
 
 
@@ -60,7 +60,10 @@ constructor(props){
                     source={require('./img/background.jpg')}
                     style={{ resizeMode: 'stretch', flex: 1, }}
                  >
-
+                   {(Platform.OS != "android") && 
+              <View style = {{paddingTop: getStatusBarHeight()}}>
+                 <StatusBar />
+               </View>}
                                          
                             <Image  source = {require('./img/CareConceptLogo.png')} style = {styles.logo} />
                               

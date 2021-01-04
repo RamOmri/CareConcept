@@ -23,16 +23,17 @@ import ImageSize from 'react-native-image-size'
 import { CropView } from 'react-native-image-crop-tools';
 import CameraRoll from "@react-native-community/cameraroll";
 import AmazingCropper, { DefaultFooter } from 'react-native-amazing-cropper';
-import CustomCropperFooter from './CustomCropperFooter';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
+
 
 export default class imageCrop extends React.Component {
 constructor(props){
   super(props)
   this.state = {
     infoObj: this.props.route.params.infoObj,
+    cropRef: React.createRef(),
     imageHeight: 0,
     imageWidth: 0,
-    cropRef: React.createRef(),
     loading: true
   }
     //alert(JSON.stringify(this.state.infoObj.pages[this.state.infoObj.pages.length - 1].url))
@@ -44,7 +45,7 @@ async componentDidMount(){
 }
 
  async onDone(croppedImageUri){
-   this.setState({loading: true})
+   
  this.state.infoObj.pages.splice(this.state.infoObj.pages.length - 1, 1, {url: croppedImageUri})
   await this.getImageSize(croppedImageUri) 
 }
@@ -75,19 +76,27 @@ onContinue = () =>{
             return(         
               <React.Fragment>
               <View style ={{flex:1}}>
+              {(Platform.OS != "android") && 
+              <View style = {{paddingTop: getStatusBarHeight()}}>
+                 <StatusBar />
+               </View>}
               
                       <AmazingCropper
-                          footerComponent={<CustomCropperFooter />}
-                          onDone={croppedImg => this.onDone(croppedImg)}
+                          
+                         footerComponent={ <this.CustomCropperFooter />}
+                        
+                          onDone={ (croppedImageUri) => {
+                            this.onDone(croppedImageUri)}
+                             
+                          }
                           onError={this.onError}
                           onCancel = {() => this.onContinue()}
                           imageUri={this.state.infoObj.pages[this.state.infoObj.pages.length - 1].url}
                           imageWidth={this.state.imageWidth}
-                        imageHeight={this.state.imageHeight}
+                          imageHeight={this.state.imageHeight}
                           initialRotation = {0}
                         />
                 </View>
-            
               </React.Fragment>
          
          
@@ -101,6 +110,21 @@ onContinue = () =>{
       
         
     }
+
+     CustomCropperFooter = (props) => {
+       
+       return(
+        <View style={{flexDirection:"row", justifyContent:"center"}}>
+          <TouchableOpacity onPress={()=>{this.setState({loading:true})
+           props.onDone()}} style={styles.button}>
+            <Text style={styles.text}>Crop</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={props.onCancel} style={styles.button}>
+            <Text style={styles.text}>Continue</Text>
+          </TouchableOpacity>
+        </View>
+      )
+     }
 }
 
 const styles = StyleSheet.create({
@@ -112,14 +136,13 @@ const styles = StyleSheet.create({
     aspectRatio:undefined
   },
   button: {
-    width: 220,
+    width: 200,
     height: 50,
-    backgroundColor: "#711401ff",
+    backgroundColor: "white",
     justifyContent: 'center',
     alignItems: 'center',
+    margin:10,
    marginTop: 20,
-   borderRadius:30,
-   marginBottom: 20,
   },
   buttonText: {
     backgroundColor: "rgba(245, 252, 255, 0.7)",

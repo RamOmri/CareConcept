@@ -23,7 +23,7 @@ import {
 import DocumentScanner from "@woonivers/react-native-document-scanner"
 import ImageSize from 'react-native-image-size'
 import ImageViewer from 'react-native-image-zoom-viewer';
-
+import { getStatusBarHeight } from 'react-native-status-bar-height';
 
 
 export default class Scanner extends React.Component {
@@ -53,6 +53,10 @@ constructor(props){
     renderScanner(){
         return(
          <React.Fragment>
+           {(Platform.OS != "android") && 
+              <View style = {{paddingTop: getStatusBarHeight()}}>
+                 <StatusBar />
+               </View>}
           <DocumentScanner
            ref={this.state.pdfScannerReference}
             style={styles.scanner}

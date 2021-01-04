@@ -35,7 +35,7 @@ import {
   import DateTimePickerModal from "react-native-modal-datetime-picker";
   import {connect} from 'react-redux'
   import {addDoc, setIBAN, setDate, setBIC, setAccountHolder} from './actions/claimActions'
-
+  import { getStatusBarHeight } from 'react-native-status-bar-height';
 
 class DocumentInfo extends React.Component {
 constructor(props){
@@ -63,6 +63,7 @@ constructor(props){
               backgroundColor: 'white',
               borderColor: '#f59b00',
               borderWidth:5,
+              marginLeft:20,
               borderRadius: 7,
           },
           triggerTouchable: {
@@ -109,8 +110,12 @@ constructor(props){
         source={require('./img/background.jpg')}
         style={{ resizeMode: 'stretch', flex: 1,  }}
          >
+           {(Platform.OS != "android") && 
+              <View style = {{paddingTop: getStatusBarHeight()}}>
+                 <StatusBar />
+               </View>}
         <Image  source = {require('./img/CareConceptLogo.png')} style = {styles.logo} />
-            <View  style = {{justifyContent: 'center', alignItems:'center'}}>
+            <View  style = {{}}>
             <KeyboardAvoidingView>
               <ScrollView>
                 {this.renderAge()}
@@ -228,7 +233,7 @@ renderClaimInfo(){
 
 renderIsFromSameAccount = () =>{
   return(
-    <View style = {{justifyContent: 'center', alignItems:'center'}}>
+    <View style = {{}}>
         <Text style = {styles.questionText}> 
               Should contractual services be reimbursed to the biller (physician/hospital, etc.)?
                 </Text>

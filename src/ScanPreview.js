@@ -23,7 +23,7 @@ import DocumentScanner from "@woonivers/react-native-document-scanner"
 import ImageViewer from 'react-native-image-zoom-viewer';
 import {connect} from 'react-redux'
 import {addDoc} from './actions/claimActions'
-
+import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { CommonActions } from '@react-navigation/native';
 
  class ScanPreview extends React.Component {
@@ -44,6 +44,10 @@ import { CommonActions } from '@react-navigation/native';
     render(){
         return(
           <View style = {{marginTop:10}}>
+            {(Platform.OS != "android") && 
+              <View style = {{paddingTop: getStatusBarHeight()}}>
+                 <StatusBar />
+               </View>}
             <Modal visible={true} transparent={true}>
              
                <View style ={{flex:0.06, alignItems:'center', flexDirection:'row', justifyContent:'center',}}>
@@ -89,7 +93,7 @@ import { CommonActions } from '@react-navigation/native';
                 
                 <ImageViewer imageUrls={this.state.infoObj.pages}/>
               </View>
-              <View style ={{flex:0.06, alignItems:'center', flexDirection:'row', justifyContent:'center'}}>
+            <View style ={{flex:0.1, alignItems:'center', flexDirection:'row', justifyContent:'center', backgroundColor:"black"}}>
                             
 
                               <TouchableOpacity
