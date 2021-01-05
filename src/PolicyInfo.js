@@ -34,7 +34,7 @@ import {
  import {connect} from 'react-redux'
 import { changeSurname, changeInsuranceNumber,changeGender, changeName } from './actions/policInfoActions';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
-import { PERMISSIONS, check, request } from 'react-native-permissions'
+import { PERMISSIONS, check, request, RESULTS } from 'react-native-permissions'
 
 class PolicyInfo extends React.Component {
 constructor(props){

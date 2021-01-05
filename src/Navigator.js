@@ -8,7 +8,8 @@ import {
   View, Button, ImageBackground,
   Image, TouchableOpacity,
   Alert,StatusBar,ScrollView,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  Platform
 } from 'react-native'
 
 import Scanner from './Scanner'
@@ -41,7 +42,8 @@ import DocumentInfo from './DocumentInfo'
       <Stack.Navigator screenOptions={{
         headerShown: false,
         initial:false,
-        lazy: false
+        lazy: false,
+        gestureEnabled:(!Platform.OS === "ios")
         }}>
       <Stack.Screen name='PolicyInfo' component={PolicyInfo} />
       <Stack.Screen name = 'SummaryScreen' component = {SummaryScreen} />

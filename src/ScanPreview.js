@@ -44,13 +44,13 @@ import { CommonActions } from '@react-navigation/native';
     render(){
         return(
           <View style = {{marginTop:10}}>
-            {(Platform.OS != "android") && 
+           
+            <Modal visible={true} transparent={true}>
+              {(Platform.OS != "android") && 
               <View style = {{paddingTop: getStatusBarHeight()}}>
                  <StatusBar />
                </View>}
-            <Modal visible={true} transparent={true}>
-             
-               <View style ={{flex:0.06, alignItems:'center', flexDirection:'row', justifyContent:'center',}}>
+               <View style ={{flex:0.1, alignItems:'center', flexDirection:'row', justifyContent:'center', backgroundColor:"black"}}>
                                     <TouchableOpacity
                                        style={{flex:1, backgroundColor:'#f59b00', alignItems:'center', borderRightWidth:2, borderRightColor:'black'}}
                                         onPress={() =>{

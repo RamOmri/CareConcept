@@ -61,7 +61,7 @@ constructor(props){
                     source={require('./img/background.jpg')}
                     style={{ resizeMode: 'stretch', flex: 1, }}
                  >
-                   {(Platform.OS != "android") && 
+                   {(Platform.OS === "ios") && 
               <View style = {{paddingTop: getStatusBarHeight()}}>
                  <StatusBar />
                </View>}

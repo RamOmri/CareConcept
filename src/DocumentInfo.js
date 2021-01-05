@@ -12,7 +12,8 @@ import {
   ImageBackground,
   KeyboardAvoidingView,
   Button,
-  BackHandler
+  BackHandler,
+  Dimensions
 } from 'react-native';
 
 import {
@@ -118,6 +119,23 @@ constructor(props){
             <View  style = {{}}>
             <KeyboardAvoidingView>
               <ScrollView>
+              <TouchableOpacity
+                  onPress = {()=>{
+                    if(this.state.isEditing){
+                      this.props.add(this.state.infoObj)
+                    }
+                    this.props.navigation.navigate('ClaimStack', {params:{}, screen: 'SummaryScreen'})
+                    return true;
+                  
+                  
+                  }}
+                >
+                  {(Platform.OS === "ios") && <View style = {{marginLeft: 10, flex:0.1, backgroundColor:"orange", height: Dimensions.get("window").height/20, width: Dimensions.get("window").width/3, justifyContent:"center", alignItems:"center", borderTopLeftRadius:20, borderBottomLeftRadius: 20}}>
+                      <Text style={{color: "white", fontSize: 14}}>
+                        Go Back
+                      </Text>
+                  </View>}
+                </TouchableOpacity>
                 {this.renderAge()}
                   <Text style = {styles.questionText}> 
                       What type of Invoice are you about to scan?
@@ -159,7 +177,7 @@ constructor(props){
 
 renderAge(){
     return(
-      <View style = {{alignItems: 'center', justifyContent:'center'}}>
+      <View style = {{ justifyContent:'center'}}>
       <Text style = {styles.questionText}>Please enter the birthdate of the insured person: </Text>
                   <TouchableOpacity
                         onPress = {()=>{
