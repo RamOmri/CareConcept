@@ -9,6 +9,7 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
+  Dimensions,
   ImageBackground,
   FlatList,
   Button
@@ -64,16 +65,23 @@ constructor(props){
               <View style = {{paddingTop: getStatusBarHeight()}}>
                  <StatusBar />
                </View>}
+               <View style = {{flex: 1}}>
                                          
                             <Image  source = {require('./img/CareConceptLogo.png')} style = {styles.logo} />
                               
+                              <TouchableOpacity
+                                onPress={()=>{
+                                  this.props.navigation.navigate('ClaimStack', {params:{isEditing: false}, screen: 'DocumentInfo'})
+                                }}
+                              >
+                                <View style = {{ width: Dimensions.get('window').width, backgroundColor:"#E67F00", height: Dimensions.get('window').height/16, justifyContent: 'center', alignItems: 'center'}}>
+                                    <Text style = {{color: 'white', fontSize:16}}>
+                                      Scan a new Document
+                                    </Text>
+                                </View>
+                              </TouchableOpacity>
                             
-                                  
-                                                     <Button color = '#f59b00'
-                                                            title={'Scan a Document'} 
-                                                            onPress={()=>{
-                                                              this.props.navigation.navigate('ClaimStack', {params:{isEditing: false}, screen: 'DocumentInfo'})
-                                                            }} />
+                                
                                        
                             <ScrollView
                               contentContainerStyle={{ flexGrow: 1, justifyContent: 'space-between', flexDirection: 'column' }}
@@ -91,13 +99,14 @@ constructor(props){
                                                 }  
                                               }>
                                              <View style = {{marginTop: 10, justifyContent:'center', alignItems:'center'}}>
-                                                <Text style = {styles.questionText}>{`This is a ${item.document.docType} with ${item.document.pages.length} page/s`}</Text>
+                                                <Text style = {styles.DocumentText}>{`This is a ${item.document.docType} with ${item.document.pages.length} page/s`}</Text>
                                                   <Image                                             
                                                   source={{uri: item.document.pages[0].url}}
-                                                  style={{flex: 1,
-                                                    width: 200,
-                                                    height: 400,
-                                                    margin: 10,
+                                                  style={{
+                                                    flex: 1,
+                                                    margin:5,
+                                                    width: Dimensions.get('window').width/1.5,
+                                                    height: Dimensions.get('window').height/3,
                                                     resizeMode: 'contain'}}
                                                 />
                                               </View>
@@ -124,6 +133,7 @@ constructor(props){
                                 
                     </View>
               </ScrollView>
+              </View>
             </ImageBackground>
         )
     }
@@ -198,8 +208,10 @@ const styles = StyleSheet.create({
         margin: 10,
         
   },
-  questionText: {
-    width: 300,
+  DocumentText: {
+    flexDirection:'row',
+    fontSize:14,
+    fontWeight:'bold',
     color: '#E67F00',
     justifyContent: 'center',
     alignItems: 'center',
