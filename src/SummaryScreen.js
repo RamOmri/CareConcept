@@ -40,8 +40,6 @@ import {
   import base64Image from './base64Example';
   import { getStatusBarHeight } from 'react-native-status-bar-height';
   const sha256 = require('sha256')
-
-
 class SummaryScreen extends React.Component {
 constructor(props){
           super(props)
@@ -167,6 +165,23 @@ constructor(props){
       this.sendObject(objectToSend)
     }
 
+ async  makePagesBase64(){
+      let documentsArray = [] 
+      for(let i = 0; i < this.props.docs.length; i++){
+        let pagesArray = []
+
+        let pages = this.props.docs[i].document.pages.map(a => a.url);
+        /* for(let j = 0; j < this.props.docs[i].document.pages.length; j++){
+         await ImgToBase64.getBase64String(this.props.docs[i].document.pages[j].url)
+                      .then(base64String => pagesArray.push(base64String))
+                      .catch(err => alert(err));
+        } */
+        documentsArray.push(pagesArray)
+      }
+     
+     return documentsArray
+    } 
+
   async sendObject(objectToSend){
     console.log(objectToSend)
    await fetch('https://www.care-concept.de/service/erstattungsannehmer.php', {
@@ -186,21 +201,7 @@ constructor(props){
           .catch((error) => console.log(error))
   }
 
-  async  makePagesBase64(){
-      let documentsArray = [] 
-      for(let i = 0; i < this.props.docs.length; i++){
-        let pagesArray = []
-        for(let j = 0; j < this.props.docs[i].document.pages.length; j++){
-         await ImgToBase64.getBase64String(this.props.docs[i].document.pages[j].url)
-                      .then(base64String => pagesArray.push(base64String))
-                      .catch(err => alert(err));
-        }
-        //console.log(pagesArray[0])
-        documentsArray.push(pagesArray)
-      }
-     
-     return documentsArray
-    } 
+ 
 }
 
 const styles = StyleSheet.create({
