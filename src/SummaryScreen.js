@@ -98,7 +98,7 @@ constructor(props){
                                                   this.props.navigation.navigate('ClaimStack', {params:{isEditing:  true, infoObj: info}, screen: 'DocumentInfo'})          
                                                 }  
                                               }>
-                                             <View style = {{marginTop: 10, justifyContent:'center', alignItems:'center'}}>
+                                             <View style = {{marginTop: 10, justifyContent:'center', alignItems:'center', borderBottomWidth:3, borderBottomColor:"#004799"}}>
                                                 <Text style = {styles.DocumentText}>{`This is a ${item.document.docType} with ${item.document.pages.length} page/s`}</Text>
                                                   <Image                                             
                                                   source={{uri: item.document.pages[0].url}}
