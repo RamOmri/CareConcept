@@ -54,9 +54,12 @@ class SummaryScreen extends React.Component {
       firstName: '',
       surName: '',
     };
-    alert(JSON.stringify(this.props))
+  
   }
 
+  componentDidMount(){
+    console.log(this.props)
+}
   render() {
     return (
       <ImageBackground
@@ -166,6 +169,7 @@ class SummaryScreen extends React.Component {
   }
 
   async constructObject() {
+    console.log('//////////////////////////// ' + JSON.stringify(this.props.policyInfo))
     var pdfArray = await this.makePagesBase64();
     let objectToSend = {
       apikey: sha256('GCrzJC4Jb.un4Gd%8njJ'),
@@ -173,25 +177,24 @@ class SummaryScreen extends React.Component {
     };
     for (let i = 0; i < pdfArray.length; i++) {
       let document = {
-        VNR: 'AP209099999',
-        vorname: 'Omri',
-        nachname: 'ram',
-        geschlecht: 'm',
-        dokumentenart: 1,
-        auslandsbeleg: 0,
-        bezahlt: 0,
-        iban: 'DE05200300000000128751',
-        bic: 'HYVEDEMM300',
-        vp_geburtsdatum_tag: '01',
-        vp_geburtsdatum_monat: '12',
-        vp_geburtsdatum_jahr: '1990',
-        kto_inhaber: 't_nachname',
-
+        VNR: this.props.policyInfo.insuranceNumber,
+        vorname: this.props.policyInfo.FirstName,
+        nachname: this.props.policyInfo.Surname,
+        geschlecht: this.props.policyInfo.gender === 'Male' && 'm' || 'f',
+        dokumentenart: this.props.docs[i].document.docType === 'Claim Document' && 1 || 2,
+        auslandsbeleg: this.props.docs[i].document.isDocumentGerman === 'Yes' && 1 || 0,
+        iban: this.props.docs[i].document.IBAN || '',
+        bezahlt: this.props.docs[i].document.docType === 'Claim Document' && this.props.docs[i].document.sendMoneyToContractualServices === 'Yes' && 1|| 0,
+        bic: this.props.docs[i].document.BIC || '',
+        vp_geburtsdatum_tag: this.props.docs[0].document.dateStatus.split('/')[0],
+        vp_geburtsdatum_monat: this.props.docs[0].document.dateStatus.split('/')[1],
+        vp_geburtsdatum_jahr: this.props.docs[0].document.dateStatus.split('/')[2],
+        kto_inhaber: this.props.docs[0].document.AccountHolder,
         dokument: pdfArray[i],
-      };
+      }
+      
       objectToSend.payload.push(document);
     }
-
     this.sendObject(objectToSend);
   }
 
@@ -255,7 +258,6 @@ class SummaryScreen extends React.Component {
       .then((response) => response.json())
       .then((jsonData) => {
         console.log('here::::::::::::::::::::::');
-        alert(JSON.stringify(jsonData));
         console.log(jsonData);
       })
       .catch((error) => console.log('could not send ' + error));
@@ -333,8 +335,9 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-  console.log(state);
+  console.log(':::::::::::::: ' + state);
   return {
+    policyInfo: state.policyInfoReducers.policyInfo,
     docs: state.docReducer.docList,
   };
 };
