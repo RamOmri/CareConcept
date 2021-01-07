@@ -223,8 +223,7 @@ handleConfirm = (date) => {
     ...this.state.infoObj,
     dateStatus: birthDate
   }
-  console.log( parseInt(new Date().getFullYear().toString()) - parseInt(year) > 120)
-  if(parseInt(new Date().getFullYear().toString()) - parseInt(year) > 120 || parseInt(new Date().getFullYear().toString()) - parseInt(year) < 12){
+  if(parseInt(new Date().getFullYear().toString()) - parseInt(year) > 100 || parseInt(new Date().getFullYear().toString()) - parseInt(year) < 0){
     alert('Please enter a valid birth date')
   }
   else{

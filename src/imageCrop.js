@@ -76,12 +76,11 @@ onContinue = () =>{
       if(!this.state.loading){
             return(         
               <React.Fragment>
-              <View style ={{flex:1}}>
+              <View style = {{ flex: 1}}>
               {(Platform.OS != "android") && 
               <View style = {{paddingTop: getStatusBarHeight()}}>
                  <StatusBar />
                </View>}
-              
                       <AmazingCropper
                           
                          footerComponent={ <this.CustomCropperFooter />}
@@ -120,6 +119,12 @@ onContinue = () =>{
        
        return(
         <View style={{flexDirection:"row", justifyContent:"center"}}>
+            <TouchableOpacity onPress={()=>{
+              this.state.infoObj.pages.splice(this.state.infoObj.pages.length - 1, 1)
+              this.props.navigation.navigate('ScanStack', {params:{infoObj: this.state.infoObj,}, screen: 'Scanner'})
+              }} style={styles.button}>
+            <Text style={styles.text}>Rescan</Text>
+          </TouchableOpacity>
           <TouchableOpacity onPress={()=>{this.setState({loading:true})
            props.onDone()}} style={styles.button}>
             <Text style={styles.text}>Crop</Text>
@@ -127,6 +132,7 @@ onContinue = () =>{
           <TouchableOpacity onPress={props.onCancel} style={styles.button}>
             <Text style={styles.text}>Continue</Text>
           </TouchableOpacity>
+          
         </View>
       )
      }
@@ -141,8 +147,8 @@ const styles = StyleSheet.create({
     aspectRatio:undefined
   },
   button: {
-    width: 200,
-    height: 50,
+    width: Dimensions.get('window').width/4,
+    height: Dimensions.get('window').height/13,
     backgroundColor: "white",
     justifyContent: 'center',
     alignItems: 'center',
