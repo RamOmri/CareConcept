@@ -1,6 +1,6 @@
 import { Switch } from 'react-native-paper';
 import { changeInsuranceNumber } from '../actions/policInfoActions';
-import {CHANGE_INSURANCE_NUMBER, CHANGE_GENDER, CHANGE_NAME, CHANGE_SURNAME, SET_DATE} from '../actions/types';
+import {CHANGE_INSURANCE_NUMBER, CHANGE_GENDER, CHANGE_NAME, CHANGE_SURNAME, DELETE_STATE} from '../actions/types';
 
 const initState = {
     policyInfo: {
@@ -45,6 +45,10 @@ const policyInfoReducer = (state = initState, action) =>{
                                             Surname: action.data
                                         }        
                                     };
+                                    case DELETE_STATE:
+                                            return{
+                                                ...initState
+                                        }
                                    
             default: 
                 return state

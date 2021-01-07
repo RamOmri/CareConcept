@@ -93,7 +93,6 @@ render(){
                                       <MenuOptions>
                                           <MenuOption onSelect={() => this.props.changeGender('Male')} text='Male' />
                                           <MenuOption onSelect={() => this.props.changeGender('Female')} text='Female' />
-                                          <MenuOption onSelect={() => this.props.changeGender('Unspecified')} text='Unspecified' />
                                       </MenuOptions>
                               </Menu>
                        

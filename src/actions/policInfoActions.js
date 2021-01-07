@@ -1,4 +1,4 @@
-import {CHANGE_INSURANCE_NUMBER,CHANGE_GENDER, CHANGE_NAME, CHANGE_SURNAME} from './types'
+import {CHANGE_INSURANCE_NUMBER,CHANGE_GENDER, CHANGE_NAME, CHANGE_SURNAME, DELETE_STATE} from './types'
 
 export const changeInsuranceNumber = (insuranceNumber) =>(
     {
@@ -25,6 +25,12 @@ export const changeSurname = (surname) =>(
     {
         type: CHANGE_SURNAME,
         data: surname
+    }
+)
+
+export const deleteStatePolicyInfo = () =>(
+    {
+        type: DELETE_STATE,
     }
 )
 

@@ -1,5 +1,5 @@
 import { Switch } from 'react-native-paper';
-import {ADD_DOC, DELETE_DOC, SET_IBAN, SET_BIC, SET_ACCOUNT_HOLDER, SET_DATE} from '../actions/types';
+import {ADD_DOC, DELETE_DOC, SET_IBAN, SET_BIC, SET_ACCOUNT_HOLDER, SET_DATE,  DELETE_STATE} from '../actions/types';
 
 const initState = {
     docList: [],
@@ -48,6 +48,10 @@ const docReducers = (state = initState, action) =>{
                                         ...state,
                                             date: action.data 
                                         };
+                                        case DELETE_STATE:
+                                            return{
+                                                ...initState
+                                            }
             default: 
                 return state
     }

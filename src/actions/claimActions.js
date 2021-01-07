@@ -1,5 +1,5 @@
 import {ADD_DOC, DELETE_DOC, CHANGE_INSURANCE_NUMBER, 
-    SET_IBAN, SET_DATE, SET_BIC, SET_ACCOUNT_HOLDER} from './types'
+    SET_IBAN, SET_DATE, SET_BIC, SET_ACCOUNT_HOLDER, DELETE_STATE} from './types'
 
 export const addDoc = (doc) =>(
     {
@@ -47,5 +47,11 @@ export const setAccountHolder= (accountHolder) =>(
     {
         type: SET_ACCOUNT_HOLDER,
         data: accountHolder
+    }
+)
+
+export const deleteStateClaimInfo= () =>(
+    {
+        type: DELETE_STATE
     }
 )

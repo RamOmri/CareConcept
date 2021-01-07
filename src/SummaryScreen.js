@@ -13,6 +13,7 @@ import {
   ImageBackground,
   FlatList,
   Button,
+  ActivityIndicator,
 } from 'react-native';
 
 import {
@@ -34,7 +35,8 @@ import {
 } from 'react-native-popup-menu';
 import {connect} from 'react-redux';
 import {addDoc} from './actions/claimActions';
-import {deleteDoc} from './actions/claimActions';
+import {deleteDoc, deleteStateClaimInfo} from './actions/claimActions';
+import { deleteStatePolicyInfo} from './actions/policInfoActions';
 import {StackActions, NavigationActions} from 'react-navigation';
 import ImgToBase64 from 'react-native-image-base64';
 import base64Image from './base64Example';
@@ -49,156 +51,213 @@ class SummaryScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      server_message: '',
+      isLoading: false,
+      finishedSending: false,
       insuranceNumber: '',
       gender: 'please select gender',
       firstName: '',
       surName: '',
     };
-  
   }
 
-  componentDidMount(){
-    console.log(this.props)
-}
+  componentDidMount() {
+    console.log(this.props);
+  }
   render() {
-    return (
-      <ImageBackground
-        style={styles.container}
-        source={require('./img/background.jpg')}
-        style={{resizeMode: 'stretch', flex: 1}}>
-        {Platform.OS === 'ios' && (
-          <View style={{paddingTop: getStatusBarHeight()}}>
-            <StatusBar />
-          </View>
-        )}
-        <View style={{flex: 1}}>
-          <Image
-            source={require('./img/CareConceptLogo.png')}
-            style={styles.logo}
-          />
-
-          <TouchableOpacity
-            onPress={() => {
-              this.props.navigation.navigate('ClaimStack', {
-                params: {isEditing: false},
-                screen: 'DocumentInfo',
-              });
-            }}>
-            <View
-              style={{
-                width: Dimensions.get('window').width,
-                backgroundColor: '#E67F00',
-                height: Dimensions.get('window').height / 16,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <Text style={{color: 'white', fontSize: 16}}>
-                Scan a new Document
-              </Text>
+    if (this.state.isLoading) {
+      return (
+        <View
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+            <Text style = {styles.DocumentText}>
+             {this.state.server_message} Please wait while we send your claim...
+            </Text>
+          <ActivityIndicator size="large" color="#004799" />
+        </View>
+      );
+    } else if(this.state.finishedSending) {
+      return(
+      <View
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <Text style={styles.DocumentText}>
+           Finished submitting claim, please close the app
+        </Text>
+      </View>
+      )
+    } else {
+      return (
+        <ImageBackground
+          style={styles.container}
+          source={require('./img/background.jpg')}
+          style={{resizeMode: 'stretch', flex: 1}}>
+          {Platform.OS === 'ios' && (
+            <View style={{paddingTop: getStatusBarHeight()}}>
+              <StatusBar />
             </View>
-          </TouchableOpacity>
-
-          <ScrollView
-            contentContainerStyle={{
-              flexGrow: 1,
-              justifyContent: 'space-between',
-              flexDirection: 'column',
-            }}>
-            <FlatList
-              extraData={this.state}
-              data={this.props.docs}
-              renderItem={({item, index}) => (
-                <TouchableOpacity
-                  onPress={() => {
-                    let info = item;
-
-                    this.props.delete(item.key);
-                    this.props.navigation.navigate('ClaimStack', {
-                      params: {isEditing: true, infoObj: info},
-                      screen: 'DocumentInfo',
-                    });
-                  }}>
-                  <View
-                    style={{
-                      marginTop: 10,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      borderBottomWidth: 3,
-                      borderBottomColor: '#004799',
-                    }}>
-                    <Text
-                      style={
-                        styles.DocumentText
-                      }>{`This is a ${item.document.docType} with ${item.document.pages.length} page/s`}</Text>
-                    <Image
-                      source={{uri: item.document.pages[0].url}}
-                      style={{
-                        flex: 1,
-                        margin: 5,
-                        width: Dimensions.get('window').width / 1.5,
-                        height: Dimensions.get('window').height / 3,
-                        resizeMode: 'contain',
-                      }}
-                    />
-                  </View>
-                </TouchableOpacity>
-              )}
+          )}
+          <View style={{flex: 1}}>
+            <Image
+              source={require('./img/CareConceptLogo.png')}
+              style={styles.logo}
             />
 
-            <View
-              style={{
-                flex: 1,
-                justifyContent: 'flex-end',
-                marginBottom: 10,
-                alignItems: 'center',
-                marginTop: 3,
+            <TouchableOpacity
+              onPress={() => {
+                this.props.navigation.navigate('ClaimStack', {
+                  params: {isEditing: false},
+                  screen: 'DocumentInfo',
+                });
               }}>
-              <TouchableOpacity
-                onPress={() => {
-                  this.constructObject();
+              <View
+                style={{
+                  width: Dimensions.get('window').width,
+                  backgroundColor: '#E67F00',
+                  height: Dimensions.get('window').height / 16,
+                  justifyContent: 'center',
+                  alignItems: 'center',
                 }}>
-                <View style={styles.button}>
-                  <Text style={{color: 'white', fontSize: 12}}>Send...</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-          </ScrollView>
-        </View>
-      </ImageBackground>
-    );
+                <Text style={{color: 'white', fontSize: 16}}>
+                  Scan a new Document
+                </Text>
+              </View>
+            </TouchableOpacity>
+
+            <ScrollView
+              contentContainerStyle={{
+                flexGrow: 1,
+                justifyContent: 'space-between',
+                flexDirection: 'column',
+              }}>
+              <FlatList
+                extraData={this.state}
+                data={this.props.docs}
+                renderItem={({item, index}) => (
+                  <TouchableOpacity
+                    onPress={() => {
+                      let info = item;
+
+                      this.props.delete(item.key);
+                      this.props.navigation.navigate('ClaimStack', {
+                        params: {isEditing: true, infoObj: info},
+                        screen: 'DocumentInfo',
+                      });
+                    }}>
+                    <View
+                      style={{
+                        marginTop: 10,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        borderBottomWidth: 3,
+                        borderBottomColor: '#004799',
+                      }}>
+                      <Text
+                        style={
+                          styles.DocumentText
+                        }>{`This is a ${item.document.docType} with ${item.document.pages.length} page/s`}</Text>
+                      <Image
+                        source={{uri: item.document.pages[0].url}}
+                        style={{
+                          flex: 1,
+                          margin: 5,
+                          width: Dimensions.get('window').width / 1.5,
+                          height: Dimensions.get('window').height / 3,
+                          resizeMode: 'contain',
+                        }}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                )}
+              />
+
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'flex-end',
+                  marginBottom: 10,
+                  alignItems: 'center',
+                  marginTop: 3,
+                }}>
+                <TouchableOpacity
+                  onPress={() => {
+                    if (this.props.docs.length != 0) {
+                      this.setState({isLoading: true});
+                      this.constructObject();
+                    }
+                    else{
+                      alert('Cannot send anything before you scan some documents!')
+                    }
+                  }}>
+                  <View style={styles.button}>
+                    <Text style={{color: 'white', fontSize: 12}}>Send...</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            </ScrollView>
+          </View>
+        </ImageBackground>
+      );
+    }
   }
 
   async constructObject() {
-    console.log('//////////////////////////// ' + JSON.stringify(this.props.policyInfo))
-    var pdfArray = await this.makePagesBase64();
+    var pdfArray = await this.makeDocumentPagesPDF();
     let objectToSend = {
       apikey: sha256('GCrzJC4Jb.un4Gd%8njJ'),
       payload: new Array(),
     };
-    for (let i = 0; i < pdfArray.length; i++) {
+    for (let i = 0; i < this.props.docs.length; i++) {
       let document = {
         VNR: this.props.policyInfo.insuranceNumber,
         vorname: this.props.policyInfo.FirstName,
         nachname: this.props.policyInfo.Surname,
-        geschlecht: this.props.policyInfo.gender === 'Male' && 'm' || 'f',
-        dokumentenart: this.props.docs[i].document.docType === 'Claim Document' && 1 || 2,
-        auslandsbeleg: this.props.docs[i].document.isDocumentGerman === 'Yes' && 1 || 0,
+        geschlecht: (this.props.policyInfo.gender === 'Male' && 'm') || 'f',
+        dokumentenart:
+          (this.props.docs[i].document.docType === 'Claim Document' && 1) || 2,
+        auslandsbeleg:
+          (this.props.docs[i].document.isDocumentGerman === 'Yes' && 1) || 0,
         iban: this.props.docs[i].document.IBAN || '',
-        bezahlt: this.props.docs[i].document.docType === 'Claim Document' && this.props.docs[i].document.sendMoneyToContractualServices === 'Yes' && 1|| 0,
+        bezahlt:
+          (this.props.docs[i].document.docType === 'Claim Document' &&
+            this.props.docs[i].document.sendMoneyToContractualServices ===
+              'Yes' &&
+            1) ||
+          0,
         bic: this.props.docs[i].document.BIC || '',
-        vp_geburtsdatum_tag: this.props.docs[0].document.dateStatus.split('/')[0],
-        vp_geburtsdatum_monat: this.props.docs[0].document.dateStatus.split('/')[1],
-        vp_geburtsdatum_jahr: this.props.docs[0].document.dateStatus.split('/')[2],
+        vp_geburtsdatum_tag: this.props.docs[0].document.dateStatus.split(
+          '/',
+        )[0],
+        vp_geburtsdatum_monat: this.props.docs[0].document.dateStatus.split(
+          '/',
+        )[1],
+        vp_geburtsdatum_jahr: this.props.docs[0].document.dateStatus.split(
+          '/',
+        )[2],
         kto_inhaber: this.props.docs[0].document.AccountHolder,
         dokument: pdfArray[i],
-      }
-      
+      };
+      //console.log(document)
       objectToSend.payload.push(document);
     }
     this.sendObject(objectToSend);
   }
 
-  async makePagesBase64() {
+  async makeDocumentPagesPDF() {
     var bytes;
     let pdfArray = [];
 
@@ -224,15 +283,13 @@ class SummaryScreen extends React.Component {
           y: page.getHeight() / 2 - pdfDims.height / 2,
           width: pdfDims.width,
           height: pdfDims.height,
-        })
+        });
         let pdfBytes = await pdfDoc.save();
         let pdfBase64 = await base64.encodeFromByteArray(pdfBytes);
 
-        pdfArray.push(pdfBase64)
+        pdfArray.push(pdfBase64);
       }
     }
-
-    
 
     return pdfArray;
   }
@@ -247,6 +304,7 @@ class SummaryScreen extends React.Component {
   }
 
   async sendObject(objectToSend) {
+    var message_from_server;
     await fetch('https://www.care-concept.de/service/erstattungsannehmer.php', {
       method: 'POST',
       headers: {
@@ -255,13 +313,27 @@ class SummaryScreen extends React.Component {
       },
       body: JSON.stringify(objectToSend),
     })
-      .then((response) => response.json())
+      .then((response) => {
+        this.setState({server_message: JSON.stringify(response.status)})
+        response.json()
+      })
       .then((jsonData) => {
-        console.log('here::::::::::::::::::::::');
-        console.log(jsonData);
+        console.log(jsonData)
       })
       .catch((error) => console.log('could not send ' + error));
+      if(this.state.server_message === '200'){
+      this.setState({finishedSending: true})
+      this.setState({isLoading: false})
+      this.props.deleteStateClaimInfo()
+      this.props.deleteStatePolicyInfo()
+    }
+    else{
+      this.setState({isLoading: false})
+      alert('Could not connect to server, please try again')
+    }
+      
   }
+  
 }
 
 const styles = StyleSheet.create({
@@ -345,6 +417,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     delete: (key) => dispatch(deleteDoc(key)),
+    deleteStateClaimInfo: () => dispatch(deleteStateClaimInfo()), 
+    deleteStatePolicyInfo: () => dispatch(deleteStatePolicyInfo()) 
   };
 };
 
