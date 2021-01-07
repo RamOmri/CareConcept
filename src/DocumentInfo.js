@@ -13,7 +13,8 @@ import {
   KeyboardAvoidingView,
   Button,
   BackHandler,
-  Dimensions
+  Dimensions,
+  Alert
 } from 'react-native';
 
 import {
@@ -36,7 +37,8 @@ import {
   import {connect} from 'react-redux'
   import {addDoc, setIBAN, setDate, setBIC, setAccountHolder} from './actions/claimActions'
   import { getStatusBarHeight } from 'react-native-status-bar-height';
-
+  import bic from 'bic';
+  var IBAN = require('iban');
 class DocumentInfo extends React.Component {
 constructor(props){
   super(props)
@@ -207,12 +209,27 @@ renderAge(){
 
 handleConfirm = (date) => {
   this.state.isDatePickerVisible = false
-  let birthDate =  date.getDate().toString() + '/' + (date.getMonth() + 1).toString() + '/' + date.getFullYear().toString() 
+  var day = parseInt(date.getDate().toString())
+  var month = (date.getMonth() + 1).toString()
+  var year = date.getFullYear().toString() 
+  if(parseInt(day) < 10){
+    day = '0'+day
+  }
+  if(parseInt(month) < 10){
+    month = '0'+month
+  }
+  let birthDate =  day + '/' + month + '/' + year 
   this.state.infoObj ={
     ...this.state.infoObj,
     dateStatus: birthDate
   }
+  console.log( parseInt(new Date().getFullYear().toString()) - parseInt(year) > 120)
+  if(parseInt(new Date().getFullYear().toString()) - parseInt(year) > 120 || parseInt(new Date().getFullYear().toString()) - parseInt(year) < 12){
+    alert('Please enter a valid birth date')
+  }
+  else{
    this.props.set_date(birthDate)  
+  }
 };
 
 
@@ -340,16 +357,32 @@ return(
       </View>
   )
 }
+checkName = (name)=>{
+  const utf8 = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZüöäÜÖÄß0123456789 _çÇñÑëáé&;.-:'
+  for(let i = 0; i < name.split('').length; i++){
+    if(!utf8.includes(name[i])) return false
+  }
+  return true
+}
 
 renderContinue = () =>{
   return(
     <TouchableOpacity
     onPress = {()=>{
           if(this.state.isEditing){
-              this.props.navigation.navigate('ScanStack', {params:{infoObj: this.state.infoObj,}, screen: 'ScanPreview'})
+            if(this.state.infoObj.AccountHolder && this.state.sendMoneyToContractualServices != 'Yes' && !this.checkName(this.state.infoObj.AccountHolder)) alert('please check your bank details')
+            else if(this.state.infoObj.BIC && !bic.isValid(this.state.infoObj.BIC))alert('Please check your bank details')
+            else if(this.state.infoObj.IBAN && !IBAN.isValid(this.state.infoObj.IBAN)) alert('Please check your bank details')
+            else this.props.navigation.navigate('ScanStack', {params:{infoObj: this.state.infoObj,}, screen: 'ScanPreview'})
+            
+         
           }
           else{
-              this.props.navigation.navigate('ScanStack', {params:{infoObj: this.state.infoObj,}, screen: 'Scanner'})
+            if(this.state.isDocumentGerman === 'Select...' && this.state.docType === 'Claim Document') alert('Please make sure all fields have been selected')
+            else if(this.state.infoObj.AccountHolder && this.state.sendMoneyToContractualServices != 'Yes' && !this.checkName(this.state.infoObj.AccountHolder)) alert('please check your bank details')
+            else if(this.state.infoObj.BIC && !bic.isValid(this.state.infoObj.BIC))alert('Please check your bank details')
+            else if(this.state.infoObj.IBAN && !IBAN.isValid(this.state.infoObj.IBAN)) alert('Please check your bank details')
+            else this.props.navigation.navigate('ScanStack', {params:{infoObj: this.state.infoObj,}, screen: 'Scanner'})
           }
     }}
     >

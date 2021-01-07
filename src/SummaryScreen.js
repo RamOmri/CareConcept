@@ -54,10 +54,6 @@ class SummaryScreen extends React.Component {
       server_message: '',
       isLoading: false,
       finishedSending: false,
-      insuranceNumber: '',
-      gender: 'please select gender',
-      firstName: '',
-      surName: '',
     };
   }
 
@@ -78,7 +74,7 @@ class SummaryScreen extends React.Component {
             alignItems: 'center',
           }}>
             <Text style = {styles.DocumentText}>
-             {this.state.server_message} Please wait while we send your claim...
+               Please wait while we send your claim...
             </Text>
           <ActivityIndicator size="large" color="#004799" />
         </View>
@@ -110,12 +106,14 @@ class SummaryScreen extends React.Component {
             <View style={{paddingTop: getStatusBarHeight()}}>
               <StatusBar />
             </View>
-          )}
+          )} 
+          
           <View style={{flex: 1}}>
             <Image
               source={require('./img/CareConceptLogo.png')}
               style={styles.logo}
             />
+            
 
             <TouchableOpacity
               onPress={() => {
@@ -314,22 +312,31 @@ class SummaryScreen extends React.Component {
       body: JSON.stringify(objectToSend),
     })
       .then((response) => {
-        this.setState({server_message: JSON.stringify(response.status)})
-        response.json()
+        const status = response.status;
+        const data = response.json();
+         return Promise.all([status, data])
       })
-      .then((jsonData) => {
-        console.log(jsonData)
+      .then(([res, data]) => {
+        if(res == '400'){
+            this.state.server_message = '400'
+            this.setState({isLoading: false})
+           alert(JSON.stringify(Object.values(data[0])))
+          }
+          else{
+            this.state.server_message = res
+          }
       })
       .catch((error) => console.log('could not send ' + error));
-      if(this.state.server_message === '200'){
+      if(this.state.server_message == '200'){
       this.setState({finishedSending: true})
       this.setState({isLoading: false})
       this.props.deleteStateClaimInfo()
       this.props.deleteStatePolicyInfo()
     }
-    else{
+    else if(this.state.server_message != '400'){
+      alert('Something went wrong sending claim. Please try again')
+      console.log(this.state.server_message)
       this.setState({isLoading: false})
-      alert('Could not connect to server, please try again')
     }
       
   }

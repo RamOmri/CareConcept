@@ -35,7 +35,6 @@ import {
 import { changeSurname, changeInsuranceNumber,changeGender, changeName } from './actions/policInfoActions';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { PERMISSIONS, check, request, RESULTS } from 'react-native-permissions'
-
 class PolicyInfo extends React.Component {
 constructor(props){
   super(props)
@@ -62,9 +61,8 @@ constructor(props){
         
     }
   }
- 
+ console.log(this.props)
 }
-
 render(){
   return(
           <ImageBackground style={styles.container}
@@ -115,12 +113,15 @@ render(){
                      
                                           <TouchableOpacity
                                                         onPress = {()=>{
+                                                          if(this.checkFields()){
                                                             if(Platform.OS === "android"){
                                                               this.requestCameraPermissionAndroid()
                                                             }
                                                             else{
                                                               this.handleCameraPermissionIOS()
                                                             }
+                                                          }
+
                                                         }}
                                                         >
                                       <View style = {styles.button}>
@@ -135,6 +136,65 @@ render(){
       </ImageBackground>
   )
 }
+checkFields = () =>{
+ if(!this.checkInsuranceNumber()){
+   alert('Insurance number is incorrect')
+   return false
+ } 
+ else if(this.props.gender === 'select...'){
+   alert('please select gender')
+   return false
+ }
+ else if(this.props.FirstName === '' || this.props.Surname === ''){
+  alert('Please enter your name')
+  return false
+ }
+else if(!this.checkName()){
+   alert('Please only use latin characters in your name')
+   return false
+ }
+
+  return true
+}
+
+checkName = ()=>{
+  const utf8 = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZüöäÜÖÄß0123456789 _çÇñÑëáé&;.-:'
+  for(let i = 0; i < this.props.FirstName.split('').length; i++){
+    if(!utf8.includes(this.props.FirstName[i])) return false
+  }
+  for(let i = 0; i < this.props.Surname.split('').length; i++){
+    if(!utf8.includes(this.props.Surname[i])) return false
+  }
+  return true
+}
+
+checkInsuranceNumber = () =>{
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+  const numbers = '0123456789'
+  if(alphabet.includes(this.props.insuranceNumber[0]) && alphabet.includes(this.props.insuranceNumber[1])){
+    let policynumberlength = this.props.insuranceNumber.split('').length
+    if(policynumberlength != 11) return false
+    for(let i = 2; i <= 10; i++){
+      if(!numbers.includes(this.props.insuranceNumber[i])) return false
+    }
+    return true
+  }
+  else if(alphabet.includes(this.props.insuranceNumber[0])){
+    let policynumberlength = this.props.insuranceNumber.split('').length
+    if(policynumberlength != 10) return false
+    for(let i = 1; i < 10; i++){
+      if(!numbers.includes(this.props.insuranceNumber.split('')[i])){
+        return false
+      }
+    }
+    return true
+  }
+  else{
+    return false
+  }
+
+}
+
 
 requestCameraPermissionAndroid = async () => {
   try {
