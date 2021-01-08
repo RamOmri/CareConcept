@@ -207,7 +207,10 @@ renderAge(){
     )
 }
 
+ 
+
 handleConfirm = (date) => {
+  console.log('::::::::::::::::::: ++++' + this._calculateAge(date)[1])
   this.state.isDatePickerVisible = false
   var day = parseInt(date.getDate().toString())
   var month = (date.getMonth() + 1).toString()
@@ -223,7 +226,8 @@ handleConfirm = (date) => {
     ...this.state.infoObj,
     dateStatus: birthDate
   }
-  if(parseInt(new Date().getFullYear().toString()) - parseInt(year) > 100 || parseInt(new Date().getFullYear().toString()) - parseInt(year) < 0){
+  if(this._calculateAge(date)[0] < 0 || this._calculateAge(date)[1] >= 100){
+    
     alert('Please enter a valid birth date')
   }
   else{
@@ -231,7 +235,11 @@ handleConfirm = (date) => {
   }
 };
 
-
+_calculateAge(birthday) { // birthday is a date
+  var ageDifMs = Date.now() - birthday.getTime();
+  var ageDate = new Date(ageDifMs); // miliseconds from epoch
+  return [ageDifMs,  Math.abs(ageDate.getUTCFullYear() - 1970)]
+}
 
 renderClaimInfo(){
   return(
