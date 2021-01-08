@@ -44,7 +44,6 @@ import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {PDFDocument} from 'pdf-lib';
 const sha256 = require('sha256');
 var RNFS = require('react-native-fs');
-import RNFetchBlob from 'react-native-fetch-blob';
 import base64 from 'react-native-base64';
 
 class SummaryScreen extends React.Component {

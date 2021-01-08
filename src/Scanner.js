@@ -10,7 +10,8 @@ import {
   Alert,
   Image,
   Modal,
-  Dimensions
+  Dimensions,
+  ActivityIndicator
 } from 'react-native';
 
 import {
@@ -31,16 +32,32 @@ export default class Scanner extends React.Component {
 constructor(props){
  super(props)
   this.state = {
+    isScanning: false,
       pdfScannerReference: React.createRef(),
       infoObj: this.props.route.params.infoObj
     }
-   
+    const unsubscribe = this.props.navigation.addListener('focus', () => {
+     this.forceUpdate()
+    });
 }
 
+
+componentDidMount() {
+  this.willFocusSubscription = this.props.navigation.addListener(
+    'willFocus',
+    () => {
+      this.forceUpdate()
+    }
+  );
+}
+
+
+
  handleScannedDocument(Img, init){    
+  this.setState({isScanning: false})
   this.state.infoObj.pages.push({url: Img})  
-  
   this.props.navigation.navigate('ScanStack', {params:{infoObj: this.state.infoObj}, screen: 'imageCrop'})
+  
   }
   render(){
         return(
@@ -48,6 +65,9 @@ constructor(props){
               {this.renderScanner()}
           </React.Fragment>
         )
+
+    
+
       }
 
     renderScanner(){
@@ -62,6 +82,7 @@ constructor(props){
             style={styles.scanner}
             onPictureTaken={(picture) =>{
               this.handleScannedDocument(picture.croppedImage, picture.initialImage)
+              
             }}
             overlayColor="rgba(255,130,0, 0.7)"
             enableTorch={false}
@@ -71,10 +92,12 @@ constructor(props){
           />  
           
           <View style ={{flex:0.12}}>
-            <TouchableOpacity
+           {!this.state.isScanning && <TouchableOpacity
                         style={styles.scanButton}
                         onPress={() =>{
+                          this.setState({isScanning: true})
                                     this.state.pdfScannerReference.current.capture()
+                                    
                                   }}
                                         > 
             
@@ -84,7 +107,15 @@ constructor(props){
                           </Text>
                   
               
-            </TouchableOpacity>
+            </TouchableOpacity> ||
+           <View style ={{justifyContent:"center",alignItems:"center"}}>
+            <Text style = {styles.DocumentText}>
+               Please wait while your document is being scanned
+            </Text>
+          <ActivityIndicator size="large" color="#004799" />
+    </View>
+        }
+
           </View>
           </React.Fragment>
         )
@@ -123,5 +154,13 @@ const styles = StyleSheet.create({
     flex:1,
     justifyContent: "center",
     alignItems: "center"
-  }
+  },
+  DocumentText: {
+    flexDirection: 'row',
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#E67F00',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 })
