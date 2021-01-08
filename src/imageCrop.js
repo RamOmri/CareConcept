@@ -121,7 +121,7 @@ onContinue = () =>{
         <View style={{flexDirection:"row", justifyContent:"center"}}>
             <TouchableOpacity onPress={()=>{
               this.state.infoObj.pages.splice(this.state.infoObj.pages.length - 1, 1)
-              this.props.navigation.navigate('ScanStack', {params:{infoObj: this.state.infoObj,}, screen: 'Scanner'})
+              this.props.navigation.push('ScanStack', {params:{infoObj: this.state.infoObj,}, screen: 'Scanner'})
               }} style={styles.button}>
             <Text style={styles.text}>Rescan</Text>
           </TouchableOpacity>

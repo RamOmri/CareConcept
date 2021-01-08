@@ -14,7 +14,7 @@ import {
   Button,
   BackHandler,
   Dimensions,
-  Alert
+  Keyboard
 } from 'react-native';
 
 import {
@@ -118,7 +118,7 @@ constructor(props){
                </View>}
         <Image  source = {require('./img/CareConceptLogo.png')} style = {styles.logo} />
             <View  style = {{}}>
-            <KeyboardAvoidingView>
+            
               <ScrollView>
               <TouchableOpacity
                   onPress = {()=>{
@@ -167,7 +167,7 @@ constructor(props){
                      
               
               </ScrollView>
-          </KeyboardAvoidingView>
+         
 
         
            </View>
@@ -185,7 +185,7 @@ renderAge(){
                           this.setState({isDatePickerVisible: true})
                         }}
                         >
-      <View style = {{margin: 10, borderColor: '#f59b00', borderWidth: 5, height: 40, width: 120, justifyContent: "center", alignItems:"center", marginLeft: 10}}>
+      <View style = {{margin: 10, borderColor: '#f59b00', borderWidth: 5, height: 40, width: 120, justifyContent: "center", alignItems:"center", marginLeft:20, borderRadius:10}}>
                       <Text
                       style={{color: '#f59b00', fontSize: 12}}
                       >{this.state.isEditing && this.state.infoObj.dateStatus || this.props.date} </Text>

@@ -12,6 +12,7 @@ import {
   ImageBackground,
   PermissionsAndroid,
   Platform,
+  KeyboardAvoidingView,
   Keyboard
 } from 'react-native';
 
@@ -75,9 +76,10 @@ render(){
                  <StatusBar />
                </View>}
                       <Image  source = {require('./img/CareConceptLogo.png')} style = {styles.logo} />
-
+                      <KeyboardAvoidingView>
+<ScrollView>
                       <View style = {{flex: 1, alignItems:'center'}}>
-                          
+                         
                           <TextInput
                                           style = {styles.policyInput}
                                               placeholder = 'Insurance Number'
@@ -134,7 +136,10 @@ render(){
                                          
                                       </View>
                                        </TouchableOpacity>
+                      
                   </View>
+                    </ScrollView> 
+                    </KeyboardAvoidingView>
       </ImageBackground>
   )
 }
@@ -221,7 +226,7 @@ requestCameraPermissionAndroid = async () => {
 };
 handleCameraPermissionIOS = async () => {
   const res = await check(PERMISSIONS.IOS.CAMERA);
-
+console.log(res)
   if (res === RESULTS.GRANTED) {
     this.setState({cameraPermissionGranted:true});
     this.props.navigation.navigate('ClaimStack', {params:{Document: [], index: -1}, screen: 'SummaryScreen'})
@@ -235,11 +240,12 @@ handleCameraPermissionIOS = async () => {
     }
     else{
       this.setState({cameraPermissionGranted:false});
+      alert("could not access camera, please grant permission manually")
     }
 
 
   }
-  else if(res == RESULTS.BLOCKED){
+  else{
     alert("Could not access camera, please grant permission through phone settings ")
   }
 };

@@ -70,7 +70,7 @@ import { CommonActions } from '@react-navigation/native';
                                          // this.props.navigation.push('Scanner', {params:{img: [{url: this.state.finalImages}]}});
                                                                               }
                                                                               else{
-                                                                                alert('number of per document must be less than 20')
+                                                                                alert('number of pages per document cannot be more than 20')
                                                                               }
                                         }}
                                             >
