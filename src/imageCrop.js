@@ -9,7 +9,8 @@ import {
   Image,
   TouchableOpacity,
   Dimensions,
-  ActivityIndicator
+  ActivityIndicator,
+  Platform
 } from 'react-native';
 
 import {
@@ -121,7 +122,8 @@ onContinue = () =>{
         <View style={{flexDirection:"row", justifyContent:"center"}}>
             <TouchableOpacity onPress={()=>{
               this.state.infoObj.pages.splice(this.state.infoObj.pages.length - 1, 1)
-              this.props.navigation.push('ScanStack', {params:{infoObj: this.state.infoObj,}, screen: 'Scanner'})
+              if(Platform.OS === 'ios') this.props.navigation.push('ScanStack', {params:{infoObj: this.state.infoObj,}, screen: 'Scanner'})
+              else this.props.navigation.navigate('ScanStack', {params:{infoObj: this.state.infoObj,}, screen: 'Scanner'})
               }} style={styles.button}>
             <Text style={styles.text}>Rescan</Text>
           </TouchableOpacity>

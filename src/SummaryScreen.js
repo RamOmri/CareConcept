@@ -108,6 +108,18 @@ class SummaryScreen extends React.Component {
           )} 
           
           <View style={{flex: 1}}>
+          {(Platform.OS === "ios") && <View style = {{marginLeft: 10, flex:0.1, backgroundColor:"orange", height: Dimensions.get("window").height/200, width: Dimensions.get("window").width/4, justifyContent:"center", alignItems:"center", borderTopLeftRadius:20, borderBottomLeftRadius: 20}}>
+                    
+                    <TouchableOpacity
+                    onPress = {()=>{
+                      this.props.navigation.navigate('ClaimStack', {params:{}, screen: 'PolicyInfo'})
+                    }}
+                    >
+                      <Text style={{color: "white", fontSize: 14}}>
+                        Go Back
+                      </Text>
+                      </TouchableOpacity>
+                  </View>}
             <Image
               source={require('./img/CareConceptLogo.png')}
               style={styles.logo}
