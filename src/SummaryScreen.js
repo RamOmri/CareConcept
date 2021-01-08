@@ -142,10 +142,15 @@ class SummaryScreen extends React.Component {
 
             <TouchableOpacity
               onPress={() => {
+                if(this.props.docs.length < 20){
                 this.props.navigation.navigate('ClaimStack', {
                   params: {isEditing: false},
                   screen: 'DocumentInfo',
                 });
+              }
+              else{
+                alert('Cannot send more than 20 documents')
+              }
               }}>
               <View
                 style={{
