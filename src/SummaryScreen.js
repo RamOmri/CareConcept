@@ -345,7 +345,7 @@ class SummaryScreen extends React.Component {
         if(res == '400'){
             this.state.server_message = '400'
             this.setState({isLoading: false})
-           alert(JSON.stringify(Object.values(data[0])))
+           alert(`${JSON.stringify(data[0].arg3)} was entered incorrectly. Please fix your entry and try again`)
           }
           else{
             this.state.server_message = res
