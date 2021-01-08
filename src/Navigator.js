@@ -26,7 +26,8 @@ import DocumentInfo from './DocumentInfo'
       <Stack.Navigator screenOptions={{
         headerShown: false,
         initial:false,
-        lazy: false
+        lazy: false,
+        gestureEnabled:(!Platform.OS === "ios")
         }}>
        
       <Stack.Screen name='Scanner' component={Scanner} />
