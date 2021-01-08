@@ -11,7 +11,8 @@ import {
   TextInput,
   ImageBackground,
   PermissionsAndroid,
-  Platform
+  Platform,
+  Keyboard
 } from 'react-native';
 
 import {
@@ -113,6 +114,7 @@ render(){
                      
                                           <TouchableOpacity
                                                         onPress = {()=>{
+                                                          Keyboard.dismiss()
                                                           if(this.checkFields()){
                                                             if(Platform.OS === "android"){
                                                               this.requestCameraPermissionAndroid()
