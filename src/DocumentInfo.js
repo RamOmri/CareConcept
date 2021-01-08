@@ -389,6 +389,7 @@ renderContinue = () =>{
             else if(this.state.infoObj.AccountHolder && this.state.sendMoneyToContractualServices != 'Yes' && !this.checkName(this.state.infoObj.AccountHolder)) alert('please check your bank details')
             else if(this.state.infoObj.BIC && !bic.isValid(this.state.infoObj.BIC))alert('Please check your bank details')
             else if(this.state.infoObj.IBAN && !IBAN.isValid(this.state.infoObj.IBAN)) alert('Please check your bank details')
+            if(this.props.date === 'select') alert('Please enter a birth date')
             else this.props.navigation.navigate('ScanStack', {params:{infoObj: this.state.infoObj,}, screen: 'Scanner'})
           }
     }}
