@@ -103,7 +103,7 @@ componentDidMount() {
                                     let that = this
                                      if(that.state.isScanning === true){
                                        alert('Scan timed out, please hold phone steady and try again')
-                                       that.state.pdfScannerReference.current.forceUpdate()
+                                      // that.state.pdfScannerReference.current.forceUpdate()
                                        that.setState({isScanning: false})
                                      }
                                   }, 9000);

@@ -300,13 +300,14 @@ class SummaryScreen extends React.Component {
   }
 
   async makeDocumentPagesPDF() {
-    var bytes;
+   
     let pdfArray = [];
 
     for (let d = 0; d < this.props.docs.length; d++) {
       var pdfDoc = await PDFDocument.create();
       let pages = this.props.docs[d].document.pages.map((a) => a.url);
       for (let i = 0; i < pages.length; i++) {
+         let bytes;
         await RNFS.readFile(pages[i], 'base64')
           .then((data) => {
             bytes = data;
@@ -328,7 +329,7 @@ class SummaryScreen extends React.Component {
         });
         let pdfBytes = await pdfDoc.save();
         let pdfBase64 = await base64.encodeFromByteArray(pdfBytes);
-
+          console.log(pdfBase64)
         pdfArray.push(pdfBase64);
       }
     }
@@ -458,7 +459,6 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-  console.log(':::::::::::::: ' + state);
   return {
     policyInfo: state.policyInfoReducers.policyInfo,
     docs: state.docReducer.docList,
