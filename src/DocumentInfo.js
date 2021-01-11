@@ -338,20 +338,12 @@ return(
           value={this.state.isEditing && this.state.infoObj.IBAN || this.props.iban || ''}
           />
 
-      {(this.state.infoObj.isDocumentGerman == 'No') && <View style = {{justifyContent:'center', alignItems:'center'}}><Text style = { {width: 300,
+   <View style = {{justifyContent:'center', alignItems:'center'}}><Text style = { {width: 300,
                       color: '#E67F00',
                       justifyContent: 'center',
                       alignItems: 'center',
                       }}> 
         Please enter your BIC
-      </Text>
-    <Text style = {{  width: 300,
-                      color: '#E67F00',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      margin: 5,
-                      fontSize:9}}>
-        *optional field
       </Text>
         <TextInput
           style = {styles.policyInput}
@@ -368,7 +360,7 @@ return(
           value={this.state.isEditing && this.state.infoObj.BIC || this.props.bic || ''}
           />
           </View>
-          }
+        
 
           {this.renderContinue()}
       </View>
@@ -422,8 +414,12 @@ checkFieldsBeforeContinue(){
      alert('please check your bank details (name)')
     return false
     }
-  else if(this.state.infoObj.BIC && !bic.isValid(this.state.infoObj.BIC)){
+  else if(this.state.infoObj.sendMoneyToContractualServices == 'No' && !bic.isValid(this.state.infoObj.BIC)){
     alert('Please check your bank details (bic)')
+    return false
+  }
+  else if(this.state.infoObj.sendMoneyToContractualServices == 'No' && this.props.bic == ''){
+    alert('Please check your bank details (BIC) ')
     return false
   }
   else if(this.state.infoObj.sendMoneyToContractualServices == 'No' && !IBAN.isValid(this.state.infoObj.IBAN)){
