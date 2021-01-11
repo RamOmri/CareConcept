@@ -81,6 +81,7 @@ componentDidMount() {
            ref={this.state.pdfScannerReference}
             style={styles.scanner}
             onPictureTaken={(picture) =>{
+              
               this.handleScannedDocument(picture.croppedImage, picture.initialImage)
               
             }}
@@ -94,9 +95,19 @@ componentDidMount() {
           <View style ={{flex:0.12}}>
            {!this.state.isScanning && <TouchableOpacity
                         style={styles.scanButton}
-                        onPress={() =>{
-                          this.setState({isScanning: true})
+                        onPress={() =>{ 
+                                    this.setState({isScanning: true})
                                     this.state.pdfScannerReference.current.capture()
+                                  setTimeout(() => {
+                                    
+                                    let that = this
+                                     if(that.state.isScanning === true){
+                                       alert('Scan timed out, please hold phone steady and try again')
+                                       that.state.pdfScannerReference.current.forceUpdate()
+                                       that.setState({isScanning: false})
+                                     }
+                                  }, 9000);
+                                   
                                     
                                   }}
                                         > 
