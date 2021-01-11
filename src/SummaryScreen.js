@@ -256,8 +256,11 @@ class SummaryScreen extends React.Component {
 
   async constructObject() {
     var pdfArray = await this.makeDocumentPagesPDF();
+    var time = (Math.floor(new Date().getTime() / 1000)).toString()
     let objectToSend = {
-      apikey: sha256('GCrzJC4Jb.un4Gd%8njJ'),
+      apikey: sha256('GCrzJC4Jb.un4Gd%8njJ' + time),
+      user_language: 'eng',
+      timestamp: time,
       payload: new Array(),
     };
     for (let i = 0; i < this.props.docs.length; i++) {
