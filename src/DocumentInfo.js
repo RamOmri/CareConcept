@@ -133,7 +133,6 @@ constructor(props){
                       this.props.navigation.navigate('ClaimStack', {params:{}, screen: 'SummaryScreen'})
                     }
                     return true;
-                 
                   
                   
                   }}
