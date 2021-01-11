@@ -323,24 +323,6 @@ return(
               value={this.state.isEditing && this.state.infoObj.AccountHolder || this.props.AccountHolder || ''}
               />
 
-      <Text style = {styles.questionText}> 
-        Please enter your BIC
-      </Text>
-        <TextInput
-          style = {styles.policyInput}
-          placeholder = 'BIC'
-          placeholderTextColor="#004799"
-          secureTextEntry = {false}
-          onChangeText={bic =>{
-            this.props.set_bic(bic)
-            this.state.infoObj = {
-              ...this.state.infoObj,
-              BIC: bic
-            }
-            }}
-          value={this.state.isEditing && this.state.infoObj.BIC || this.props.bic || ''}
-          />
-
 
       <Text style = {styles.questionText}> 
         Please enter your IBAN
@@ -360,15 +342,53 @@ return(
           value={this.state.isEditing && this.state.infoObj.IBAN || this.props.iban || ''}
           />
 
+      {(this.state.infoObj.isDocumentGerman == 'No') && <View style = {{justifyContent:'center', alignItems:'center'}}><Text style = { {width: 300,
+                      color: '#E67F00',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      }}> 
+        Please enter your BIC
+      </Text>
+    <Text style = {{  width: 300,
+                      color: '#E67F00',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      margin: 5,
+                      fontSize:9}}>
+        *optional field
+      </Text>
+        <TextInput
+          style = {styles.policyInput}
+          placeholder = 'BIC'
+          placeholderTextColor="#004799"
+          secureTextEntry = {false}
+          onChangeText={bic =>{
+            this.props.set_bic(bic)
+            this.state.infoObj = {
+              ...this.state.infoObj,
+              BIC: bic
+            }
+            }}
+          value={this.state.isEditing && this.state.infoObj.BIC || this.props.bic || ''}
+          />
+          </View>
+          }
+
           {this.renderContinue()}
       </View>
   )
 }
 checkName = (name)=>{
-  const utf8 = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZüöäÜÖÄß0123456789 _çÇñÑëáé&;.-:'
+  if(name)
+  {
+    const utf8 = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZüöäÜÖÄß0123456789 _çÇñÑëáé&;.-:'
   for(let i = 0; i < name.split('').length; i++){
     if(!utf8.includes(name[i])) return false
   }
+}
+else{
+  return false
+}
   return true
 }
 
@@ -376,21 +396,12 @@ renderContinue = () =>{
   return(
     <TouchableOpacity
     onPress = {()=>{
-          if(this.state.isEditing){
-            if(this.state.infoObj.AccountHolder && this.state.sendMoneyToContractualServices != 'Yes' && !this.checkName(this.state.infoObj.AccountHolder)) alert('please check your bank details')
-            else if(this.state.infoObj.BIC && !bic.isValid(this.state.infoObj.BIC))alert('Please check your bank details')
-            else if(this.state.infoObj.IBAN && !IBAN.isValid(this.state.infoObj.IBAN)) alert('Please check your bank details')
-            else this.props.navigation.navigate('ScanStack', {params:{infoObj: this.state.infoObj,}, screen: 'ScanPreview'})
-            
+          if(this.state.isEditing && this.checkFieldsBeforeContinue){
+            this.props.navigation.navigate('ScanStack', {params:{infoObj: this.state.infoObj,}, screen: 'ScanPreview'})
          
           }
-          else{
-            if(this.state.isDocumentGerman === 'Select...' && this.state.docType === 'Claim Document') alert('Please make sure all fields have been selected')
-            else if(this.state.infoObj.AccountHolder && this.state.sendMoneyToContractualServices != 'Yes' && !this.checkName(this.state.infoObj.AccountHolder)) alert('please check your bank details')
-            else if(this.state.infoObj.BIC && !bic.isValid(this.state.infoObj.BIC))alert('Please check your bank details')
-            else if(this.state.infoObj.IBAN && !IBAN.isValid(this.state.infoObj.IBAN)) alert('Please check your bank details')
-            if(this.props.date === 'select') alert('Please enter a birth date')
-            else this.props.navigation.navigate('ScanStack', {params:{infoObj: this.state.infoObj,}, screen: 'Scanner'})
+          else if(this.checkFieldsBeforeContinue()){
+              this.props.navigation.navigate('ScanStack', {params:{infoObj: this.state.infoObj,}, screen: 'Scanner'})
           }
     }}
     >
@@ -403,6 +414,38 @@ renderContinue = () =>{
     </TouchableOpacity> 
         )
 }
+
+
+checkFieldsBeforeContinue(){
+  if(this.state.isDocumentGerman === 'Select...' && this.state.docType === 'Claim Document'){
+     alert('Please make sure all fields have been selected')
+     return false
+    }
+  else if(this.state.infoObj.sendMoneyToContractualServices == 'No' && !this.checkName(this.state.infoObj.AccountHolder)){
+     alert('please check your bank details (name)')
+    return false
+    }
+  else if(this.state.infoObj.BIC && !bic.isValid(this.state.infoObj.BIC)){
+    alert('Please check your bank details (bic)')
+    return false
+  }
+  else if(this.state.infoObj.sendMoneyToContractualServices == 'No' && !IBAN.isValid(this.state.infoObj.IBAN)){
+     alert('Please check your bank details (IBAN) ')
+      return false
+    }
+  else if(this.state.infoObj.sendMoneyToContractualServices == 'No' && this.props.iban == ''){
+    alert('Please check your bank details (iban) ')
+    return false
+  }
+  else if(this.props.date === 'select'){
+     alert('Please enter a birth date')
+     return false
+    }
+    else{
+      return true
+    }
+}
+
   componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
   }

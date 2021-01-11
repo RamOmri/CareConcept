@@ -3,8 +3,8 @@ import {ADD_DOC, DELETE_DOC, SET_IBAN, SET_BIC, SET_ACCOUNT_HOLDER, SET_DATE,  D
 
 const initState = {
     docList: [],
-    IBAN: null,
-    BIC: null,
+    IBAN: '',
+    BIC: '',
     AccountHolder: null,
     date: 'select'
 }

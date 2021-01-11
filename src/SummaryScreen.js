@@ -14,7 +14,7 @@ import {
   FlatList,
   Button,
   ActivityIndicator,
-  BackHandler
+  BackHandler,
 } from 'react-native';
 
 import {
@@ -37,7 +37,7 @@ import {
 import {connect} from 'react-redux';
 import {addDoc} from './actions/claimActions';
 import {deleteDoc, deleteStateClaimInfo} from './actions/claimActions';
-import { deleteStatePolicyInfo} from './actions/policInfoActions';
+import {deleteStatePolicyInfo} from './actions/policInfoActions';
 import {StackActions, NavigationActions} from 'react-navigation';
 import ImgToBase64 from 'react-native-image-base64';
 import base64Image from './base64Example';
@@ -58,20 +58,21 @@ class SummaryScreen extends React.Component {
     BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
   }
 
-
   componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress', this.onBackPress());
   }
 
   onBackPress = () => {
-   if(!this.state.isLoading){
-    this.props.navigation.navigate('ClaimStack', {params:{Document: [], index: -1}, screen: 'PolicyInfo'})
-    return true
-   }
-   else{
-     return true
-   }
-  }
+    if (!this.state.isLoading) {
+      this.props.navigation.navigate('ClaimStack', {
+        params: {Document: [], index: -1},
+        screen: 'PolicyInfo',
+      });
+      return true;
+    } else {
+      return true;
+    }
+  };
 
   render() {
     if (this.state.isLoading) {
@@ -86,29 +87,29 @@ class SummaryScreen extends React.Component {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-            <Text style = {styles.DocumentText}>
-               Please wait while we send your claim...
-            </Text>
+          <Text style={styles.DocumentText}>
+            Please wait while we send your claim...
+          </Text>
           <ActivityIndicator size="large" color="#004799" />
         </View>
       );
-    } else if(this.state.finishedSending) {
-      return(
-      <View
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        <Text style={styles.DocumentText}>
-           Finished submitting claim, please close the app
-        </Text>
-      </View>
-      )
+    } else if (this.state.finishedSending) {
+      return (
+        <View
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text style={styles.DocumentText}>
+            Finished submitting claim, please close the app
+          </Text>
+        </View>
+      );
     } else {
       return (
         <ImageBackground
@@ -119,41 +120,47 @@ class SummaryScreen extends React.Component {
             <View style={{paddingTop: getStatusBarHeight()}}>
               <StatusBar />
             </View>
-          )} 
-          
+          )}
+
           <View style={{flex: 1}}>
-          {(Platform.OS === "ios") && 
-         
-         <TouchableOpacity
-         onPress = {()=>{
-           this.props.navigation.navigate('ClaimStack', {params:{}, screen: 'PolicyInfo'})
-         }}
-         >
-            <View style = {{marginLeft: 10, backgroundColor:"orange", height: Dimensions.get("window").height/17, width: Dimensions.get("window").width/4, justifyContent:"center", alignItems:"center", borderTopLeftRadius:200, borderBottomLeftRadius: 200}}>
-         
-           <Text style={{color: "white", fontSize: 15}}>
-             Go Back
-           </Text>
-           </View>
-           </TouchableOpacity>
-       }
+            {Platform.OS === 'ios' && (
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.navigate('ClaimStack', {
+                    params: {},
+                    screen: 'PolicyInfo',
+                  });
+                }}>
+                <View
+                  style={{
+                    marginLeft: 10,
+                    backgroundColor: 'orange',
+                    height: Dimensions.get('window').height / 17,
+                    width: Dimensions.get('window').width / 4,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    borderTopLeftRadius: 200,
+                    borderBottomLeftRadius: 200,
+                  }}>
+                  <Text style={{color: 'white', fontSize: 15}}>Go Back</Text>
+                </View>
+              </TouchableOpacity>
+            )}
             <Image
               source={require('./img/CareConceptLogo.png')}
               style={styles.logo}
             />
-            
 
             <TouchableOpacity
               onPress={() => {
-                if(this.props.docs.length < 20){
-                this.props.navigation.navigate('ClaimStack', {
-                  params: {isEditing: false},
-                  screen: 'DocumentInfo',
-                });
-              }
-              else{
-                alert('Cannot send more than 20 documents')
-              }
+                if (this.props.docs.length < 20) {
+                  this.props.navigation.navigate('ClaimStack', {
+                    params: {isEditing: false},
+                    screen: 'DocumentInfo',
+                  });
+                } else {
+                  alert('Cannot send more than 20 documents');
+                }
               }}>
               <View
                 style={{
@@ -229,9 +236,10 @@ class SummaryScreen extends React.Component {
                     if (this.props.docs.length != 0) {
                       this.setState({isLoading: true});
                       this.constructObject();
-                    }
-                    else{
-                      alert('Cannot send anything before you scan some documents!')
+                    } else {
+                      alert(
+                        'Cannot send anything before you scan some documents!',
+                      );
                     }
                   }}>
                   <View style={styles.button}>
@@ -257,7 +265,7 @@ class SummaryScreen extends React.Component {
         VNR: this.props.policyInfo.insuranceNumber,
         vorname: this.props.policyInfo.FirstName,
         nachname: this.props.policyInfo.Surname,
-        geschlecht: (this.props.policyInfo.gender === 'Male' && 'm') || 'f',
+        geschlecht: (this.props.policyInfo.gender === 'Male' && 'm') || 'w',
         dokumentenart:
           (this.props.docs[i].document.docType === 'Claim Document' && 1) || 2,
         auslandsbeleg:
@@ -347,33 +355,33 @@ class SummaryScreen extends React.Component {
       .then((response) => {
         const status = response.status;
         const data = response.json();
-         return Promise.all([status, data])
+        return Promise.all([status, data]);
       })
       .then(([res, data]) => {
-        if(res == '400'){
-            this.state.server_message = '400'
-            this.setState({isLoading: false})
-           alert(`${JSON.stringify(data[0].arg3)} was entered incorrectly. Please fix your entry and try again`)
-          }
-          else{
-            this.state.server_message = res
-          }
+        if (res == '400') {
+          this.state.server_message = '400';
+          this.setState({isLoading: false});
+          alert(
+            `${JSON.stringify(
+              data[0].arg3,
+            )} was entered incorrectly. Please fix your entry and try again`,
+          );
+        } else {
+          this.state.server_message = res;
+        }
       })
       .catch((error) => console.log('could not send ' + error));
-      if(this.state.server_message == '200'){
-      this.setState({finishedSending: true})
-      this.setState({isLoading: false})
-      this.props.deleteStateClaimInfo()
-      this.props.deleteStatePolicyInfo()
+    if (this.state.server_message == '200') {
+      this.setState({finishedSending: true});
+      this.setState({isLoading: false});
+      this.props.deleteStateClaimInfo();
+      this.props.deleteStatePolicyInfo();
+    } else if (this.state.server_message != '400') {
+      alert('Something went wrong sending claim. Please try again');
+      console.log(this.state.server_message);
+      this.setState({isLoading: false});
     }
-    else if(this.state.server_message != '400'){
-      alert('Something went wrong sending claim. Please try again')
-      console.log(this.state.server_message)
-      this.setState({isLoading: false})
-    }
-      
   }
-  
 }
 
 const styles = StyleSheet.create({
@@ -457,8 +465,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     delete: (key) => dispatch(deleteDoc(key)),
-    deleteStateClaimInfo: () => dispatch(deleteStateClaimInfo()), 
-    deleteStatePolicyInfo: () => dispatch(deleteStatePolicyInfo()) 
+    deleteStateClaimInfo: () => dispatch(deleteStateClaimInfo()),
+    deleteStatePolicyInfo: () => dispatch(deleteStatePolicyInfo()),
   };
 };
 
