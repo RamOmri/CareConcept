@@ -123,10 +123,17 @@ constructor(props){
               <TouchableOpacity
                   onPress = {()=>{
                     if(this.state.isEditing){
-                      this.props.add(this.state.infoObj)
+                      if(this.checkFieldsBeforeContinue()){
+                         this.props.add(this.state.infoObj)
+                         this.props.navigation.navigate('ClaimStack', {params:{}, screen: 'SummaryScreen'})
+                        }
+                      else return true
                     }
-                    this.props.navigation.navigate('ClaimStack', {params:{}, screen: 'SummaryScreen'})
+                    else{
+                      this.props.navigation.navigate('ClaimStack', {params:{}, screen: 'SummaryScreen'})
+                    }
                     return true;
+                 
                   
                   
                   }}
@@ -379,6 +386,7 @@ return(
   )
 }
 checkName = (name)=>{
+  console.log(name)
   if(name)
   {
     const utf8 = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZüöäÜÖÄß0123456789 _çÇñÑëáé&;.-:'
@@ -396,7 +404,7 @@ renderContinue = () =>{
   return(
     <TouchableOpacity
     onPress = {()=>{
-          if(this.state.isEditing && this.checkFieldsBeforeContinue){
+          if(this.state.isEditing && this.checkFieldsBeforeContinue()){
             this.props.navigation.navigate('ScanStack', {params:{infoObj: this.state.infoObj,}, screen: 'ScanPreview'})
          
           }
@@ -456,9 +464,15 @@ checkFieldsBeforeContinue(){
 
   onBackPress = () => {
     if(this.state.isEditing){
-      this.props.add(this.state.infoObj)
+      if(this.checkFieldsBeforeContinue()){
+         this.props.add(this.state.infoObj)
+         this.props.navigation.navigate('ClaimStack', {params:{}, screen: 'SummaryScreen'})
+        }
+      else return true
     }
-    this.props.navigation.navigate('ClaimStack', {params:{}, screen: 'SummaryScreen'})
+    else{
+      this.props.navigation.navigate('ClaimStack', {params:{}, screen: 'SummaryScreen'})
+    }
     return true;
   }
   
