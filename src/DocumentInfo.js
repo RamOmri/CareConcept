@@ -122,17 +122,7 @@ constructor(props){
               <ScrollView>
               <TouchableOpacity
                   onPress = {()=>{
-                    if(this.state.isEditing){
-                      if(this.checkFieldsBeforeContinue()){
-                         this.props.add(this.state.infoObj)
-                         this.props.navigation.navigate('ClaimStack', {params:{}, screen: 'SummaryScreen'})
-                        }
-                      else return true
-                    }
-                    else{
-                      this.props.navigation.navigate('ClaimStack', {params:{}, screen: 'SummaryScreen'})
-                    }
-                    return true;
+                    this.onBackPress()
                   
                   
                   }}
