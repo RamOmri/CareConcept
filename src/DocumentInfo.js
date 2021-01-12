@@ -31,7 +31,8 @@ import {
     MenuOptions,
     MenuOption,
     MenuTrigger,
-    MenuProvider
+    MenuProvider,
+    renderers
   } from 'react-native-popup-menu';
   import DateTimePickerModal from "react-native-modal-datetime-picker";
   import {connect} from 'react-redux'
@@ -39,6 +40,7 @@ import {
   import { getStatusBarHeight } from 'react-native-status-bar-height';
   import bic from 'bic';
   var IBAN = require('iban');
+  const { SlideInMenu } = renderers;
 class DocumentInfo extends React.Component {
 constructor(props){
   super(props)
@@ -72,7 +74,45 @@ constructor(props){
               underlayColor: 'darkblue',
               activeOpacity: 70,
           },   
+      },
+      /* optionsStyles : {
+        optionTouchable: {
+          underlayColor: 'white',
+          activeOpacity: 40,
+          
+          backgroundColor: 'white',
+        },
+        optionWrapper: {
+          backgroundColor: "purple",
+          height:70,
+          width:400,
+          paddingTop:15,
+        },
+        optionText: {
+          color: 'white',
+          marginLeft:20
+        },
+      }, */
+      optionStyles : {
+        optionTouchable: {
+          underlayColor: '#E5ECF5',
+          activeOpacity: 40,
+        },
+        optionWrapper: {
+          backgroundColor: "#004799",
+          margin: 3,
+          borderRadius:10,
+          height:40,
+          justifyContent:'center',
+          alignItems:'center'
+        },
+        optionText: {
+          color: 'white',
+          margin:8
+        },
       }
+
+      
     }
     this.setPrefilledDateAndBankDetails()
       this.check_if_editing()
@@ -107,6 +147,24 @@ constructor(props){
   }
 
   render(){
+    /* const optionsStyles = {
+      optionTouchable: {
+        underlayColor: 'white',
+        activeOpacity: 40,
+      },
+      optionWrapper: {
+        backgroundColor: 'white',
+        height:140,
+        paddingTop:15,
+      },
+      optionText: {
+        color: 'white',
+        marginLeft:20
+      },
+    }; */
+    const claimStr = ''//`\nThese include, for example, doctor’s bills, pharmacy receipts and hospital bills`
+    const otherStr = ''//`\nThese include such documents as completed self-disclosure forms, duty of confidentiality waivers, cost estimates and proof of entry into a country.`
+
     return(
         <ImageBackground style={styles.container}
         source={require('./img/background.jpg')}
@@ -132,28 +190,48 @@ constructor(props){
                         Go Back
                       </Text>
                   </View>}
+
                 </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress = {()=>{
+                    alert(
+                      "If you have a claim and would like to send us any relevant documents such as doctor's bills or pharmacy receipts or if we have asked you for some information regarding a request for reimbursement (for example, a completed self-disclosure form or proof of entry into a country), you can upload all documents quickly and easily here. Your advantage: You do not need to send us anything by regular mail or email* and you will receive the benefits stipulated in your policy very quickly. *In individual cases we reserve the right to request original versions of the documents."
+                    )
+                  }}
+                >
+                <View style = {{flexDirection: 'row', marginBottom: 40, justifyContent:'center'}}>
+                <Image  source = {require('./img/questionMark.png')} style = {{width:20, height:20}} />
+                <Text style = {{fontWeight:'bold', color:"#004799"}}>
+                  Press here for instructions
+                </Text>
+                <Image  source = {require('./img/questionMark.png')} style = {{width:20, height:20}} />
+                </View>
+                </TouchableOpacity>
+                
                 {this.renderAge()}
                   <Text style = {styles.questionText}> 
                       What type of Invoice are you about to scan?
                   </Text>
                   <Menu >
                       <MenuTrigger text={this.state.isEditing && this.state.infoObj.docType || this.state.docType} customStyles = {this.state.menuStyle} />
-                          <MenuOptions>
-                              <MenuOption onSelect={() =>{
+                          <MenuOptions customStyles={this.state.optionStyles}>
+                              <MenuOption /* customStyles = {this.state.optionStyles} */
+                                          onSelect={() =>{
                                                           this.state.infoObj ={
                                                             ...this.state.infoObj,
                                                             docType: 'Claim Document'
                                                           }
                                                           this.setState({docType: 'Claim Document'})
-                                                        }} text='Claim Document' />
-                              <MenuOption onSelect={() =>{
+                                                        }} text= {"Claim Document" + claimStr }/>
+                              <MenuOption  
+                              onSelect={() =>{
                                                           this.state.infoObj ={
                                                             ...this.state.infoObj,
                                                             docType: 'Other Document'
                                                           }
                                                           this.setState({docType: 'Other Document'})
-                                                        }} text='Other Document' />
+                                                        }} text={'Other Document' + otherStr} />
                           </MenuOptions>
                   </Menu>
           
@@ -245,7 +323,7 @@ renderClaimInfo(){
       </Text>
       <Menu >
           <MenuTrigger text={this.state.isEditing && this.state.infoObj.isDocumentGerman || this.state.isDocumentGerman } customStyles = {this.state.menuStyle} />
-              <MenuOptions>
+              <MenuOptions customStyles={this.state.optionStyles}>
                   <MenuOption onSelect={() =>{
                                   this.state.infoObj = {
                                     ...this.state.infoObj,
@@ -274,9 +352,9 @@ renderIsFromSameAccount = () =>{
         <Text style = {styles.questionText}> 
               Should contractual services be reimbursed to the biller (physician/hospital, etc.)?
                 </Text>
-                <Menu >
+                <Menu>
                     <MenuTrigger text={this.state.isEditing && this.state.infoObj.sendMoneyToContractualServices || this.state.sendMoneyToContractualServices} customStyles = {this.state.menuStyle}/>
-                        <MenuOptions>
+                        <MenuOptions customStyles={this.state.optionStyles}>
                             <MenuOption onSelect={() => {
                               this.state.infoObj = {
                                 ...this.state.infoObj,
@@ -466,7 +544,7 @@ checkFieldsBeforeContinue(){
 const styles = StyleSheet.create({
   logo:{
         margin: 10,
-        marginBottom:50
+        marginBottom:20
   },
   button: {
     width: 160,

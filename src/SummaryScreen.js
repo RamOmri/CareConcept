@@ -316,7 +316,7 @@ class SummaryScreen extends React.Component {
         var embeddedImage = await pdfDoc
           .embedJpg(bytes)
           .catch((err) => console.log('here2:::::::::::::::::::: ' + err));
-        const page = pdfDoc.addPage();
+        var page = pdfDoc.addPage();
 
         const pdfDims = embeddedImage.scale(0.5);
 
@@ -326,16 +326,19 @@ class SummaryScreen extends React.Component {
           width: pdfDims.width,
           height: pdfDims.height,
         });
+        
+      }
         let pdfBytes = await pdfDoc.save();
         let pdfBase64 = await base64.encodeFromByteArray(pdfBytes);
 
         pdfArray.push(pdfBase64);
-      }
     }
 
     return pdfArray;
   }
-  _base64ToArrayBuffer(base64) {
+
+  //If not used then please delete
+  /* _base64ToArrayBuffer(base64) {
     var binary_string = new Buffer.from(base64, 'base64');
     var len = binary_string.length;
     var bytes = new Uint8Array(len);
@@ -343,7 +346,7 @@ class SummaryScreen extends React.Component {
       bytes[i] = binary_string.charCodeAt(i);
     }
     return bytes.buffer;
-  }
+  } */
 
   async sendObject(objectToSend) {
     var message_from_server;

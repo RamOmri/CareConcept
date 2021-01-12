@@ -41,6 +41,24 @@ class PolicyInfo extends React.Component {
 constructor(props){
   super(props)
   this.state = {
+    optionStyles : {
+      optionTouchable: {
+        underlayColor: '#E5ECF5',
+        activeOpacity: 40,
+      },
+      optionWrapper: {
+        backgroundColor: "#004799",
+        margin: 3,
+        borderRadius:10,
+        height:40,
+        justifyContent:'center',
+        alignItems:'center'
+      },
+      optionText: {
+        color: 'white',
+        margin:8
+      },
+    },
     menuStyle: {
         triggerText: {
             color: '#f59b00',
@@ -61,7 +79,8 @@ constructor(props){
         },
         
         
-    }
+        
+    },
   }
  console.log(this.props)
 }
@@ -91,7 +110,9 @@ render(){
                               <Text style = {styles.questionText}>Please select your sex</Text>
                               <Menu >
                                   <MenuTrigger text={this.props.gender} customStyles = {this.state.menuStyle} />
-                                      <MenuOptions>
+                                      <MenuOptions
+                                      customStyles = {this.state.optionStyles}
+                                      >
                                           <MenuOption onSelect={() => this.props.changeGender('Male')} text='Male' />
                                           <MenuOption onSelect={() => this.props.changeGender('Female')} text='Female' />
                                       </MenuOptions>
