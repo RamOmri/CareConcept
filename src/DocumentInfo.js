@@ -513,6 +513,8 @@ renderContinue = () =>{
 
 
 checkFieldsBeforeContinue(){
+  if(this.state.infoObj.docType === "Other Document") this.state.infoObj.sendMoneyToContractualServices = "Yes"
+
   if(this.state.isDocumentGerman === 'Select...' && this.state.docType === 'Claim Document'){
      alert('Please make sure all fields have been selected')
      return false
