@@ -174,6 +174,11 @@ constructor(props){
               <View style = {{paddingTop: getStatusBarHeight()}}>
                  <StatusBar />
                </View>}
+               {(Platform.OS === "ios") && <View style = {{marginTop:10,marginLeft: 10, flex:0.15, backgroundColor:"orange", height: Dimensions.get("window").height/18, width: Dimensions.get("window").width/3, justifyContent:"center", alignItems:"center", borderTopLeftRadius:20, borderBottomLeftRadius: 20}}>
+                      <Text style={{color: "white", fontSize: 14}}>
+                        Go Back
+                      </Text>
+                  </View>}
         <Image  source = {require('./img/CareConceptLogo.png')} style = {styles.logo} />
             <View  style = {{}}>
             
@@ -185,11 +190,7 @@ constructor(props){
                   
                   }}
                 >
-                  {(Platform.OS === "ios") && <View style = {{marginLeft: 10, flex:0.1, backgroundColor:"orange", height: Dimensions.get("window").height/20, width: Dimensions.get("window").width/3, justifyContent:"center", alignItems:"center", borderTopLeftRadius:20, borderBottomLeftRadius: 20}}>
-                      <Text style={{color: "white", fontSize: 14}}>
-                        Go Back
-                      </Text>
-                  </View>}
+                  
 
                 </TouchableOpacity>
 
