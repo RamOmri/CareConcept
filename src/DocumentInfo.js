@@ -60,8 +60,8 @@ constructor(props){
           },
           triggerWrapper: {
               padding: 5,
-              height: 40,
-              width: 150,
+              height: 50,
+              width: 100,
               marginBottom: 10,
               justifyContent: 'center',
               backgroundColor: 'white',
@@ -210,9 +210,13 @@ constructor(props){
                 </TouchableOpacity>
                 
                 {this.renderAge()}
+
                   <Text style = {styles.questionText}> 
-                      What type of Invoice are you about to scan?
+                      Which type of document are you about to scan?
                   </Text>
+
+
+                  <View style = {{flexDirection:'row', alignItems:'center'}}>
                   <Menu >
                       <MenuTrigger text={this.state.isEditing && this.state.infoObj.docType || this.state.docType} customStyles = {this.state.menuStyle} />
                           <MenuOptions customStyles={this.state.optionStyles}>
@@ -234,7 +238,25 @@ constructor(props){
                                                         }} text={'Other Document' + otherStr} />
                           </MenuOptions>
                   </Menu>
-          
+                  <TouchableOpacity
+                    onPress = {()=>{
+                      alert(
+                        "Claim Document:" + "\nThese include, for example, doctor’s bills, pharmacy receipts and hospital bills\n\n"+
+                        "All other documents: \nThese include such documents as completed self-disclosure forms, duty of confidentiality waivers, cost estimates and proof of entry into a country."
+                      )
+                    }}
+                  >
+                    <View style = {{flexDirection:'row', marginLeft:10}}>
+                  <Image  source = {require('./img/questionMark.png')} style = {{width:20, height:20}} />
+                <Text style = {{fontSize:12, color:"#004799",}}>
+                  Press for explanation
+                </Text>
+                <Image  source = {require('./img/questionMark.png')} style = {{width:20, height:20}} />
+                </View>
+                </TouchableOpacity>
+                </View>
+
+
                       {(this.state.infoObj.docType == 'Claim Document' || this.state.docType == 'Claim Document') && this.renderClaimInfo()}   
                       {(this.state.docType == 'Other Document' || this.state.infoObj.docType == 'Other Document') && this.renderContinue()}                      
                                       
