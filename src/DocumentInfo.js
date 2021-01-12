@@ -174,26 +174,32 @@ constructor(props){
               <View style = {{paddingTop: getStatusBarHeight()}}>
                  <StatusBar />
                </View>}
-               {(Platform.OS === "ios") && <View style = {{marginTop:10,marginLeft: 10, flex:0.15, backgroundColor:"orange", height: Dimensions.get("window").height/18, width: Dimensions.get("window").width/3, justifyContent:"center", alignItems:"center", borderTopLeftRadius:20, borderBottomLeftRadius: 20}}>
-                      <Text style={{color: "white", fontSize: 14}}>
+
+
+
+
+               {(Platform.OS === "ios") && 
+               
+               <View style = {{marginTop:10,marginLeft: 10, flex:0.15, backgroundColor:"orange", height: Dimensions.get("window").height/18, width: Dimensions.get("window").width/4, justifyContent:"center", alignItems:"center", borderTopLeftRadius:20, borderBottomLeftRadius: 20}}>
+                    <TouchableOpacity
+               onPress = {()=>{
+                 this.onBackPress()
+               
+               
+               }}
+             >
+                 <Text style={{color: "white", fontSize: 19}}>
                         Go Back
                       </Text>
-                  </View>}
+                      </TouchableOpacity>
+                  </View>
+                  
+                  }
         <Image  source = {require('./img/CareConceptLogo.png')} style = {styles.logo} />
             <View  style = {{}}>
             
               <ScrollView>
-              <TouchableOpacity
-                  onPress = {()=>{
-                    this.onBackPress()
-                  
-                  
-                  }}
-                >
-                  
-
-                </TouchableOpacity>
-
+              
                 <TouchableOpacity
                   onPress = {()=>{
                     alert(
