@@ -13,7 +13,9 @@ import {
   PermissionsAndroid,
   Platform,
   KeyboardAvoidingView,
-  Keyboard
+  Keyboard,
+  LogBox,
+  YellowBox
 } from 'react-native';
 
 import {
@@ -37,9 +39,13 @@ import {
 import { changeSurname, changeInsuranceNumber,changeGender, changeName } from './actions/policInfoActions';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { PERMISSIONS, check, request, RESULTS } from 'react-native-permissions'
+import { Pattern } from 'react-native-svg';
 class PolicyInfo extends React.Component {
+
 constructor(props){
   super(props)
+  YellowBox.ignoreWarnings([""]);
+
   this.state = {
     optionStyles : {
       optionTouchable: {
