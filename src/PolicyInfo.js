@@ -82,6 +82,7 @@ const setI18nConfig = () => {
 class PolicyInfo extends React.Component {
 
 constructor(props){
+console.log(JSON.stringify(RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters))))  
   super(props)
   setI18nConfig(); // set initial config
   YellowBox.ignoreWarnings([""]);

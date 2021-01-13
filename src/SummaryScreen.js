@@ -70,7 +70,7 @@ const setI18nConfig = () => {
   const { languageTag, isRTL } =
     RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
     fallback;
-
+    console.log(languageTag)
   // clear translation cache
   translate.cache.clear();
   // update layout direction

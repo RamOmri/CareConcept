@@ -66,7 +66,7 @@ import memoize from "lodash.memoize"; // Use for caching/memoize for better perf
     const fallback = { languageTag: "en", isRTL: false };
   
     const { languageTag, isRTL } =
-      RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
+      RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) || 
       fallback;
   
     // clear translation cache
@@ -142,7 +142,7 @@ constructor(props){
         },
         optionWrapper: {
           backgroundColor: "#004799",
-          margin: 3,
+          margin: 10,
           borderRadius:10,
           height:40,
           justifyContent:'center',
@@ -189,21 +189,6 @@ constructor(props){
   }
 
   render(){
-    /* const optionsStyles = {
-      optionTouchable: {
-        underlayColor: 'white',
-        activeOpacity: 40,
-      },
-      optionWrapper: {
-        backgroundColor: 'white',
-        height:140,
-        paddingTop:15,
-      },
-      optionText: {
-        color: 'white',
-        marginLeft:20
-      },
-    }; */
     return(
         <ImageBackground style={styles.container}
         source={require('./img/background.jpg')}
@@ -305,7 +290,9 @@ constructor(props){
                       {(this.state.infoObj.docType == 'Claim Document' || this.state.docType == 'Claim Document') && this.renderClaimInfo()}   
                       {(this.state.docType == 'Other Document' || this.state.infoObj.docType == 'Other Document') && this.renderContinue()}                      
                                       
-                     
+                     <View style = {{height:60, backgroundColor:'white'}}>
+
+                     </View>
               
               </ScrollView>
          

@@ -1,5 +1,5 @@
 {
-    "Insurance Number": "KrankenVersicherungNummer",
+    "Insurance Number": "Versicherungsnummer",
     "Please select your sex": "Bitte wählen Sie Ihr Geschlecht",
     "Select": "Wählen...",
     "Male": "Männlich",
@@ -7,22 +7,22 @@
     "First Name": "Vorname",
     "Surname": "Nachname",
     "Please check your insurance number": "Bitte überprüfen Sie Ihre Versicherungsnummer",
-    "Continue": "Folge...",
+    "Continue": "Weiter...",
     "Please select your gender": "Bitte wählen Sie Ihr Geschlecht",
     "Please enter your name": "Bitte geben Sie Ihren Namen ein",
     
     "Scan a new Document": "Ein neues Dokument scannen",
     "Send": "Senden...",
     "was entered incorrectly Please fix your entry and try again": "wurde falsch eingegeben. Bitte korrigieren Sie Ihre Eingabe und versuchen Sie es erneut",
-    "Something went wrong sending claim Please try again": "Beim Senden des Claims ist etwas schief gegangen. Bitte versuchen Sie es erneut",
+    "Something went wrong sending claim Please try again": "Beim Senden des Dokuments ist etwas schief gegangen. Bitte versuchen Sie es erneut",
     "Cannot send anything before you scan some documents": "Sie können nichts senden, bevor Sie einige Dokumente gescannt haben!",
 
     "Press here for instructions": "Drücken Sie hier für Anweisungen",
     "Please enter the birthdate of the insured person": "Bitte geben Sie das Geburtsdatum der versicherten Person ein:",
     "Which type of document are you about to scan": "Welche Art von Dokument wollen Sie scannen?",
-    "Claim Document": "Reklamationsbeleg",
+    "Claim Document": "Beleg",
     "Other Document": "anderes Dokument",
-    "Press for explanation":"Presse für Erklärung",
+    "Press for explanation":"Drücke für Erklärung",
     "Is the document you are about to scan from Germany":"Ist das Dokument, das Sie gerade scannen, aus Deutschland?",
     "Yes": "Ja",
     "No": "Nein",
@@ -40,11 +40,11 @@
     
     "Scan":"Scannen",
     "Scan timed out, please hold phone steady and try again":"Scanvorgang wurde abgebrochen, bitte halten Sie das Telefon ruhig und versuchen Sie es erneut",
-    "Crop":"Ernte",
-    "Rescan":"Neu abtasten",
+    "Crop":"Zuschneiden",
+    "Rescan":"Neu scannen",
     "Add Page":"Seite hinzufügen",
     "Delete all Pages":"Alle Seiten löschen",
     "This is a": "Dies ist ein",
     "with":"mit",
-    "pages":"seite/n"
+    "pages":"Seite/n"
 }
