@@ -524,6 +524,7 @@ checkFieldsBeforeContinue(){
     return false
     }
   else if(this.state.infoObj.sendMoneyToContractualServices == 'No' && !bic.isValid(this.state.infoObj.BIC)){
+    console.log(':::::::::::::::: ' +bic.isValid(this.state.infoObj.BIC))
     alert('Please check your bank details (bic)')
     return false
   }
@@ -532,6 +533,7 @@ checkFieldsBeforeContinue(){
     return false
   }
   else if(this.state.infoObj.sendMoneyToContractualServices == 'No' && !IBAN.isValid(this.state.infoObj.IBAN)){
+    console.log(':::::::::::::::: ' +bic.isValid(this.state.infoObj.IBAN) + this.state.infoObj.IBAN)
      alert('Please check your bank details (IBAN) ')
       return false
     }
