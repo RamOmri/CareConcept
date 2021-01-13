@@ -15,6 +15,7 @@ import {
   Button,
   ActivityIndicator,
   BackHandler,
+  I18nManager,
 } from 'react-native';
 
 import {
@@ -47,9 +48,47 @@ const sha256 = require('sha256');
 var RNFS = require('react-native-fs');
 import base64 from 'react-native-base64';
 
+import * as RNLocalize from "react-native-localize";
+import i18n from "i18n-js";
+import memoize from "lodash.memoize"; // Use for caching/memoize for better performance
+
+const translationGetters = {
+  // lazy requires (metro bundler does not support symlinks)
+  en: () => require("./translations/eng.json"),
+  de: () => require("./translations/De.json")
+};
+
+const translate = memoize(
+  (key, config) => i18n.t(key, config),
+  (key, config) => (config ? key + JSON.stringify(config) : key)
+);
+
+const setI18nConfig = () => {
+  // fallback if no available language fits
+  const fallback = { languageTag: "en", isRTL: false };
+
+  const { languageTag, isRTL } =
+    RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
+    fallback;
+
+  // clear translation cache
+  translate.cache.clear();
+  // update layout direction
+  I18nManager.forceRTL(isRTL);
+  // set i18n-js config
+  i18n.translations = { [languageTag]: translationGetters[languageTag]() };
+  i18n.locale = languageTag;
+};
+
+
+
+
+
 class SummaryScreen extends React.Component {
   constructor(props) {
     super(props);
+    setI18nConfig(); // set initial config
+    
     this.state = {
       server_message: '',
       isLoading: false,
@@ -171,7 +210,7 @@ class SummaryScreen extends React.Component {
                   alignItems: 'center',
                 }}>
                 <Text style={{color: 'white', fontSize: 16}}>
-                  Scan a new Document
+                  {translate("Scan a new Document")}
                 </Text>
               </View>
             </TouchableOpacity>
@@ -207,7 +246,7 @@ class SummaryScreen extends React.Component {
                       <Text
                         style={
                           styles.DocumentText
-                        }>{`This is a ${item.document.docType} with ${item.document.pages.length} page/s`}</Text>
+                        }>{`${translate("This is a")} ${translate(item.document.docType)} ${translate("with")} ${item.document.pages.length} ${translate("pages")}`}</Text>
                       <Image
                         source={{uri: item.document.pages[0].url}}
                         style={{
@@ -238,12 +277,12 @@ class SummaryScreen extends React.Component {
                       this.constructObject();
                     } else {
                       alert(
-                        'Cannot send anything before you scan some documents!',
+                        translate("Cannot send anything before you scan some documents"),
                       );
                     }
                   }}>
                   <View style={styles.button}>
-                    <Text style={{color: 'white', fontSize: 12}}>Send...</Text>
+                    <Text style={{color: 'white', fontSize: 12}}>{translate("Send")}</Text>
                   </View>
                 </TouchableOpacity>
               </View>
@@ -370,7 +409,7 @@ class SummaryScreen extends React.Component {
           alert(
             `${JSON.stringify(
               data[0].arg3,
-            )} was entered incorrectly. Please fix your entry and try again`,
+            )} ${translate("was entered incorrectly Please fix your entry and try agai")}`,
           );
         } else {
           this.state.server_message = res;
@@ -383,7 +422,7 @@ class SummaryScreen extends React.Component {
       this.props.deleteStateClaimInfo();
       this.props.deleteStatePolicyInfo();
     } else if (this.state.server_message != '400') {
-      alert('Something went wrong sending claim. Please try again');
+      alert(translate('Something went wrong sending claim Please try again'));
       console.log(this.state.server_message);
       this.setState({isLoading: false});
     }

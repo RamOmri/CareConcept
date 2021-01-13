@@ -15,7 +15,8 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   LogBox,
-  YellowBox
+  YellowBox,
+  I18nManager,
 } from 'react-native';
 
 import {
@@ -40,10 +41,49 @@ import { changeSurname, changeInsuranceNumber,changeGender, changeName } from '.
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { PERMISSIONS, check, request, RESULTS } from 'react-native-permissions'
 import { Pattern } from 'react-native-svg';
+
+import * as RNLocalize from "react-native-localize";
+import i18n from "i18n-js";
+import memoize from "lodash.memoize"; // Use for caching/memoize for better performance
+
+const translationGetters = {
+  // lazy requires (metro bundler does not support symlinks)
+  en: () => require("./translations/eng.json"),
+  de: () => require("./translations/De.json")
+};
+
+const translate = memoize(
+  (key, config) => i18n.t(key, config),
+  (key, config) => (config ? key + JSON.stringify(config) : key)
+);
+
+const setI18nConfig = () => {
+  // fallback if no available language fits
+  const fallback = { languageTag: "en", isRTL: false };
+
+  const { languageTag, isRTL } =
+    RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
+    fallback;
+
+  // clear translation cache
+  translate.cache.clear();
+  // update layout direction
+  I18nManager.forceRTL(isRTL);
+  // set i18n-js config
+  i18n.translations = { [languageTag]: translationGetters[languageTag]() };
+  i18n.locale = languageTag;
+};
+
+
+
+
+
+
 class PolicyInfo extends React.Component {
 
 constructor(props){
   super(props)
+  setI18nConfig(); // set initial config
   YellowBox.ignoreWarnings([""]);
 
   this.state = {
@@ -72,7 +112,7 @@ constructor(props){
         triggerWrapper: {
             padding: 5,
             height: 40,
-            width: 80,
+            width: 100,
             justifyContent: 'center',
             backgroundColor: 'white',
             borderColor: '#f59b00',
@@ -90,6 +130,17 @@ constructor(props){
   }
  console.log(this.props)
 }
+
+
+componentDidMount() {
+  RNLocalize.addEventListener("change", this.handleLocalizationChange);
+}
+
+componentWillUnmount() {
+  RNLocalize.removeEventListener("change", this.handleLocalizationChange);
+}
+
+
 render(){
   return(
           <ImageBackground style={styles.container}
@@ -107,26 +158,26 @@ render(){
                          
                           <TextInput
                                           style = {styles.policyInput}
-                                              placeholder = 'Insurance Number'
+                                              placeholder = {translate("Insurance Number")}
                                               placeholderTextColor="#004799"
                                               secureTextEntry = {false}
                                               onChangeText={number => this.props.changeInsuranceNumber(number)}
                                               value={this.props.insuranceNumber}
                                               />
-                              <Text style = {styles.questionText}>Please select your sex</Text>
+                              <Text style = {styles.questionText}>{translate("Please select your sex")}</Text>
                               <Menu >
-                                  <MenuTrigger text={this.props.gender} customStyles = {this.state.menuStyle} />
+                                  <MenuTrigger text={translate(this.props.gender)} customStyles = {this.state.menuStyle} />
                                       <MenuOptions
                                       customStyles = {this.state.optionStyles}
                                       >
-                                          <MenuOption onSelect={() => this.props.changeGender('Male')} text='Male' />
-                                          <MenuOption onSelect={() => this.props.changeGender('Female')} text='Female' />
+                                          <MenuOption onSelect={() => this.props.changeGender('Male')} text={translate('Male')} />
+                                          <MenuOption onSelect={() => this.props.changeGender('Female')} text={translate('Female')} />
                                       </MenuOptions>
                               </Menu>
                        
                                   <TextInput
                                                   style = {styles.nameInput}
-                                                      placeholder = 'First name'
+                                                      placeholder = {translate('First Name')}
                                                       placeholderTextColor="#004799"
                                                       secureTextEntry = {false}
                                                       onChangeText={name => this.props.changeName(name)}
@@ -134,7 +185,7 @@ render(){
                                                       />
                                   <TextInput
                                                   style = {styles.nameInput}
-                                                      placeholder = 'Surname'
+                                                      placeholder = {translate('Surname')}
                                                       placeholderTextColor="#004799"
                                                       secureTextEntry = {false}
                                                       onChangeText={surname => this.props.changeSurname(surname)}
@@ -159,7 +210,7 @@ render(){
                                          
                                                       <Text
                                                       style={{color: 'white', fontSize: 15}}
-                                                      >Continue...</Text>
+                                                      >{translate("Continue")}</Text>
                                          
                                       </View>
                                        </TouchableOpacity>
@@ -172,15 +223,15 @@ render(){
 }
 checkFields = () =>{
  if(!this.checkInsuranceNumber()){
-   alert('Insurance number is incorrect')
+   alert(translate("Please check your insurance number"))
    return false
  } 
- else if(this.props.gender === 'select...'){
-   alert('please select gender')
+ else if(this.props.gender === 'Select'){
+   alert(translate("Please select your gender"))
    return false
  }
  else if(this.props.FirstName === '' || this.props.Surname === ''){
-  alert('Please enter your name')
+  alert(translate("Please enter your name"))
   return false
  }
 else if(!this.checkName()){

@@ -14,7 +14,8 @@ import {
   Button,
   BackHandler,
   Dimensions,
-  Keyboard
+  Keyboard,
+  I18nManager,
 } from 'react-native';
 
 import {
@@ -41,14 +42,55 @@ import {
   import bic from 'bic';
   var IBAN = require('iban');
   const { SlideInMenu } = renderers;
+  import * as RNLocalize from "react-native-localize";
+import i18n from "i18n-js";
+import memoize from "lodash.memoize"; // Use for caching/memoize for better performance
+
+
+
+
+
+  const translationGetters = {
+    // lazy requires (metro bundler does not support symlinks)
+    en: () => require("./translations/eng.json"),
+    de: () => require("./translations/De.json")
+  };
+  
+  const translate = memoize(
+    (key, config) => i18n.t(key, config),
+    (key, config) => (config ? key + JSON.stringify(config) : key)
+  );
+  
+  const setI18nConfig = () => {
+    // fallback if no available language fits
+    const fallback = { languageTag: "en", isRTL: false };
+  
+    const { languageTag, isRTL } =
+      RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
+      fallback;
+  
+    // clear translation cache
+    translate.cache.clear();
+    // update layout direction
+    I18nManager.forceRTL(isRTL);
+    // set i18n-js config
+    i18n.translations = { [languageTag]: translationGetters[languageTag]() };
+    i18n.locale = languageTag;
+  };
+  
+  
+  
+  
+  
 class DocumentInfo extends React.Component {
 constructor(props){
   super(props)
+  setI18nConfig(); // set initial config
   this.state = {
         isEditing: this.props.route.params.isEditing,
-        isDocumentGerman: 'Select...',
-        docType: 'Select...',
-        sendMoneyToContractualServices: 'Select...',
+        isDocumentGerman: 'Select',
+        docType: 'Select',
+        sendMoneyToContractualServices: 'Select',
         isDatePickerVisible: false,
         infoObj: {
           pages: [],
@@ -162,9 +204,6 @@ constructor(props){
         marginLeft:20
       },
     }; */
-    const claimStr = ''//`\nThese include, for example, doctor’s bills, pharmacy receipts and hospital bills`
-    const otherStr = ''//`\nThese include such documents as completed self-disclosure forms, duty of confidentiality waivers, cost estimates and proof of entry into a country.`
-
     return(
         <ImageBackground style={styles.container}
         source={require('./img/background.jpg')}
@@ -203,14 +242,14 @@ constructor(props){
                 <TouchableOpacity
                   onPress = {()=>{
                     alert(
-                      "If you have a claim and would like to send us any relevant documents such as doctor's bills or pharmacy receipts or if we have asked you for some information regarding a request for reimbursement (for example, a completed self-disclosure form or proof of entry into a country), you can upload all documents quickly and easily here. Your advantage: You do not need to send us anything by regular mail or email* and you will receive the benefits stipulated in your policy very quickly. *In individual cases we reserve the right to request original versions of the documents."
+                      translate("If you have a claim and would like to send us any relevant documents such as doctor's bills or pharmacy receipts")
                     )
                   }}
                 >
                 <View style = {{flexDirection: 'row', marginBottom: 40, justifyContent:'center'}}>
                 <Image  source = {require('./img/questionMark.png')} style = {{width:20, height:20}} />
                 <Text style = {{fontWeight:'bold', color:"#004799"}}>
-                  Press here for instructions
+                  {translate("Press here for instructions")}
                 </Text>
                 <Image  source = {require('./img/questionMark.png')} style = {{width:20, height:20}} />
                 </View>
@@ -219,13 +258,13 @@ constructor(props){
                 {this.renderAge()}
 
                   <Text style = {styles.questionText}> 
-                      Which type of document are you about to scan?
+                      {translate("Which type of document are you about to scan")}
                   </Text>
 
 
                   <View style = {{flexDirection:'row', alignItems:'center'}}>
                   <Menu >
-                      <MenuTrigger text={this.state.isEditing && this.state.infoObj.docType || this.state.docType} customStyles = {this.state.menuStyle} />
+                      <MenuTrigger text={translate(this.state.isEditing && this.state.infoObj.docType || this.state.docType)} customStyles = {this.state.menuStyle} />
                           <MenuOptions customStyles={this.state.optionStyles}>
                               <MenuOption /* customStyles = {this.state.optionStyles} */
                                           onSelect={() =>{
@@ -234,7 +273,7 @@ constructor(props){
                                                             docType: 'Claim Document'
                                                           }
                                                           this.setState({docType: 'Claim Document'})
-                                                        }} text= {"Claim Document" + claimStr }/>
+                                                        }} text= {translate("Claim Document") }/>
                               <MenuOption  
                               onSelect={() =>{
                                                           this.state.infoObj ={
@@ -242,21 +281,20 @@ constructor(props){
                                                             docType: 'Other Document'
                                                           }
                                                           this.setState({docType: 'Other Document'})
-                                                        }} text={'Other Document' + otherStr} />
+                                                        }} text={translate("Other Document")} />
                           </MenuOptions>
                   </Menu>
                   <TouchableOpacity
                     onPress = {()=>{
                       alert(
-                        "Claim Document:" + "\nThese include, for example, doctor’s bills, pharmacy receipts and hospital bills\n\n"+
-                        "All other documents: \nThese include such documents as completed self-disclosure forms, duty of confidentiality waivers, cost estimates and proof of entry into a country."
+                        translate('Doc-type info')
                       )
                     }}
                   >
                     <View style = {{flexDirection:'row', marginLeft:10}}>
                   <Image  source = {require('./img/questionMark.png')} style = {{width:20, height:20}} />
                 <Text style = {{fontSize:12, color:"#004799",}}>
-                  Press for explanation
+                  {translate("Press for explanation")}
                 </Text>
                 <Image  source = {require('./img/questionMark.png')} style = {{width:20, height:20}} />
                 </View>
@@ -282,7 +320,7 @@ constructor(props){
 renderAge(){
     return(
       <View style = {{ justifyContent:'center'}}>
-      <Text style = {styles.questionText}>Please enter the birthdate of the insured person: </Text>
+      <Text style = {styles.questionText}>{translate('Please enter the birthdate of the insured person')} </Text>
                   <TouchableOpacity
                         onPress = {()=>{
                           this.setState({isDatePickerVisible: true})
@@ -291,7 +329,7 @@ renderAge(){
       <View style = {{margin: 10, borderColor: '#f59b00', borderWidth: 5, height: 40, width: 120, justifyContent: "center", alignItems:"center", marginLeft:20, borderRadius:10}}>
                       <Text
                       style={{color: '#f59b00', fontSize: 12}}
-                      >{this.state.isEditing && this.state.infoObj.dateStatus || this.props.date} </Text>
+                      >{ this.state.isEditing && this.state.infoObj.dateStatus || this.props.date ||translate("Select")} </Text>
 
       </View>  
     </TouchableOpacity> 
@@ -348,10 +386,10 @@ renderClaimInfo(){
   return(
     <View>
           <Text style = {styles.questionText}> 
-          Is the document you are about to scan from Germany?
+          {translate("Is the document you are about to scan from Germany")}
       </Text>
       <Menu >
-          <MenuTrigger text={this.state.isEditing && this.state.infoObj.isDocumentGerman || this.state.isDocumentGerman } customStyles = {this.state.menuStyle} />
+          <MenuTrigger text={translate(this.state.isEditing && this.state.infoObj.isDocumentGerman || this.state.isDocumentGerman)} customStyles = {this.state.menuStyle} />
               <MenuOptions customStyles={this.state.optionStyles}>
                   <MenuOption onSelect={() =>{
                                   this.state.infoObj = {
@@ -359,14 +397,14 @@ renderClaimInfo(){
                                     isDocumentGerman: 'Yes'
                                   }
                                   this.setState({isDocumentGerman: 'Yes'})
-                                  }} text='Yes' />
+                                  }} text={translate("Yes")} />
                   <MenuOption onSelect={() => {
                                               this.state.infoObj = {
                                                 ...this.state.infoObj,
                                                 isDocumentGerman: 'No'
                                               }
                                               this.setState({isDocumentGerman: 'No'})
-                                              }} text='No' />
+                                              }} text={translate("No")} />
               </MenuOptions>
               {this.renderIsFromSameAccount()}
       </Menu>
@@ -379,10 +417,10 @@ renderIsFromSameAccount = () =>{
   return(
     <View style = {{}}>
         <Text style = {styles.questionText}> 
-              Should contractual services be reimbursed to the biller (physician/hospital, etc.)?
+              {translate("Should contractual services")}
                 </Text>
                 <Menu>
-                    <MenuTrigger text={this.state.isEditing && this.state.infoObj.sendMoneyToContractualServices || this.state.sendMoneyToContractualServices} customStyles = {this.state.menuStyle}/>
+                    <MenuTrigger text={translate(this.state.isEditing && this.state.infoObj.sendMoneyToContractualServices || this.state.sendMoneyToContractualServices)} customStyles = {this.state.menuStyle}/>
                         <MenuOptions customStyles={this.state.optionStyles}>
                             <MenuOption onSelect={() => {
                               this.state.infoObj = {
@@ -390,14 +428,14 @@ renderIsFromSameAccount = () =>{
                                 sendMoneyToContractualServices: 'Yes'
                               }
                               this.setState({sendMoneyToContractualServices: 'Yes'})
-                              }} text='Yes' />
+                              }} text={translate('Yes')} />
                             <MenuOption onSelect={() => {
                               this.state.infoObj = {
                                 ...this.state.infoObj,
                                 sendMoneyToContractualServices: 'No'
                               }
                               this.setState({sendMoneyToContractualServices: 'No'})
-                              }} text='No' />
+                              }} text={translate('No')} />
                         </MenuOptions>
                 </Menu>
                 {(this.state.sendMoneyToContractualServices == 'Yes' || this.state.infoObj.sendMoneyToContractualServices == 'Yes') && this.renderContinue()}
@@ -409,11 +447,11 @@ renderBankAccountDetails = () =>{
 return(
     <View style = {{justifyContent: 'center', alignItems:'center'}}>
     <Text style = {styles.questionText}> 
-            Please enter the full name of the account holder
+            {translate("Please enter the full name of the account holder")}
     </Text>
             <TextInput
               style = {styles.policyInput}
-              placeholder = 'Full name'
+              placeholder = {translate("Full Name")}
               placeholderTextColor="#004799"
               secureTextEntry = {false}
               onChangeText={name =>{
@@ -428,7 +466,7 @@ return(
 
 
       <Text style = {styles.questionText}> 
-        Please enter your IBAN
+        {translate("Please enter your")} IBAN
       </Text>
         <TextInput
           style = {styles.policyInput}
@@ -450,7 +488,7 @@ return(
                       justifyContent: 'center',
                       alignItems: 'center',
                       }}> 
-        Please enter your BIC
+        {translate("Please enter your")} BIC
       </Text>
         <TextInput
           style = {styles.policyInput}
@@ -504,7 +542,7 @@ renderContinue = () =>{
       <View style = {styles.button}>
                       <Text
                       style={{color: 'white', fontSize: 12}}
-                      >Continue...</Text>
+                      >{translate("Continue")}</Text>
 
       </View>  
     </TouchableOpacity> 
@@ -515,34 +553,34 @@ renderContinue = () =>{
 checkFieldsBeforeContinue(){
   if(this.state.infoObj.docType === "Other Document") this.state.infoObj.sendMoneyToContractualServices = "Yes"
 
-  if(this.state.isDocumentGerman === 'Select...' && this.state.docType === 'Claim Document'){
-     alert('Please make sure all fields have been selected')
+  if(this.state.isDocumentGerman === 'Select' && this.state.docType === 'Claim Document'){
+     alert(translate('Please make sure all fields have been selected'))
      return false
     }
   else if(this.state.infoObj.sendMoneyToContractualServices == 'No' && !this.checkName(this.state.infoObj.AccountHolder)){
-     alert('please check your bank details (name)')
+     alert(`${translate("please check your bank details")} (name)`)
     return false
     }
   else if(this.state.infoObj.sendMoneyToContractualServices == 'No' && !bic.isValid(this.state.infoObj.BIC)){
     console.log(':::::::::::::::: ' +bic.isValid(this.state.infoObj.BIC))
-    alert('Please check your bank details (bic)')
+    alert(`${translate("please check your bank details")} (bic)`)
     return false
   }
   else if(this.state.infoObj.sendMoneyToContractualServices == 'No' && this.props.bic == ''){
-    alert('Please check your bank details (BIC) ')
+    alert(`${translate("please check your bank details")} (BIC)`)
     return false
   }
   else if(this.state.infoObj.sendMoneyToContractualServices == 'No' && !IBAN.isValid(this.state.infoObj.IBAN)){
     console.log(':::::::::::::::: ' +bic.isValid(this.state.infoObj.IBAN) + this.state.infoObj.IBAN)
-     alert('Please check your bank details (IBAN) ')
+     alert(`${translate("please check your bank details")} (IBAN)`)
       return false
     }
   else if(this.state.infoObj.sendMoneyToContractualServices == 'No' && this.props.iban == ''){
-    alert('Please check your bank details (iban) ')
+    alert(`${translate("please check your bank details")} (iban)`)
     return false
   }
-  else if(this.props.date === 'select'){
-     alert('Please enter a birth date')
+  else if(!this.props.date){
+     alert(translate('Please enter a birth date'))
      return false
     }
     else{

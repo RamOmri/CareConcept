@@ -10,7 +10,8 @@ import {
   TouchableOpacity,
   Dimensions,
   ActivityIndicator,
-  Platform
+  Platform,
+  I18nManager,
 } from 'react-native';
 
 import {
@@ -27,9 +28,41 @@ import CameraRoll from "@react-native-community/cameraroll";
 import AmazingCropper, { DefaultFooter } from 'react-native-amazing-cropper';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 
+import * as RNLocalize from "react-native-localize";
+import i18n from "i18n-js";
+import memoize from "lodash.memoize"; // Use for caching/memoize for better performance
 
+
+const translationGetters = {
+  // lazy requires (metro bundler does not support symlinks)
+  en: () => require("./translations/eng.json"),
+  de: () => require("./translations/De.json")
+};
+
+const translate = memoize(
+  (key, config) => i18n.t(key, config),
+  (key, config) => (config ? key + JSON.stringify(config) : key)
+);
+
+const setI18nConfig = () => {
+  // fallback if no available language fits
+  const fallback = { languageTag: "en", isRTL: false };
+
+  const { languageTag, isRTL } =
+    RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
+    fallback;
+
+  // clear translation cache
+  translate.cache.clear();
+  // update layout direction
+  I18nManager.forceRTL(isRTL);
+  // set i18n-js config
+  i18n.translations = { [languageTag]: translationGetters[languageTag]() };
+  i18n.locale = languageTag;
+};
 export default class imageCrop extends React.Component {
 constructor(props){
+ 
   super(props)
   this.state = {
     infoObj: this.props.route.params.infoObj,
@@ -38,6 +71,7 @@ constructor(props){
     imageWidth: 0,
     loading: true
   }
+   setI18nConfig(); // set initial config
     //alert(JSON.stringify(this.state.infoObj.pages[this.state.infoObj.pages.length - 1].url))
 }
  
@@ -125,14 +159,14 @@ onContinue = () =>{
               if(Platform.OS === 'ios') this.props.navigation.push('ScanStack', {params:{infoObj: this.state.infoObj,}, screen: 'Scanner'})
               else this.props.navigation.navigate('ScanStack', {params:{infoObj: this.state.infoObj,}, screen: 'Scanner'})
               }} style={styles.button}>
-            <Text style={styles.text}>Rescan</Text>
+            <Text style={styles.text}>{translate("Rescan")}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={()=>{this.setState({loading:true})
            props.onDone()}} style={styles.button}>
-            <Text style={styles.text}>Crop</Text>
+            <Text style={styles.text}>{translate("Crop")}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={props.onCancel} style={styles.button}>
-            <Text style={styles.text}>Continue</Text>
+            <Text style={styles.text}>{translate("Continue")}</Text>
           </TouchableOpacity>
           
         </View>

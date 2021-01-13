@@ -6,7 +6,7 @@ const initState = {
     IBAN: '',
     BIC: '',
     AccountHolder: null,
-    date: 'select'
+    date: null
 }
 
 const docReducers = (state = initState, action) =>{

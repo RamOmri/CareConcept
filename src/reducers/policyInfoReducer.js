@@ -5,7 +5,7 @@ import {CHANGE_INSURANCE_NUMBER, CHANGE_GENDER, CHANGE_NAME, CHANGE_SURNAME, DEL
 const initState = {
     policyInfo: {
         insuranceNumber: '',
-        gender: 'select...',
+        gender: 'Select',
         FirstName: '',
         Surname: '',
     }

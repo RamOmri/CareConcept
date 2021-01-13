@@ -11,7 +11,8 @@ import {
   Image,
   Modal,
   Dimensions,
-  ActivityIndicator
+  ActivityIndicator,
+  I18nManager,
 } from 'react-native';
 
 import {
@@ -25,6 +26,47 @@ import DocumentScanner from "@woonivers/react-native-document-scanner"
 import ImageSize from 'react-native-image-size'
 import ImageViewer from 'react-native-image-zoom-viewer';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
+
+import * as RNLocalize from "react-native-localize";
+import i18n from "i18n-js";
+import memoize from "lodash.memoize"; // Use for caching/memoize for better performance
+
+
+
+
+
+const translationGetters = {
+  // lazy requires (metro bundler does not support symlinks)
+  en: () => require("./translations/eng.json"),
+  de: () => require("./translations/De.json")
+};
+
+const translate = memoize(
+  (key, config) => i18n.t(key, config),
+  (key, config) => (config ? key + JSON.stringify(config) : key)
+);
+
+const setI18nConfig = () => {
+  // fallback if no available language fits
+  const fallback = { languageTag: "en", isRTL: false };
+
+  const { languageTag, isRTL } =
+    RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
+    fallback;
+
+  // clear translation cache
+  translate.cache.clear();
+  // update layout direction
+  I18nManager.forceRTL(isRTL);
+  // set i18n-js config
+  i18n.translations = { [languageTag]: translationGetters[languageTag]() };
+  i18n.locale = languageTag;
+};
+
+
+
+
+
 
 
 export default class Scanner extends React.Component {
@@ -102,7 +144,7 @@ componentDidMount() {
                                     
                                     let that = this
                                      if(that.state.isScanning === true){
-                                       alert('Scan timed out, please hold phone steady and try again')
+                                       alert(translate('Scan timed out, please hold phone steady and try again'))
                                        that.state.pdfScannerReference.current.forceUpdate()
                                        that.setState({isScanning: false})
                                      }
@@ -114,14 +156,14 @@ componentDidMount() {
             
                     
                           <Text style={{ fontSize: 18, color: "white", margin: 10 }}>
-                                    Scan
+                                    {translate("Scan")}
                           </Text>
                   
               
             </TouchableOpacity> ||
            <View style ={{justifyContent:"center",alignItems:"center"}}>
             <Text style = {styles.DocumentText}>
-               Please wait while your document is being scanned
+               {translate("Please wait while your document is being scanned")}
             </Text>
           <ActivityIndicator size="large" color="#004799" />
     </View>
@@ -173,5 +215,6 @@ const styles = StyleSheet.create({
     color: '#E67F00',
     justifyContent: 'center',
     alignItems: 'center',
+    margin:10
   },
 })

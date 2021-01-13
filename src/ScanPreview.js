@@ -9,7 +9,8 @@ import {
   Image,
   Modal,
   TouchableOpacity,
-  Dimensions
+  Dimensions,
+  I18nManager,
 } from 'react-native';
 
 import {
@@ -26,6 +27,37 @@ import {addDoc} from './actions/claimActions'
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { CommonActions } from '@react-navigation/native';
 
+import * as RNLocalize from "react-native-localize";
+import i18n from "i18n-js";
+import memoize from "lodash.memoize"; // Use for caching/memoize for better performance
+
+const translationGetters = {
+  // lazy requires (metro bundler does not support symlinks)
+  en: () => require("./translations/eng.json"),
+  de: () => require("./translations/De.json")
+};
+
+const translate = memoize(
+  (key, config) => i18n.t(key, config),
+  (key, config) => (config ? key + JSON.stringify(config) : key)
+);
+
+const setI18nConfig = () => {
+  // fallback if no available language fits
+  const fallback = { languageTag: "en", isRTL: false };
+
+  const { languageTag, isRTL } =
+    RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
+    fallback;
+
+  // clear translation cache
+  translate.cache.clear();
+  // update layout direction
+  I18nManager.forceRTL(isRTL);
+  // set i18n-js config
+  i18n.translations = { [languageTag]: translationGetters[languageTag]() };
+  i18n.locale = languageTag;
+};
  class ScanPreview extends React.Component {
 
   constructor(props){
@@ -70,12 +102,12 @@ import { CommonActions } from '@react-navigation/native';
                                          // this.props.navigation.push('Scanner', {params:{img: [{url: this.state.finalImages}]}});
                                                                               }
                                                                               else{
-                                                                                alert('number of pages per document cannot be more than 20')
+                                                                                alert(translate("number of pages per document cannot be more than 20"))
                                                                               }
                                         }}
                                             >
-                                        <Text style={{ fontSize: 18, color: "white", margin: 10 }}>
-                                            Add Page
+                                        <Text style={{ fontSize: 15, color: "white", margin: 10 }}>
+                                            {translate("Add Page")}
                                         </Text>
                                     </TouchableOpacity>      
 
@@ -86,8 +118,8 @@ import { CommonActions } from '@react-navigation/native';
                                           
                                         }}
                                             >
-                                        <Text style={{ fontSize: 18, color: "white", margin: 10 }}>
-                                            Delete all Pages
+                                        <Text style={{ fontSize: 15, color: "white", margin: 10 }}>
+                                            {translate("Delete all Pages")}
                                         </Text>
                     </TouchableOpacity>  
               </View>
@@ -107,7 +139,7 @@ import { CommonActions } from '@react-navigation/native';
                                   }}
                                       >
                                   <Text style={{ fontSize: 18, color: "white", margin: 10 }}>
-                                      Continue...
+                                      {translate("Continue")}
                                   </Text>
                               </TouchableOpacity>
 
