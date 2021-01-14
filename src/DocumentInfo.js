@@ -96,17 +96,16 @@ class DocumentInfo extends React.Component {
       menuStyle: {
         triggerText: {
           color: '#f59b00',
+          fontSize:14
         },
         triggerWrapper: {
           padding: 5,
-          height: 50,
-          width: 100,
-          marginBottom: 10,
+          height: 40,
+          width: 250,
           justifyContent: 'center',
           backgroundColor: 'white',
           borderColor: '#f59b00',
           borderWidth: 5,
-          marginLeft: 20,
           borderRadius: 7,
         },
         triggerTouchable: {
@@ -233,7 +232,7 @@ class DocumentInfo extends React.Component {
         />
         <View style={{}}>
           <ScrollView>
-            <View style={{marginBottom: 200}}>
+            <View style={{marginBottom: 150, justifyContent:'center', marginLeft:20}}>
               <TouchableOpacity
                 onPress={() => {
                   alert(
@@ -245,20 +244,14 @@ class DocumentInfo extends React.Component {
                 <View
                   style={{
                     flexDirection: 'row',
-                    marginBottom: 20,
+                    marginBottom: 5,
                     justifyContent: 'center',
                   }}>
                   <Image
                     source={require('./img/questionMark.png')}
-                    style={{width: 20, height: 20}}
+                    style={{width: 50, height: 50}}
                   />
-                  <Text style={{fontWeight: 'bold', color: '#004799'}}>
-                    {translate('Press here for instructions')}
-                  </Text>
-                  <Image
-                    source={require('./img/questionMark.png')}
-                    style={{width: 20, height: 20}}
-                  />
+                
                 </View>
               </TouchableOpacity>
 
@@ -307,15 +300,11 @@ class DocumentInfo extends React.Component {
                   <View style={{flexDirection: 'row', marginLeft: 10}}>
                     <Image
                       source={require('./img/questionMark.png')}
-                      style={{width: 20, height: 20}}
+                      style={{width: 30, height: 30}}
                     />
-                    <Text style={{fontSize: 12, color: '#004799'}}>
+                    {/* <Text style={{fontSize: 12, color: '#004799'}}>
                       {translate('Press for explanation')}
-                    </Text>
-                    <Image
-                      source={require('./img/questionMark.png')}
-                      style={{width: 20, height: 20}}
-                    />
+                    </Text> */}
                   </View>
                 </TouchableOpacity>
               </View>
@@ -335,7 +324,7 @@ class DocumentInfo extends React.Component {
 
   renderAge() {
     return (
-      <View style={{justifyContent: 'center'}}>
+      <View style={{justifyContent: 'center',}}>
         <Text style={styles.questionText}>
           {translate('Please enter the birthdate of the insured person')}{' '}
         </Text>
@@ -345,17 +334,16 @@ class DocumentInfo extends React.Component {
           }}>
           <View
             style={{
-              margin: 10,
+              padding: 5,
+              height: 40,
+              width: 250,
+              justifyContent: 'center',
+              backgroundColor: 'white',
               borderColor: '#f59b00',
               borderWidth: 5,
-              height: 40,
-              width: 120,
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginLeft: 20,
-              borderRadius: 10,
+              borderRadius: 7,
             }}>
-            <Text style={{color: '#f59b00', fontSize: 12}}>
+            <Text style={{color: '#f59b00', fontSize: 14}}>
               {(this.state.isEditing && this.state.infoObj.dateStatus) ||
                 this.props.date ||
                 translate('Select')}{' '}
@@ -410,7 +398,7 @@ class DocumentInfo extends React.Component {
 
   renderClaimInfo() {
     return (
-      <View>
+      <View style = {{}}>
         <Text style={styles.questionText}>
           {translate('Is the document you are about to scan from Germany')}
         </Text>
@@ -499,7 +487,7 @@ class DocumentInfo extends React.Component {
   };
   renderBankAccountDetails = () => {
     return (
-      <View style={{justifyContent: 'center', alignItems: 'center'}}>
+      <View style={{justifyContent: 'center',}}>
         <Text style={styles.questionText}>
           {translate('Please enter the full name of the account holder')}
         </Text>
@@ -544,14 +532,9 @@ class DocumentInfo extends React.Component {
           }
         />
 
-        <View style={{justifyContent: 'center', alignItems: 'center'}}>
+        <View style={{justifyContent: 'center', }}>
           <Text
-            style={{
-              width: 300,
-              color: '#E67F00',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
+            style={styles.questionText}>
             {translate('Please enter your')} BIC
           </Text>
           <TextInput
@@ -716,9 +699,9 @@ const styles = StyleSheet.create({
   questionText: {
     width: 300,
     color: '#E67F00',
-    justifyContent: 'center',
-    alignItems: 'center',
+    marginLeft:0,
     margin: 10,
+    fontWeight:'bold'
   },
   nameInput: {
     marginTop: 12,
@@ -731,6 +714,7 @@ const styles = StyleSheet.create({
   },
   policyInput: {
     margin: 10,
+    marginLeft:0,
     borderWidth: 1,
     width: 250,
     height: 40,

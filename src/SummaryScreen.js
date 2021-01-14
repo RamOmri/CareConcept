@@ -130,8 +130,8 @@ class SummaryScreen extends React.Component {
       );
     } else if (this.state.finishedSending) {
       this.props.navigation.reset({
-        //index: 0,
-        routes: [{name: 'startScreen'}],
+        index: 0,
+        routes: [{name: 'PolicyInfo'}],
       });
       return (
         <View

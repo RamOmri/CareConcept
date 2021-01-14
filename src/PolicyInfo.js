@@ -250,6 +250,13 @@ class PolicyInfo extends React.Component {
                   </Text>
                 </View>
               </TouchableOpacity>
+              
+              <Text style = {{color:"#004799",fontSize:12, fontWeight:'bold', marginTop:15 }}>
+                *Press these ({<Image
+                            source={require('./img/questionMark.png')}
+                            style={{width: 20, height:20}}
+                          />}) icons for instructions
+              </Text>
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
