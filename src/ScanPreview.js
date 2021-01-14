@@ -61,6 +61,7 @@ const setI18nConfig = () => {
  class ScanPreview extends React.Component {
 
   constructor(props){
+    setI18nConfig()
       super(props)
       this.state = {
       infoObj: this.props.route.params.infoObj,

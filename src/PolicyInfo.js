@@ -19,6 +19,8 @@ import {
   I18nManager,
 } from 'react-native';
 
+import { WebView } from 'react-native-webview';
+
 import {
   Header,
   LearnMoreLinks,
@@ -143,7 +145,20 @@ componentWillUnmount() {
 
 
 render(){
-  return(
+ /*  if(this.state.renderWebView){
+    return(
+      <View style = {{flex:1}}>
+        <Text>testing something</Text>
+      <WebView
+      source={{
+        uri: 'https://github.com/facebook/react-native'
+      }}
+      style={{ marginTop: 20 }}
+    />
+    </View>
+    )
+  } */
+ return(
           <ImageBackground style={styles.container}
       source={require('./img/background.jpg')}
       style={{ resizeMode: 'stretch', flex: 1, }}
@@ -195,6 +210,7 @@ render(){
                      
                                           <TouchableOpacity
                                                         onPress = {()=>{
+                                                         // this.setState({renderWebView: true})
                                                           Keyboard.dismiss()
                                                           if(this.checkFields()){
                                                             if(Platform.OS === "android"){

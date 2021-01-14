@@ -212,9 +212,11 @@ constructor(props){
                
                }}
              >
-                 <Text style={{color: "white", fontSize: 19}}>
-                        Go Back
+               <View style = {{flex: 1, justifyContent:'center', alignItems:'center', height:Dimensions.get("window").height/18, width:Dimensions.get("window").width/4}}>
+                 <Text style={{color: "white", fontSize: 11}}>
+                        {translate("Go Back")}
                       </Text>
+                      </View>
                       </TouchableOpacity>
                   </View>
                   
@@ -223,7 +225,7 @@ constructor(props){
             <View  style = {{}}>
             
               <ScrollView>
-              
+                  <View style = {{marginBottom:200}}>
                 <TouchableOpacity
                   onPress = {()=>{
                     alert(
@@ -231,7 +233,7 @@ constructor(props){
                     )
                   }}
                 >
-                <View style = {{flexDirection: 'row', marginBottom: 40, justifyContent:'center'}}>
+                <View style = {{flexDirection: 'row', marginBottom: 20, justifyContent:'center'}}>
                 <Image  source = {require('./img/questionMark.png')} style = {{width:20, height:20}} />
                 <Text style = {{fontWeight:'bold', color:"#004799"}}>
                   {translate("Press here for instructions")}
@@ -290,9 +292,11 @@ constructor(props){
                       {(this.state.infoObj.docType == 'Claim Document' || this.state.docType == 'Claim Document') && this.renderClaimInfo()}   
                       {(this.state.docType == 'Other Document' || this.state.infoObj.docType == 'Other Document') && this.renderContinue()}                      
                                       
-                     <View style = {{height:60, backgroundColor:'white'}}>
-
-                     </View>
+             
+                      <Text style = {{bottom:0, marginTop: 10}}>
+                        something something
+                      </Text>
+                    </View>
               
               </ScrollView>
          
@@ -613,7 +617,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
    marginTop: 30,
    borderRadius:15,
-   marginBottom: 200,
   },
   questionText: {
     width: 300,

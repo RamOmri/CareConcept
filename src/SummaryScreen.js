@@ -145,7 +145,7 @@ class SummaryScreen extends React.Component {
             alignItems: 'center',
           }}>
           <Text style={styles.DocumentText}>
-            Finished submitting claim, please close the app
+           {translate("Finished submitting claim, please close the app")}
           </Text>
         </View>
       );
@@ -181,7 +181,7 @@ class SummaryScreen extends React.Component {
                     borderTopLeftRadius: 200,
                     borderBottomLeftRadius: 200,
                   }}>
-                  <Text style={{color: 'white', fontSize: 15}}>Go Back</Text>
+                  <Text style={{color: 'white', fontSize: 12}}>{translate("Go Back")}</Text>
                 </View>
               </TouchableOpacity>
             )}
@@ -198,7 +198,7 @@ class SummaryScreen extends React.Component {
                     screen: 'DocumentInfo',
                   });
                 } else {
-                  alert('Cannot send more than 20 documents');
+                  alert(translate('Kann nicht mehr als 20 Dokumente senden'));
                 }
               }}>
               <View

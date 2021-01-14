@@ -148,7 +148,7 @@ componentDidMount() {
                                        that.state.pdfScannerReference.current.forceUpdate()
                                        that.setState({isScanning: false})
                                      }
-                                  }, 9000);
+                                  }, 5000);
                                    
                                     
                                   }}
