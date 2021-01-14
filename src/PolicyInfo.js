@@ -17,6 +17,8 @@ import {
   LogBox,
   YellowBox,
   I18nManager,
+  BackHandler,
+  Dimensions
 } from 'react-native';
 
 import {WebView} from 'react-native-webview';
@@ -118,7 +120,7 @@ class PolicyInfo extends React.Component {
         triggerWrapper: {
           padding: 5,
           height: 40,
-          width: 100,
+          width: 250,
           justifyContent: 'center',
           backgroundColor: 'white',
           borderColor: '#f59b00',
@@ -134,14 +136,21 @@ class PolicyInfo extends React.Component {
     console.log(this.props);
   }
 
+  
+ 
+
   componentDidMount() {
     RNLocalize.addEventListener('change', this.handleLocalizationChange);
+      BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
   }
 
   componentWillUnmount() {
     RNLocalize.removeEventListener('change', this.handleLocalizationChange);
+     BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
   }
-
+ onBackPress = () => {
+    return true
+  };
   render() {
     /*  if(this.state.renderWebView){
     return(
@@ -172,7 +181,10 @@ class PolicyInfo extends React.Component {
         />
         <KeyboardAvoidingView>
           <ScrollView>
-            <View style={{flex: 1, alignItems: 'center'}}>
+            <View style={{flex: 1, alignItems:'center'}}>
+              <Text style = {styles.headerText}>
+                Please enter the information of the policy holder below
+              </Text>
               <TextInput
                 style={styles.policyInput}
                 placeholder={translate('Insurance Number')}
@@ -184,7 +196,7 @@ class PolicyInfo extends React.Component {
                 value={this.props.insuranceNumber}
               />
               <Text style={styles.questionText}>
-                {translate('Please select your sex')}
+                {translate("Select policy holder's sex")}
               </Text>
               <Menu>
                 <MenuTrigger
@@ -359,20 +371,26 @@ const styles = StyleSheet.create({
     margin: 10,
     marginBottom: 50,
   },
+  headerText:{
+    color:"#004799",
+    fontSize:17,
+    margin:15,
+    alignSelf:'center',
+    fontWeight:'bold'
+  },
   questionText: {
     margin: 10,
     fontSize: 16,
     color: '#E67F00',
   },
   button: {
-    width: 160,
-    height: 45,
+    width: Dimensions.get('window').width/2.5,
     backgroundColor: '#E67F00',
+    height: Dimensions.get('window').height / 16,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 30,
-    borderRadius: 15,
-    marginBottom: 20,
+    borderRadius:40,
+    margin:10
   },
   nameInput: {
     marginTop: 12,
@@ -384,7 +402,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#E5ECF5',
   },
   policyInput: {
-    margin: 20,
+    marginTop:30,
+    marginBottom:15,
     borderWidth: 1,
     width: 250,
     height: 40,

@@ -129,6 +129,10 @@ class SummaryScreen extends React.Component {
         </View>
       );
     } else if (this.state.finishedSending) {
+      this.props.navigation.reset({
+        //index: 0,
+        routes: [{name: 'startScreen'}],
+      });
       return (
         <View
           style={{
@@ -188,31 +192,6 @@ class SummaryScreen extends React.Component {
               style={styles.logo}
             />
 
-            <TouchableOpacity
-              onPress={() => {
-                if (this.props.docs.length < 20) {
-                  this.props.navigation.navigate('ClaimStack', {
-                    params: {isEditing: false},
-                    screen: 'DocumentInfo',
-                  });
-                } else {
-                  alert(translate('Kann nicht mehr als 20 Dokumente senden'));
-                }
-              }}>
-              <View
-                style={{
-                  width: Dimensions.get('window').width,
-                  backgroundColor: '#E67F00',
-                  height: Dimensions.get('window').height / 16,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Text style={{color: 'white', fontSize: 16}}>
-                  {translate('Scan a new Document')}
-                </Text>
-              </View>
-            </TouchableOpacity>
-
             <ScrollView
               contentContainerStyle={{
                 flexGrow: 1,
@@ -265,12 +244,33 @@ class SummaryScreen extends React.Component {
 
               <View
                 style={{
-                  flex: 1,
-                  justifyContent: 'flex-end',
+                  //justifyContent: 'flex-end',
+                  justifyContent:'center',
                   marginBottom: 10,
                   alignItems: 'center',
-                  marginTop: 3,
+                  flexDirection:'row',
+                  marginTop: 5,
                 }}>
+
+                <TouchableOpacity
+                  onPress={() => {
+                    if (this.props.docs.length < 20) {
+                      this.props.navigation.navigate('ClaimStack', {
+                        params: {isEditing: false},
+                        screen: 'DocumentInfo',
+                      });
+                    } else {
+                      alert(translate('Cannot send more than 20 documents'));
+                    }
+                  }}>
+                  <View
+                    style={styles.button}>
+                    <Text style={{color: 'white', fontSize: 13, fontWeight:'bold'}}>
+                      {translate('Scan Document')}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+
                 <TouchableOpacity
                   onPress={() => {
                     if (this.props.docs.length != 0) {
@@ -285,7 +285,7 @@ class SummaryScreen extends React.Component {
                     }
                   }}>
                   <View style={styles.button}>
-                    <Text style={{color: 'white', fontSize: 12}}>
+                    <Text style={{color: 'white', fontSize: 13, fontWeight:'bold'}}>
                       {translate('Send')}
                     </Text>
                   </View>
@@ -421,10 +421,10 @@ class SummaryScreen extends React.Component {
       })
       .catch((error) => console.log('could not send ' + error));
     if (this.state.server_message == '200') {
-      this.setState({finishedSending: true});
       this.setState({isLoading: false});
       this.props.deleteStateClaimInfo();
       this.props.deleteStatePolicyInfo();
+      this.setState({finishedSending: true});
     } else if (this.state.server_message != '400') {
       alert(translate('Something went wrong sending claim Please try again'));
       console.log(this.state.server_message);
@@ -456,14 +456,13 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   button: {
-    width: 150,
-    height: 45,
+    width: Dimensions.get('window').width/2.5,
     backgroundColor: '#E67F00',
+    height: Dimensions.get('window').height / 16,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 30,
-    borderRadius: 15,
-    margin: 10,
+    borderRadius:40,
+    margin:10
   },
   nameInput: {
     marginTop: 12,
