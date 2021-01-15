@@ -180,10 +180,16 @@ class PolicyInfo extends React.Component {
           style={styles.logo}
         />
         <KeyboardAvoidingView>
-          <ScrollView>
-            <View style={{flex: 1, alignItems:'center', marginBottom:100}}>
+          <ScrollView   contentContainerStyle={{ flexGrow: 1 }}>
+            <View style={{flex: 1, alignItems:'center', marginBottom:200}}>
               <Text style = {styles.headerText}>
                 Please enter the information of the policy holder below
+              </Text>
+              <Text style = {{color:"#004799",fontSize:12, fontWeight:'bold', marginTop:3, textAlign:'center' }}>
+                *Press these ({<Image
+                            source={require('./img/questionMark.png')}
+                            style={{width: 20, height:20}}
+                          />}) icons for instructions
               </Text>
               <TextInput
                 style={styles.policyInput}
@@ -251,12 +257,8 @@ class PolicyInfo extends React.Component {
                 </View>
               </TouchableOpacity>
               
-              <Text style = {{color:"#004799",fontSize:12, fontWeight:'bold', marginTop:15 }}>
-                *Press these ({<Image
-                            source={require('./img/questionMark.png')}
-                            style={{width: 20, height:20}}
-                          />}) icons for instructions
-              </Text>
+              
+             
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
@@ -382,8 +384,10 @@ const styles = StyleSheet.create({
     color:"#004799",
     fontSize:17,
     margin:15,
+    marginBottom:0,
     alignSelf:'center',
-    fontWeight:'bold'
+    fontWeight:'bold',
+    textAlign:'center'
   },
   questionText: {
     margin: 10,
@@ -410,7 +414,7 @@ const styles = StyleSheet.create({
   },
   policyInput: {
     marginTop:30,
-    marginBottom:15,
+    marginBottom:4,
     borderWidth: 1,
     width: 250,
     height: 40,
