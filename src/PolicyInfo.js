@@ -181,7 +181,7 @@ class PolicyInfo extends React.Component {
         />
         <KeyboardAvoidingView>
           <ScrollView>
-            <View style={{flex: 1, alignItems:'center'}}>
+            <View style={{flex: 1, alignItems:'center', marginBottom:100}}>
               <Text style = {styles.headerText}>
                 Please enter the information of the policy holder below
               </Text>
@@ -225,7 +225,7 @@ class PolicyInfo extends React.Component {
               />
               <TextInput
                 style={styles.nameInput}
-                placeholder={translate('Surname')}
+                placeholder={translate('Last name')}
                 placeholderTextColor="#004799"
                 secureTextEntry={false}
                 onChangeText={(surname) => this.props.changeSurname(surname)}

@@ -201,13 +201,15 @@ const styles = StyleSheet.create({
     aspectRatio: undefined,
   },
   button: {
-    width: Dimensions.get('window').width / 4,
-    height: Dimensions.get('window').height / 13,
-    backgroundColor: 'white',
+    width: Dimensions.get('window').width/4.3,
+    backgroundColor: '#E67F00',
+    height: Dimensions.get('window').width / 4.3,
     justifyContent: 'center',
     alignItems: 'center',
-    margin: 10,
-    marginTop: 20,
+    alignSelf:'center',
+    borderRadius:1000,
+    margin:10,
+    marginBottom:15,
   },
   buttonText: {
     backgroundColor: 'rgba(245, 252, 255, 0.7)',
@@ -223,4 +225,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  text:{
+    color:'white',
+    fontSize:14,
+    fontWeight:'bold'
+  }
 });

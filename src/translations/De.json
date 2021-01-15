@@ -4,7 +4,7 @@
   "Male": "Männlich",
   "Female": "Weiblich",
   "First Name": "Vorname",
-  "Surname": "Nachname",
+  "Last name": "Nachname",
   "Please check your insurance number": "Bitte überprüfen Sie Ihre Versicherungsnummer",
   "Continue": "Weiter...",
   "Please select your gender": "Bitte wählen Sie Ihr Geschlecht",
@@ -48,5 +48,6 @@
   "Go Back": "Zurückgehen",
   "Finished submitting claim, please close the app": "Fertig mit dem Einreichen des Anspruchs, bitte schließen Sie die App",
  "Select policy holder's sex":"Wählen Sie das Geschlecht des Versicherungsnehmers",
- "Scan Document":"Dokument scannen"
+ "Scan Document":"Dokument scannen",
+ "Please wait while we send your claim":"Bitte warten Sie, während wir Ihren Antrag abschicken..."
 }

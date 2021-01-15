@@ -135,14 +135,14 @@ export default class Scanner extends React.Component {
                     that.state.pdfScannerReference.current.forceUpdate();
                     that.setState({isScanning: false});
                   }
-                }, 5000);
+                }, 8000);
               }}>
               <Text style={{fontSize: 18, color: 'white', margin: 10}}>
                 {translate('Scan')}
               </Text>
             </TouchableOpacity>
           )) || (
-            <View style={{justifyContent: 'center', alignItems: 'center'}}>
+            <View style={{justifyContent: 'center', alignItems: 'center', backgroundColor:'black'}}>
               <Text style={styles.DocumentText}>
                 {translate('Please wait while your document is being scanned')}
               </Text>
@@ -182,11 +182,11 @@ const styles = StyleSheet.create({
   },
   DocumentText: {
     flexDirection: 'row',
+    marginLeft:30,
     fontSize: 14,
     fontWeight: 'bold',
     color: '#E67F00',
     justifyContent: 'center',
     alignItems: 'center',
-    margin: 10,
   },
 });

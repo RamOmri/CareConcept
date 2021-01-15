@@ -32,6 +32,7 @@ export default class StartScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
+    console.log(Dimensions.get('window').height)
   }
 
   componentDidMount() {}
@@ -58,11 +59,11 @@ export default class StartScreen extends React.Component {
             <TouchableOpacity
             style = {{backgroundColor: '#f59b00',
             position: 'absolute',
-            height: 95,
-            width: 95,
-            top:160,
+            height: Dimensions.get('window').width/3.789,
+            width: Dimensions.get('window').width/3.789,
+            top:Dimensions.get('window').height/4.656,
             borderRadius:1000,
-            left:240,}}
+            left:Dimensions.get('window').width/1.5,}}
             
                 onPress ={() =>{
                     this.props.navigation.navigate('ClaimStack', {

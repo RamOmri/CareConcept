@@ -123,32 +123,18 @@ class SummaryScreen extends React.Component {
             alignItems: 'center',
           }}>
           <Text style={styles.DocumentText}>
-            Please wait while we send your claim...
+            {translate("Please wait while we send your claim")}
           </Text>
           <ActivityIndicator size="large" color="#004799" />
         </View>
       );
     } else if (this.state.finishedSending) {
+      alert(translate('Finished submitting claim'))
       this.props.navigation.reset({
         index: 0,
-        routes: [{name: 'PolicyInfo'}],
+        screen: 'startScreen'
       });
-      return (
-        <View
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <Text style={styles.DocumentText}>
-            {translate('Finished submitting claim, please close the app')}
-          </Text>
-        </View>
-      );
+     
     } else {
       return (
         <ImageBackground

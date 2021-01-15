@@ -196,16 +196,7 @@ class DocumentInfo extends React.Component {
         {Platform.OS === 'ios' && (
           <View
             style={{
-              marginTop: 10,
-              marginLeft: 10,
-              flex: 0.15,
-              backgroundColor: 'orange',
-              height: Dimensions.get('window').height / 18,
-              width: Dimensions.get('window').width / 4,
-              justifyContent: 'center',
-              alignItems: 'center',
-              borderTopLeftRadius: 20,
-              borderBottomLeftRadius: 20,
+           
             }}>
             <TouchableOpacity
               onPress={() => {
@@ -213,11 +204,14 @@ class DocumentInfo extends React.Component {
               }}>
               <View
                 style={{
-                  flex: 1,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  height: Dimensions.get('window').height / 18,
-                  width: Dimensions.get('window').width / 4,
+                  marginLeft: 10,
+                    backgroundColor: 'orange',
+                    height: Dimensions.get('window').height / 17,
+                    width: Dimensions.get('window').width / 4,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    borderTopLeftRadius: 200,
+                    borderBottomLeftRadius: 200,
                 }}>
                 <Text style={{color: 'white', fontSize: 11}}>
                   {translate('Go Back')}
@@ -592,7 +586,7 @@ class DocumentInfo extends React.Component {
           }
         }}>
         <View style={styles.button}>
-          <Text style={{color: 'white', fontSize: 12}}>
+          <Text style={{color: 'white', fontSize: 13, fontWeight:'bold'}}>
             {translate('Continue')}
           </Text>
         </View>
@@ -687,14 +681,14 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   button: {
-    width: 160,
-    height: 45,
+    width: Dimensions.get('window').width/2.5,
     backgroundColor: '#E67F00',
+    height: Dimensions.get('window').height / 16,
     justifyContent: 'center',
-    alignSelf: 'center',
     alignItems: 'center',
-    marginTop: 30,
-    borderRadius: 15,
+    alignSelf:'center',
+    borderRadius:40,
+    marginTop:20,
   },
   questionText: {
     width: 300,

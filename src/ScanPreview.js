@@ -89,13 +89,7 @@ class ScanPreview extends React.Component {
               backgroundColor: 'black',
             }}>
             <TouchableOpacity
-              style={{
-                flex: 1,
-                backgroundColor: '#f59b00',
-                alignItems: 'center',
-                borderRightWidth: 2,
-                borderRightColor: 'black',
-              }}
+              style={styles.button}
               onPress={() => {
                 if (this.state.infoObj.pages.length < 20) {
                   this.state.infoObj.pages.reverse();
@@ -119,26 +113,20 @@ class ScanPreview extends React.Component {
                   );
                 }
               }}>
-              <Text style={{fontSize: 15, color: 'white', margin: 10}}>
+              <Text style={styles.buttonText}>
                 {translate('Add Page')}
               </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={{
-                backgroundColor: '#f59b00',
-                flex: 1,
-                alignItems: 'center',
-                borderLeftWidth: 2,
-                borderLeftColor: 'black',
-              }}
+              style={styles.button}
               onPress={() => {
                 this.props.navigation.navigate('ClaimStack', {
                   params: {},
                   screen: 'SummaryScreen',
                 });
               }}>
-              <Text style={{fontSize: 15, color: 'white', margin: 10}}>
+              <Text style={styles.buttonText}>
                 {translate('Delete all Pages')}
               </Text>
             </TouchableOpacity>
@@ -155,11 +143,7 @@ class ScanPreview extends React.Component {
               backgroundColor: 'black',
             }}>
             <TouchableOpacity
-              style={{
-                backgroundColor: '#f59b00',
-                flex: 1,
-                alignItems: 'center',
-              }}
+              style={{...styles.button, height:Dimensions.get('window').height/12, width:Dimensions.get('window').width/1.2, marginBottom:30}}
               onPress={() => {
                 this.state.infoObj.pages.reverse();
                 this.props.add(this.state.infoObj);
@@ -168,7 +152,7 @@ class ScanPreview extends React.Component {
                   screen: 'SummaryScreen',
                 });
               }}>
-              <Text style={{fontSize: 18, color: 'white', margin: 10}}>
+              <Text style={styles.buttonText}>
                 {translate('Continue')}
               </Text>
             </TouchableOpacity>
@@ -186,18 +170,16 @@ const styles = StyleSheet.create({
     aspectRatio: undefined,
   },
   button: {
-    width: 220,
-    height: 50,
-    backgroundColor: '#711401ff',
+    width: Dimensions.get('window').width/2.5,
+    backgroundColor: '#E67F00',
+    height: Dimensions.get('window').height / 16,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 20,
-    borderRadius: 30,
-    marginBottom: 20,
+    borderRadius:40,
+    margin:10
   },
   buttonText: {
-    backgroundColor: 'rgba(245, 252, 255, 0.7)',
-    fontSize: 32,
+    color: 'white', fontSize: 13, fontWeight:'bold'
   },
   preview: {
     flex: 1,
