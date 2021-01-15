@@ -201,9 +201,9 @@ const styles = StyleSheet.create({
     aspectRatio: undefined,
   },
   button: {
-    width: Dimensions.get('window').width/4.2,
+    width: Dimensions.get('window').width/3.6,
     backgroundColor: '#E67F00',
-    height: Dimensions.get('window').width / 7,
+    height: Dimensions.get('window').height / 14,
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf:'center',

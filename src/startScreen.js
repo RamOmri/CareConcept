@@ -63,7 +63,11 @@ export default class StartScreen extends React.Component {
             width: Dimensions.get('window').width/3.789,
             top:Dimensions.get('window').height/4.656,
             borderRadius:1000,
-            left:Dimensions.get('window').width/1.5,}}
+            left:Dimensions.get('window').width/1.5,
+            justifyContent:'center',
+            alignItems:'center'
+          }
+          }
             
                 onPress ={() =>{
                     this.props.navigation.push('ClaimStack', {
@@ -73,7 +77,7 @@ export default class StartScreen extends React.Component {
                 }}
             >
                  <View style = {{alignItems:'center', justifyContent:'center'}}>
-                    <Text style = {{color:'white', fontSize:22, fontWeight:'bold', marginTop:32, fontFamily:'Sans-serif '}}>
+                    <Text style = {{color:'white', fontSize:22, fontWeight:'bold', fontFamily:'Sans-serif '}}>
                             Start
                     </Text>
               </View>

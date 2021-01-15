@@ -379,7 +379,7 @@ class PolicyInfo extends React.Component {
 const styles = StyleSheet.create({
   logo: {
     margin: 10,
-    marginBottom: 10,
+    marginBottom: 20,
   },
   headerText:{
     color:"#004799",
