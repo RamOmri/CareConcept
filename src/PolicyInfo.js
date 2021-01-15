@@ -18,7 +18,8 @@ import {
   YellowBox,
   I18nManager,
   BackHandler,
-  Dimensions
+  Dimensions,
+  ActivityIndicator,
 } from 'react-native';
 
 import {WebView} from 'react-native-webview';
@@ -136,35 +137,74 @@ class PolicyInfo extends React.Component {
     console.log(this.props);
   }
 
-  
- 
-
   componentDidMount() {
     RNLocalize.addEventListener('change', this.handleLocalizationChange);
-      BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
+    BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
   }
 
   componentWillUnmount() {
     RNLocalize.removeEventListener('change', this.handleLocalizationChange);
-     BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
+    BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
   }
- onBackPress = () => {
-    return true
+  onBackPress = () => {
+    return true;
+  };
+
+  renderLoading = () => {
+    return (
+      <View
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <ActivityIndicator size="large" color="#004799" />
+      </View>
+    );
   };
   render() {
-    /*  if(this.state.renderWebView){
-    return(
-      <View style = {{flex:1}}>
-        <Text>testing something</Text>
-      <WebView
-      source={{
-        uri: 'https://github.com/facebook/react-native'
-      }}
-      style={{ marginTop: 20 }}
-    />
-    </View>
-    )
-  } */
+    if (this.state.renderWebView) {
+      return (
+        <View style={{flex: 1, backgroundColor: '#004799'}}>
+         
+          <TouchableOpacity
+            style={{
+              marginLeft: 20,
+              margin: 10,
+              backgroundColor: 'orange',
+              height: Dimensions.get('screen').height / 17,
+              width: Dimensions.get('screen').width / 4,
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderTopLeftRadius: 200,
+              borderBottomLeftRadius: 200,
+            }}
+            onPress={() => {
+              this.setState({renderWebView: false})
+            }}>
+            <View>
+              <Text style={{color: 'white', fontSize: 12}}>
+                {translate('Go Back')}
+              </Text>
+            </View>
+          </TouchableOpacity>
+          <WebView
+            startInLoadingState
+            renderLoading={this.renderLoading}
+            source={{
+              uri:
+                'https://www.care-concept.de/scripte/sniplets/app_general_information_eng.php?navilang=eng',
+            }}
+            style={{marginTop: 20}}
+          />
+        </View>
+      );
+    }
+
     return (
       <ImageBackground
         style={styles.container}
@@ -180,18 +220,38 @@ class PolicyInfo extends React.Component {
           style={styles.logo}
         />
         <KeyboardAvoidingView>
-          <ScrollView   contentContainerStyle={{ flexGrow: 1 }}>
-            <View style={{flex: 1, alignItems:'center', marginBottom:200}}>
-              <Text style = {{color:"#004799",fontSize:10, fontWeight:'bold', marginBottom:50, textAlign:'center' }}>
-                *Press these ({<Image
-                            source={require('./img/questionMark.png')}
-                            style={{width: 20, height:20}}
-                          />}) icons for instructions
+          <ScrollView contentContainerStyle={{flexGrow: 1}}>
+            <View style={{flex: 1, alignItems: 'center', marginBottom: 200}}>
+              <Text
+                style={{
+                  color: '#004799',
+                  fontSize: 10,
+                  fontWeight: 'bold',
+                  marginBottom: 20,
+                  textAlign: 'center',
+                }}>
+                *Press these (
+                {
+                  <Image
+                    source={require('./img/questionMark.png')}
+                    style={{width: 20, height: 20}}
+                  />
+                }
+                ) icons for instructions
               </Text>
-              <Text style = {styles.headerText}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.setState({renderWebView: true});
+                }}>
+                <Image
+                  source={require('./img/questionMark.png')}
+                  style={{width: 50, height: 50}}
+                />
+              </TouchableOpacity>
+              <Text style={styles.headerText}>
                 Please enter the information of the policy holder below
               </Text>
-              
+
               <TextInput
                 style={styles.policyInput}
                 placeholder={translate('Insurance Number')}
@@ -241,7 +301,6 @@ class PolicyInfo extends React.Component {
 
               <TouchableOpacity
                 onPress={() => {
-                  // this.setState({renderWebView: true})
                   Keyboard.dismiss();
                   if (this.checkFields()) {
                     if (Platform.OS === 'android') {
@@ -257,9 +316,6 @@ class PolicyInfo extends React.Component {
                   </Text>
                 </View>
               </TouchableOpacity>
-              
-              
-             
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
@@ -381,28 +437,30 @@ const styles = StyleSheet.create({
     margin: 10,
     marginBottom: 20,
   },
-  headerText:{
-    color:"#004799",
-    fontSize:17,
-    margin:15,
-    marginBottom:0,
-    alignSelf:'center',
-    fontWeight:'bold',
-    textAlign:'center'
+  headerText: {
+    color: '#004799',
+    fontSize: 17,
+    margin: 15,
+    marginBottom: 0,
+    alignSelf: 'center',
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   questionText: {
     margin: 10,
     fontSize: 16,
     color: '#E67F00',
+    alignSelf: 'center',
+    textAlign: 'center',
   },
   button: {
-    width: Dimensions.get('window').width/2.5,
+    width: Dimensions.get('window').width / 2.5,
     backgroundColor: '#E67F00',
     height: Dimensions.get('window').height / 16,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius:40,
-    margin:10
+    borderRadius: 40,
+    margin: 10,
   },
   nameInput: {
     marginTop: 12,
@@ -414,8 +472,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#E5ECF5',
   },
   policyInput: {
-    marginTop:30,
-    marginBottom:4,
+    marginTop: 30,
+    marginBottom: 4,
     borderWidth: 1,
     width: 250,
     height: 40,

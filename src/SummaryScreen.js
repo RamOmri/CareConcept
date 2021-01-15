@@ -341,7 +341,10 @@ class SummaryScreen extends React.Component {
           .catch((err) => console.log('here2:::::::::::::::::::: ' + err));
         var page = pdfDoc.addPage();
 
-        const pdfDims = embeddedImage.scale(0.5);
+        console.log('!!!!!!!!!!!!!!!!!!!!!' + embeddedImage.height)
+        console.log(embeddedImage.width/page.getWidth())
+        console.log(embeddedImage.height/page.getHeight())
+        const pdfDims = embeddedImage.scale((page.getHeight()/embeddedImage.height > page.getWidth()/embeddedImage.width) && page.getWidth()/embeddedImage.width || page.getHeight()/embeddedImage.height);
 
         page.drawImage(embeddedImage, {
           x: page.getWidth() / 2 - pdfDims.width / 2,
