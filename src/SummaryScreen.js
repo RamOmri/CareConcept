@@ -128,13 +128,6 @@ class SummaryScreen extends React.Component {
           <ActivityIndicator size="large" color="#004799" />
         </View>
       );
-    } else if (this.state.finishedSending) {
-      alert(translate('Finished submitting claim'))
-      this.props.navigation.reset({
-        index: 0,
-        screen: 'startScreen'
-      });
-     
     } else {
       return (
         <ImageBackground
@@ -410,7 +403,12 @@ class SummaryScreen extends React.Component {
       this.setState({isLoading: false});
       this.props.deleteStateClaimInfo();
       this.props.deleteStatePolicyInfo();
-      this.setState({finishedSending: true});
+
+      alert(translate('Finished submitting claim'))
+      this.props.navigation.navigate('ClaimStack', {
+        params: {},
+        screen: 'PolicyInfo',
+      })
     } else if (this.state.server_message != '400') {
       alert(translate('Something went wrong sending claim Please try again'));
       console.log(this.state.server_message);

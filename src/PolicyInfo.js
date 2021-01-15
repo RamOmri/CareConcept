@@ -182,15 +182,16 @@ class PolicyInfo extends React.Component {
         <KeyboardAvoidingView>
           <ScrollView   contentContainerStyle={{ flexGrow: 1 }}>
             <View style={{flex: 1, alignItems:'center', marginBottom:200}}>
-              <Text style = {styles.headerText}>
-                Please enter the information of the policy holder below
-              </Text>
-              <Text style = {{color:"#004799",fontSize:12, fontWeight:'bold', marginTop:3, textAlign:'center' }}>
+              <Text style = {{color:"#004799",fontSize:10, fontWeight:'bold', marginBottom:50, textAlign:'center' }}>
                 *Press these ({<Image
                             source={require('./img/questionMark.png')}
                             style={{width: 20, height:20}}
                           />}) icons for instructions
               </Text>
+              <Text style = {styles.headerText}>
+                Please enter the information of the policy holder below
+              </Text>
+              
               <TextInput
                 style={styles.policyInput}
                 placeholder={translate('Insurance Number')}
@@ -378,7 +379,7 @@ class PolicyInfo extends React.Component {
 const styles = StyleSheet.create({
   logo: {
     margin: 10,
-    marginBottom: 50,
+    marginBottom: 10,
   },
   headerText:{
     color:"#004799",

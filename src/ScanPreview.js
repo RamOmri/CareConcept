@@ -131,7 +131,7 @@ class ScanPreview extends React.Component {
               </Text>
             </TouchableOpacity>
           </View>
-          <View style={{flex: 1}}>
+          <View style={{flex: 0.8}}>
             <ImageViewer imageUrls={this.state.infoObj.pages} />
           </View>
           <View
@@ -142,21 +142,24 @@ class ScanPreview extends React.Component {
               justifyContent: 'center',
               backgroundColor: 'black',
             }}>
-            <TouchableOpacity
-              style={{...styles.button, height:Dimensions.get('window').height/12, width:Dimensions.get('window').width/1.2, marginBottom:30}}
-              onPress={() => {
-                this.state.infoObj.pages.reverse();
-                this.props.add(this.state.infoObj);
-                this.props.navigation.navigate('ClaimStack', {
-                  params: {},
-                  screen: 'SummaryScreen',
-                });
-              }}>
-              <Text style={styles.buttonText}>
-                {translate('Continue')}
-              </Text>
-            </TouchableOpacity>
+            
           </View>
+          <View style = {{justifyContent:'center', alignItems:'center', flex:0.1, backgroundColor:'black'}}>
+            <TouchableOpacity
+                style={{...styles.button, height:Dimensions.get('window').height/15, width:Dimensions.get('window').width/1.2, marginBottom:30}}
+                onPress={() => {
+                  this.state.infoObj.pages.reverse();
+                  this.props.add(this.state.infoObj);
+                  this.props.navigation.navigate('ClaimStack', {
+                    params: {},
+                    screen: 'SummaryScreen',
+                  });
+                }}>
+                <Text style={styles.buttonText}>
+                  {translate('Continue')}
+                </Text>
+            </TouchableOpacity>
+            </View>
         </Modal>
       </View>
     );

@@ -66,7 +66,7 @@ export default class StartScreen extends React.Component {
             left:Dimensions.get('window').width/1.5,}}
             
                 onPress ={() =>{
-                    this.props.navigation.navigate('ClaimStack', {
+                    this.props.navigation.push('ClaimStack', {
                         params: {},
                         screen: 'PolicyInfo',
                       })

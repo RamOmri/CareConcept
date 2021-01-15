@@ -201,15 +201,14 @@ const styles = StyleSheet.create({
     aspectRatio: undefined,
   },
   button: {
-    width: Dimensions.get('window').width/4.3,
+    width: Dimensions.get('window').width/4.2,
     backgroundColor: '#E67F00',
-    height: Dimensions.get('window').width / 4.3,
+    height: Dimensions.get('window').width / 7,
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf:'center',
-    borderRadius:1000,
+    borderRadius:10,
     margin:10,
-    marginBottom:15,
   },
   buttonText: {
     backgroundColor: 'rgba(245, 252, 255, 0.7)',

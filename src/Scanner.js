@@ -135,7 +135,7 @@ export default class Scanner extends React.Component {
                     that.state.pdfScannerReference.current.forceUpdate();
                     that.setState({isScanning: false});
                   }
-                }, 8000);
+                }, 9000);
               }}>
               <Text style={{fontSize: 18, color: 'white', margin: 10}}>
                 {translate('Scan')}
