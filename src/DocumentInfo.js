@@ -16,6 +16,7 @@ import {
   Dimensions,
   Keyboard,
   I18nManager,
+  ActivityIndicator
 } from 'react-native';
 
 import {
@@ -51,6 +52,7 @@ const {SlideInMenu} = renderers;
 import * as RNLocalize from 'react-native-localize';
 import i18n from 'i18n-js';
 import memoize from 'lodash.memoize'; // Use for caching/memoize for better performance
+import {WebView} from 'react-native-webview';
 
 const translationGetters = {
   // lazy requires (metro bundler does not support symlinks)
@@ -90,6 +92,8 @@ class DocumentInfo extends React.Component {
       docType: 'Select',
       sendMoneyToContractualServices: 'Select',
       isDatePickerVisible: false,
+      renderGeneralInfoWeb:false,
+      renderDocTypeInfoWeb:false,
       infoObj: {
         pages: [],
       },
@@ -181,7 +185,66 @@ class DocumentInfo extends React.Component {
     }
   }
 
+
+  renderLoading = () => {
+    return (
+      <View
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <ActivityIndicator size="large" color="#004799" />
+      </View>
+    );
+  };
+
   render() {
+    if(this.state.renderGeneralInfoWeb || this.state.renderDocTypeInfoWeb){
+      return(
+        <View style={{flex: 1, backgroundColor: '#004799'}}>
+         <View style = {{height:Dimensions.get('screen').height/15}}>
+        <TouchableOpacity
+          style={{
+            marginLeft: 20,
+            margin: 10,
+            backgroundColor: 'orange',
+            height: Dimensions.get('screen').height / 17,
+            width: Dimensions.get('screen').width / 4,
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderTopLeftRadius: 200,
+            borderBottomLeftRadius: 200,
+          }}
+          onPress={() => {
+            this.setState({renderGeneralInfoWeb: false})
+            this.setState({renderDocTypeInfoWeb: false})
+          }}>
+          <View>
+            <Text style={{color: 'white', fontSize: 12}}>
+              {translate('Go Back')}
+            </Text>
+          </View>
+        </TouchableOpacity>
+        </View>
+        <View style = {{flex:0.9}}>
+        <WebView
+          startInLoadingState
+          renderLoading={this.renderLoading}
+          source={{
+            uri:
+              'https://www.care-concept.de/scripte/sniplets/app_general_information_eng.php?navilang=eng',
+          }}
+          style={{marginTop: 20}}
+        />
+        </View>
+      </View>
+    )   
+    }
     return (
       <ImageBackground
         style={styles.container}
@@ -229,11 +292,7 @@ class DocumentInfo extends React.Component {
             <View style={{marginBottom: 150, justifyContent:'center', marginLeft:20}}>
               <TouchableOpacity
                 onPress={() => {
-                  alert(
-                    translate(
-                      "If you have a claim and would like to send us any relevant documents such as doctor's bills or pharmacy receipts",
-                    ),
-                  );
+                  this.setState({renderGeneralInfoWeb: true})
                 }}>
                 <View
                   style={{
@@ -289,16 +348,13 @@ class DocumentInfo extends React.Component {
                 </Menu>
                 <TouchableOpacity
                   onPress={() => {
-                    alert(translate('Doc-type info'));
+                    this.setState({renderDocTypeInfoWeb: true})
                   }}>
                   <View style={{flexDirection: 'row', marginLeft: 10}}>
                     <Image
                       source={require('./img/questionMark.png')}
                       style={{width: 30, height: 30}}
                     />
-                    {/* <Text style={{fontSize: 12, color: '#004799'}}>
-                      {translate('Press for explanation')}
-                    </Text> */}
                   </View>
                 </TouchableOpacity>
               </View>
@@ -657,7 +713,7 @@ class DocumentInfo extends React.Component {
   }
 
   onBackPress = () => {
-    if (this.state.isEditing) {
+   if (this.state.isEditing && !(this.state.renderDocTypeInfoWeb || this.state.renderGeneralInfoWeb)) {
       if (this.checkFieldsBeforeContinue()) {
         this.props.add(this.state.infoObj);
         this.props.navigation.navigate('ClaimStack', {
@@ -665,13 +721,15 @@ class DocumentInfo extends React.Component {
           screen: 'SummaryScreen',
         });
       } else return true;
-    } else {
+    } else if(!(this.state.renderDocTypeInfoWeb || this.state.renderGeneralInfoWeb)){
       this.props.navigation.navigate('ClaimStack', {
         params: {},
         screen: 'SummaryScreen',
       });
     }
     return true;
+  
+  
   };
 }
 
