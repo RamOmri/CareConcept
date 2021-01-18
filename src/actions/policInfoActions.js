@@ -4,6 +4,7 @@ import {
   CHANGE_NAME,
   CHANGE_SURNAME,
   DELETE_STATE,
+  SET_LANG
 } from './types';
 
 export const changeInsuranceNumber = (insuranceNumber) => ({
@@ -28,4 +29,8 @@ export const changeSurname = (surname) => ({
 
 export const deleteStatePolicyInfo = () => ({
   type: DELETE_STATE,
+});
+export const setLanguage= (lang) => ({
+  type: SET_LANG,
+  data: lang
 });

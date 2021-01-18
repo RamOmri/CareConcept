@@ -6,6 +6,7 @@ import {
   CHANGE_NAME,
   CHANGE_SURNAME,
   DELETE_STATE,
+  SET_LANG
 } from '../actions/types';
 
 const initState = {
@@ -14,6 +15,7 @@ const initState = {
     gender: 'Select',
     FirstName: '',
     Surname: '',
+    language: 'eng'
   },
 };
 
@@ -51,10 +53,19 @@ const policyInfoReducer = (state = initState, action) => {
           Surname: action.data,
         },
       };
+      case SET_LANG:
+      return {
+        ...state,
+        policyInfo:{
+          ...state.policyInfo,
+        language: action.data
+      }
+      };
     case DELETE_STATE:
       return {
         ...initState,
       };
+      
 
     default:
       return state;

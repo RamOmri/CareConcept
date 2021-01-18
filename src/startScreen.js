@@ -27,6 +27,8 @@ import DocumentScanner from '@woonivers/react-native-document-scanner';
 import ImageSize from 'react-native-image-size';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
+import {connect} from 'react-redux';
+import {setLanguage} from './actions/policInfoActions'
 
 
 
@@ -84,7 +86,7 @@ const userLanguageSelect = async (isLangSelected) =>{
         }
       },
       {
-        text: "German",
+        text: 'Deutsch',
         onPress: () =>{
           lang = {languageTag: 'de', isRTL: false};
           resolve()
@@ -94,10 +96,10 @@ const userLanguageSelect = async (isLangSelected) =>{
     ]
   )})
   if(isLangSelected) setI18nConfig(lang)
-  else return lang
+   return lang
 }
 
-export default class StartScreen extends React.Component {
+class StartScreen extends React.Component {
   constructor(props) {
     super(props);
    
@@ -110,6 +112,7 @@ export default class StartScreen extends React.Component {
   async componentDidMount() { 
     await setI18nConfig(null)
     this.forceUpdate()
+    this.props.setLanguage(language)
   }
 
   render() {
@@ -124,7 +127,7 @@ export default class StartScreen extends React.Component {
           <ImageBackground
             resizeMode="contain"
             style={styles.container}
-            source={require('./img/startScreen.jpg')}
+            source={language && language.includes('de') && require('./img/startScreenDe.jpg') || language && language.includes('en') && require('./img/startScreenEn.jpg')}
             style={{
               resizeMode: 'stretch',
               flex: 1,
@@ -132,15 +135,16 @@ export default class StartScreen extends React.Component {
               <TouchableOpacity
               style = {{
                 position:'absolute',
-                bottom:Dimensions.get('window').height/8.7,
-                right:Dimensions.get('window').width/5,
+                top:Dimensions.get('window').height/11.8,
+                left:Dimensions.get('window').width/1.6,
                }}
               onPress = { async () =>{
-                await userLanguageSelect(true)
+                lang = await userLanguageSelect(true)
+                this.props.setLanguage(lang.languageTag)
                 this.forceUpdate()
               }}
               >
-          <View style = {{height:30,width:100,backgroundColor:'#004799', borderRadius:30, justifyContent:'center', alignItems:'center'}}>   
+          <View style = {{height:30, width: Dimensions.get('window').width/3.789, backgroundColor:'#004799', borderRadius:30, justifyContent:'center', alignItems:'center'}}>   
            <Text style = {{fontSize:10, fontWeight:'bold', color: 'white'}}>
               {translate("Set language")}
            </Text>
@@ -186,3 +190,18 @@ const styles = StyleSheet.create({
     fontSize: 32,
   },
 });
+
+
+const mapStateToProps = (state) => {
+  return {
+    language: state.policyInfoReducers.policyInfo.language,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setLanguage: (lang) => dispatch(setLanguage(lang))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(StartScreen)

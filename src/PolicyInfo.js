@@ -56,38 +56,18 @@ import * as RNLocalize from 'react-native-localize';
 import i18n from 'i18n-js';
 import memoize from 'lodash.memoize'; // Use for caching/memoize for better performance
 
-const translationGetters = {
-  // lazy requires (metro bundler does not support symlinks)
-  en: () => require('./translations/eng.json'),
-  de: () => require('./translations/De.json'),
-};
+
 
 const translate = memoize(
   (key, config) => i18n.t(key, config),
   (key, config) => (config ? key + JSON.stringify(config) : key),
 );
 
-/* const setI18nConfig = () => {
-  // fallback if no available language fits
-  const fallback = {languageTag: 'en', isRTL: false};
-
-  const {languageTag, isRTL} =
-    RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
-    fallback;
-
-  // clear translation cache
-  translate.cache.clear();
-  // update layout direction
-  I18nManager.forceRTL(isRTL);
-  // set i18n-js config
-  i18n.translations = {[languageTag]: translationGetters[languageTag]()};
-  i18n.locale = languageTag;
-}; */
 
 class PolicyInfo extends React.Component {
-  constructor(props) {
-   
+  constructor(props) {  
     super(props);
+   
     //setI18nConfig(); // set initial config
     YellowBox.ignoreWarnings(['']);
 
@@ -134,6 +114,7 @@ class PolicyInfo extends React.Component {
   }
 
   componentDidMount() {
+    console.log('!!!!!!!!!!!!!!!! '+ this.props.language)
     RNLocalize.addEventListener('change', this.handleLocalizationChange);
     BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
   }
@@ -193,7 +174,8 @@ class PolicyInfo extends React.Component {
             renderLoading={this.renderLoading}
             source={{
               uri:
-                'https://www.care-concept.de/scripte/sniplets/app_general_information_eng.php?navilang=eng',
+                this.props.language.includes('en') && 'https://www.care-concept.de/scripte/sniplets/app_general_information_eng.php?navilang=eng' ||
+                 this.props.language.includes('de') && "https://www.care-concept.de/scripte/sniplets/app_general_information.php"
             }}
             style={{marginTop: 20}}
           />
@@ -504,6 +486,7 @@ const mapStateToProps = (state) => {
     gender: state.policyInfoReducers.policyInfo.gender,
     FirstName: state.policyInfoReducers.policyInfo.FirstName,
     Surname: state.policyInfoReducers.policyInfo.Surname,
+    language: state.policyInfoReducers.policyInfo.language,
   };
 };
 

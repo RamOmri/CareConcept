@@ -45,6 +45,9 @@ import {
   setBIC,
   setAccountHolder,
 } from './actions/claimActions';
+import {
+  setLanguage
+} from './actions/policInfoActions'
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import bic from 'bic';
 var IBAN = require('iban');
@@ -219,8 +222,10 @@ class DocumentInfo extends React.Component {
           startInLoadingState
           renderLoading={this.renderLoading}
           source={{
-            uri:
-              'https://www.care-concept.de/scripte/sniplets/app_general_information_eng.php?navilang=eng',
+            uri:  this.props.language.includes('en') && this.state.renderGeneralInfoWeb && 'https://www.care-concept.de/scripte/sniplets/app_general_information_2_eng.php?navilang=eng' ||
+                 this.props.language.includes('en') && this.state.renderDocTypeInfoWeb && 'https://www.care-concept.de/scripte/sniplets/app_general_information_3_eng.php?navilang=eng'||
+                 this.props.language.includes('de') && this.state.renderGeneralInfoWeb && 'https://www.care-concept.de/scripte/sniplets/app_general_information_2.php'||
+                 this.props.language.includes('de') && this.state.renderDocTypeInfoWeb && 'https://www.care-concept.de/scripte/sniplets/app_general_information_3.php'  ,
           }}
           style={{marginTop: 20}}
         />
@@ -784,6 +789,7 @@ const mapStateToProps = (state) => {
     date: state.docReducer.date,
     bic: state.docReducer.BIC,
     AccountHolder: state.docReducer.AccountHolder,
+    language: state.policyInfoReducers.policyInfo.language,
   };
 };
 
@@ -795,6 +801,7 @@ const mapDispatchToProps = (dispatch) => {
     set_AccountHolder: (accountHolder) =>
       dispatch(setAccountHolder(accountHolder)),
     set_date: (date) => dispatch(setDate(date)),
+    setLanguage: (lang) => dispatch(setLanguage(lang))
   };
 };
 
