@@ -67,7 +67,7 @@ const translate = memoize(
   (key, config) => (config ? key + JSON.stringify(config) : key),
 );
 
-const setI18nConfig = () => {
+/* const setI18nConfig = () => {
   // fallback if no available language fits
   const fallback = {languageTag: 'en', isRTL: false};
 
@@ -82,17 +82,13 @@ const setI18nConfig = () => {
   // set i18n-js config
   i18n.translations = {[languageTag]: translationGetters[languageTag]()};
   i18n.locale = languageTag;
-};
+}; */
 
 class PolicyInfo extends React.Component {
   constructor(props) {
-    console.log(
-      JSON.stringify(
-        RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)),
-      ),
-    );
+   
     super(props);
-    setI18nConfig(); // set initial config
+    //setI18nConfig(); // set initial config
     YellowBox.ignoreWarnings(['']);
 
     this.state = {

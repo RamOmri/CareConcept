@@ -63,27 +63,11 @@ const translate = memoize(
   (key, config) => (config ? key + JSON.stringify(config) : key),
 );
 
-const setI18nConfig = () => {
-  // fallback if no available language fits
-  const fallback = {languageTag: 'en', isRTL: false};
 
-  const {languageTag, isRTL} =
-    RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
-    fallback;
-  console.log(languageTag);
-  // clear translation cache
-  translate.cache.clear();
-  // update layout direction
-  I18nManager.forceRTL(isRTL);
-  // set i18n-js config
-  i18n.translations = {[languageTag]: translationGetters[languageTag]()};
-  i18n.locale = languageTag;
-};
 
 class SummaryScreen extends React.Component {
   constructor(props) {
     super(props);
-    setI18nConfig(); // set initial config
 
     this.state = {
       server_message: '',

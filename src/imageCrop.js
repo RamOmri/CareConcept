@@ -43,25 +43,9 @@ const translate = memoize(
   (key, config) => (config ? key + JSON.stringify(config) : key),
 );
 
-const setI18nConfig = () => {
-  // fallback if no available language fits
-  const fallback = {languageTag: 'en', isRTL: false};
 
-  const {languageTag, isRTL} =
-    RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
-    fallback;
-
-  // clear translation cache
-  translate.cache.clear();
-  // update layout direction
-  I18nManager.forceRTL(isRTL);
-  // set i18n-js config
-  i18n.translations = {[languageTag]: translationGetters[languageTag]()};
-  i18n.locale = languageTag;
-};
 export default class imageCrop extends React.Component {
   constructor(props) {
-    setI18nConfig();
     super(props);
     this.state = {
       infoObj: this.props.route.params.infoObj,
@@ -70,8 +54,6 @@ export default class imageCrop extends React.Component {
       imageWidth: 0,
       loading: true,
     };
-    setI18nConfig(); // set initial config
-    //alert(JSON.stringify(this.state.infoObj.pages[this.state.infoObj.pages.length - 1].url))
   }
 
   async componentDidMount() {

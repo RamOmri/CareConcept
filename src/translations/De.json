@@ -49,5 +49,7 @@
   "Finished submitting claim": "Fertig mit dem Einreichen des Anspruchs",
  "Select policy holder's sex":"Wählen Sie das Geschlecht des Versicherungsnehmers",
  "Scan Document":"Dokument scannen",
- "Please wait while we send your claim":"Bitte warten Sie, während wir Ihren Antrag abschicken..."
+ "Please wait while we send your claim":"Bitte warten Sie, während wir Ihren Antrag abschicken...",
+ "Language":"Sprache",
+ "Set language" : "Sprache einstellen"
 }
