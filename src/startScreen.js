@@ -37,7 +37,7 @@ import * as RNLocalize from 'react-native-localize';
 import i18n from 'i18n-js';
 import memoize from 'lodash.memoize'; // Use for caching/memoize for better performance
 
-var language = null
+
 
 const translationGetters = {
   // lazy requires (metro bundler does not support symlinks)
@@ -68,7 +68,7 @@ const setI18nConfig = async (userSelect) => {
   // set i18n-js config
   i18n.translations = {[languageTag]: translationGetters[languageTag]()};
   i18n.locale = languageTag;
-   language = JSON.stringify(languageTag)
+  return JSON.stringify(languageTag)
 };
 
 
@@ -110,9 +110,9 @@ class StartScreen extends React.Component {
   }
 
   async componentDidMount() { 
-    await setI18nConfig(null)
+   let lang = await setI18nConfig(null)
     this.forceUpdate()
-    this.props.setLanguage(language)
+    this.props.setLanguage(lang)
   }
 
   render() {
@@ -127,7 +127,7 @@ class StartScreen extends React.Component {
           <ImageBackground
             resizeMode="contain"
             style={styles.container}
-            source={language && language.includes('de') && require('./img/startScreenDe.jpg') || language && language.includes('en') && require('./img/startScreenEn.jpg')}
+            source={ this.props.language.includes('de') && require('./img/startScreenDe.jpg') || this.props.language.includes('en') && require('./img/startScreenEn.jpg')}
             style={{
               resizeMode: 'stretch',
               flex: 1,

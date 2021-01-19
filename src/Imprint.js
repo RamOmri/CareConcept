@@ -64,7 +64,7 @@ const translate = memoize(
 );
 
 
-class InfoMenu extends React.Component {
+class Imprint extends React.Component {
   constructor(props) {  
     super(props);
 
@@ -93,46 +93,6 @@ class InfoMenu extends React.Component {
   };
   render() {
  
-    if(this.state.imprintView || this.state.privacyView){
-        return(
-            <View style={{flex: 1, backgroundColor: '#004799'}}>
-         
-          <TouchableOpacity
-            style={{
-              marginLeft: 20,
-              margin: 10,
-              backgroundColor: 'orange',
-              height: Dimensions.get('screen').height / 17,
-              width: Dimensions.get('screen').width / 3.5,
-              justifyContent: 'center',
-              alignItems: 'center',
-              borderTopLeftRadius: 200,
-              borderBottomLeftRadius: 200,
-            }}
-            onPress={() => {
-              this.setState({imprintView:false})
-              this.setState({privacyView:false})
-            }}>
-            <View>
-              <Text style={{color: 'white', fontSize: 12}}>
-                {translate('Go Back')}
-              </Text>
-            </View>
-          </TouchableOpacity>
-          <WebView
-            startInLoadingState
-            renderLoading={this.renderLoading}
-            source={{
-              uri:
-                this.props.language.includes('en') && 'https://www.care-concept.de/scripte/sniplets/app_general_information_eng.php?navilang=eng' ||
-                 this.props.language.includes('de') && "https://www.care-concept.de/scripte/sniplets/app_general_information.php"
-            }}
-            style={{marginTop: 20}}
-          />
-        </View>
-        )
-    }
-    else{
             return (
             <ImageBackground
                 style={styles.container}
@@ -147,33 +107,21 @@ class InfoMenu extends React.Component {
                 source={require('./img/CareConceptLogo.png')}
                 style={styles.logo}
                 />
-
-                <View style = {{justifyContence:'center',alignItems:'center'}}>
-                    <TouchableOpacity
-                    onPress = {()=> this.setState({imprintView: true})}
-                    style = {styles.buttonStyle}
-                    >
-                        <Text style = {styles.buttonText}>
-                            Imprint
-                        </Text>
-                    </TouchableOpacity>
-
-                </View>
-                <View style = {{justifyContence:'center',alignItems:'center'}}>
-                    <TouchableOpacity
-                     onPress = {()=> this.setState({privacyView: true})}
-                     style = {styles.buttonStyle}
-                    >
-                        <Text style = {styles.buttonText}>
-                            Privacy information
-                        </Text>
-                    </TouchableOpacity>
-
-                </View>
+                     <WebView
+            startInLoadingState
+            renderLoading={this.renderLoading}
+            source={{
+              uri:
+                this.props.language.includes('en') && 'https://www.care-concept.de/scripte/sniplets/app_general_information_eng.php?navilang=eng' ||
+                 this.props.language.includes('de') && "https://www.care-concept.de/scripte/sniplets/app_general_information.php"
+            }}
+            style={{marginTop: 20}}
+          />
+                
             
             </ImageBackground>
             );
-    }
+    
   }
 
 
@@ -216,4 +164,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(InfoMenu);
+export default connect(mapStateToProps, mapDispatchToProps)(Imprint);

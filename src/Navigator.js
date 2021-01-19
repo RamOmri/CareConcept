@@ -22,6 +22,7 @@ import {
 
 import StartScreen from './startScreen'
 import InfoMenu from './infoMenu'
+import Imprint from './Imprint'
 
 import Scanner from './Scanner';
 import ScanPreview from './ScanPreview';
@@ -30,6 +31,8 @@ import imageCrop from './imageCrop';
 import PolicyInfo from './PolicyInfo';
 import SummaryScreen from './SummaryScreen';
 import DocumentInfo from './DocumentInfo';
+
+
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -88,7 +91,7 @@ const infoStack = () => (
   >
  <Tab.Screen name = "Start" component = {StartScreen} />
  <Tab.Screen name = "Information" component = {InfoMenu} />
-  {/* <Tab.Screen name="Settings" component={SettingsScreen} /> */}
+ <Tab.Screen name = "Imprint" component = {Imprint} />
   </Tab.Navigator>
 )
 
@@ -99,7 +102,7 @@ export default () => (
         headerShown: false,
       }
       }>
-      <Stack.Screen name = "infoStack" component = {infoStack} />
+      <Stack.Screen name = "startScreen" component = {infoStack} />
       <Stack.Screen name="ClaimStack" component={ClaimStack} />
       <Stack.Screen name="ScanStack" component={ScanStack} />
     </Stack.Navigator>

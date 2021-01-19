@@ -406,7 +406,10 @@ class SummaryScreen extends React.Component {
 
 const styles = StyleSheet.create({
   logo: {
-    margin: 10,
+    width:Dimensions.get('window').width/2,
+    height: Dimensions.get('window').height/9,
+    marginLeft: 15,
+    marginBottom: 20,
   },
   DocumentText: {
     flexDirection: 'row',

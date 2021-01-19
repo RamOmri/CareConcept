@@ -110,16 +110,12 @@ class PolicyInfo extends React.Component {
         },
       },
     };
-    console.log(this.props);
   }
 
   componentDidMount() {
-    console.log('!!!!!!!!!!!!!!!! '+ this.props.language)
-    RNLocalize.addEventListener('change', this.handleLocalizationChange);
   }
 
   componentWillUnmount() {
-    RNLocalize.removeEventListener('change', this.handleLocalizationChange);
   }
 
   renderLoading = () => {
@@ -296,21 +292,27 @@ class PolicyInfo extends React.Component {
     );
   }
   checkFields = () => {
+    let fieldsCorrect = true
+    let errorMessage = ''
     if (!this.checkInsuranceNumber()) {
-      alert(translate('Please check your insurance number'));
-      return false;
-    } else if (this.props.gender === 'Select') {
-      alert(translate('Please select your gender'));
-      return false;
-    } else if (this.props.FirstName === '' || this.props.Surname === '') {
-      alert(translate('Please enter your name'));
-      return false;
-    } else if (!this.checkName()) {
-      alert('Please only use latin characters in your name');
-      return false;
+      errorMessage = errorMessage + translate('Please check your insurance number') + ' \n'
+      fieldsCorrect = false;
+    } 
+    if (this.props.gender === 'Select') {
+      errorMessage = errorMessage + translate('Please select your gender') + ' \n'
+      fieldsCorrect = false
     }
-
-    return true;
+     if (this.props.FirstName === '' || this.props.Surname === '') {
+      errorMessage = errorMessage + translate('Please enter your name') + ' \n'
+      fieldsCorrect = false
+    } 
+    if (!this.checkName()) {
+      errorMessage = errorMessage + 'Please only use latin characters in your name' + ' \n'
+      fieldsCorrect = false
+    }
+    
+    if(!fieldsCorrect) alert(errorMessage)
+    return fieldsCorrect
   };
 
   checkName = () => {
@@ -407,7 +409,9 @@ class PolicyInfo extends React.Component {
 
 const styles = StyleSheet.create({
   logo: {
-    margin: 10,
+    width:Dimensions.get('window').width/2,
+    height: Dimensions.get('window').height/9,
+    marginLeft: 15,
     marginBottom: 20,
   },
   headerText: {

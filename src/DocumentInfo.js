@@ -680,6 +680,8 @@ class DocumentInfo extends React.Component {
   };
 
   checkFieldsBeforeContinue() {
+    let correctFields = true
+    let errorMessage = ''
     if (this.state.infoObj.docType === 'Other Document')
       this.state.infoObj.sendMoneyToContractualServices = 'Yes';
 
@@ -687,50 +689,40 @@ class DocumentInfo extends React.Component {
       this.state.isDocumentGerman === 'Select' &&
       this.state.docType === 'Claim Document'
     ) {
-      alert(translate('Please make sure all fields have been selected'));
-      return false;
-    } else if (
+      errorMessage = translate('Please make sure all fields have been selected') + ' \n'
+      correctFields = false;
+    }
+    if (
       this.state.infoObj.sendMoneyToContractualServices == 'No' &&
       !this.checkName(this.state.infoObj.AccountHolder)
     ) {
-      alert(`${translate('please check your bank details')} (name)`);
-      return false;
-    } else if (
+      errorMessage = errorMessage + `${translate('please check your bank details')} (name)` + ' \n'
+      correctFields = false;
+    }
+    if (
       this.state.infoObj.sendMoneyToContractualServices == 'No' &&
-      !bic.isValid(this.state.infoObj.BIC)
-    ) {
-      console.log(':::::::::::::::: ' + bic.isValid(this.state.infoObj.BIC));
-      alert(`${translate('please check your bank details')} (bic)`);
-      return false;
-    } else if (
-      this.state.infoObj.sendMoneyToContractualServices == 'No' &&
+      !bic.isValid(this.state.infoObj.BIC) ||
+       this.state.infoObj.sendMoneyToContractualServices == 'No' &&
       this.props.bic == ''
     ) {
-      alert(`${translate('please check your bank details')} (BIC)`);
-      return false;
-    } else if (
+      errorMessage = errorMessage + `${translate('please check your bank details')} (BIC)` + ' \n'
+      correctFields = false;
+    } 
+    
+    if (
       this.state.infoObj.sendMoneyToContractualServices == 'No' &&
-      !IBAN.isValid(this.state.infoObj.IBAN)
-    ) {
-      console.log(
-        ':::::::::::::::: ' +
-          bic.isValid(this.state.infoObj.IBAN) +
-          this.state.infoObj.IBAN,
-      );
-      alert(`${translate('please check your bank details')} (IBAN)`);
-      return false;
-    } else if (
-      this.state.infoObj.sendMoneyToContractualServices == 'No' &&
+      !IBAN.isValid(this.state.infoObj.IBAN) || this.state.infoObj.sendMoneyToContractualServices == 'No' &&
       this.props.iban == ''
     ) {
-      alert(`${translate('please check your bank details')} (iban)`);
-      return false;
-    } else if (!this.props.date) {
-      alert(translate('Please enter a birth date'));
-      return false;
-    } else {
-      return true;
+      errorMessage = errorMessage + `${translate('please check your bank details')} (IBAN)` + ' \n'
+      correctFields = false;
     }
+    if (!this.props.date) {
+      errorMessage = errorMessage + translate('Please enter a birth date') + ' \n'
+      correctFields = false;
+    } 
+    if(!correctFields) alert(errorMessage)
+    return correctFields
   }
 
   componentDidMount() {
@@ -764,7 +756,9 @@ class DocumentInfo extends React.Component {
 
 const styles = StyleSheet.create({
   logo: {
-    margin: 10,
+    width:Dimensions.get('window').width/2,
+    height: Dimensions.get('window').height/9,
+    marginLeft: 15,
     marginBottom: 20,
   },
   button: {
