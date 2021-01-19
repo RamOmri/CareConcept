@@ -27,6 +27,7 @@ import {addDoc} from './actions/claimActions';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {CommonActions} from '@react-navigation/native';
 
+
 import * as RNLocalize from 'react-native-localize';
 import i18n from 'i18n-js';
 import memoize from 'lodash.memoize'; // Use for caching/memoize for better performance

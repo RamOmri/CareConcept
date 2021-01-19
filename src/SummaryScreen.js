@@ -74,20 +74,22 @@ class SummaryScreen extends React.Component {
       isLoading: false,
       finishedSending: false,
     };
+
     BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
   }
 
   componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress', this.onBackPress());
+    
+    BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
   }
 
   onBackPress = () => {
     if (!this.state.isLoading) {
       this.props.navigation.navigate('ClaimStack', {
-        params: {Document: [], index: -1},
+        params: {},
         screen: 'PolicyInfo',
-      });
-      return true;
+      })
+      return true
     } else {
       return true;
     }

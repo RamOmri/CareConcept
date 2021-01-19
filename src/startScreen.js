@@ -132,24 +132,7 @@ class StartScreen extends React.Component {
               resizeMode: 'stretch',
               flex: 1,
             }}>
-              <TouchableOpacity
-              style = {{
-                position:'absolute',
-                top:Dimensions.get('window').height/16,
-                left:Dimensions.get('window').width/1.6,
-               }}
-              onPress = { async () =>{
-                lang = await userLanguageSelect(true)
-                this.props.setLanguage(lang.languageTag)
-                this.forceUpdate()
-              }}
-              >
-          <View style = {{height:30, width: Dimensions.get('window').width/3, backgroundColor:'#004799', borderRadius:30, justifyContent:'center', alignItems:'center'}}>   
-           <Text style = {{fontSize:8, fontWeight:'bold', color: 'white'}}>
-              {translate("Set language")}
-           </Text>
-           </View> 
-        </TouchableOpacity>
+              
 
             <TouchableOpacity
             style = {{backgroundColor: '#f59b00',

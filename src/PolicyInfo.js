@@ -68,27 +68,6 @@ const translationGetters = {
   de: () => require('./translations/De.json'),
 };
 
-const setI18nConfig = async (userSelect) => {
-  let lang = userSelect
-  if(RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) == null && lang == null) lang = await userLanguageSelect(false)
-   
-  const {languageTag, isRTL} =
-    lang || RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters))
- 
-  // clear translation cache
-  translate.cache.clear();
-  // update layout direction
-  try {
-    I18nManager.allowRTL(false);
-  } catch (e) {
-    console.log(e);
-  }
-  // set i18n-js config
-  i18n.translations = {[languageTag]: translationGetters[languageTag]()};
-  i18n.locale = languageTag;
-  console.log('++ ' + JSON.stringify(languageTag))
-  return JSON.stringify(languageTag)
-};
 
 
 class PolicyInfo extends React.Component {
@@ -141,18 +120,7 @@ class PolicyInfo extends React.Component {
   }
 
  async componentDidMount() {
-   this.state.didBlurSubscription = this.props.navigation.addListener(
-      'focus',
-     async () => {
-        console.log(':::::::::::::::::::::::---------------' + this.props.language)
-        if(this.props.language.includes('en')) await setI18nConfig({languageTag: 'en', isRTL: false})
-        else await setI18nConfig({languageTag: 'de', isRTL: false})
-        this.forceUpdate()
-      },
-      () =>{
-        console.log(';;;;;;;;;;;;;;;;')
-      }
-      )
+  
       
   }
  
