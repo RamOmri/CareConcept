@@ -91,7 +91,7 @@ const infoStack = () => (
   >
  <Tab.Screen name = "Start" component = {StartScreen} />
  <Tab.Screen name = "Information" component = {InfoMenu} />
- <Tab.Screen name = "Imprint" component = {Imprint} />
+ <Tab.Screen name = "Imprint" component = {InfoMenu} />
   </Tab.Navigator>
 )
 
@@ -102,7 +102,7 @@ export default () => (
         headerShown: false,
       }
       }>
-      <Stack.Screen name = "startScreen" component = {infoStack} />
+      <Stack.Screen name = "infoStack" component = {infoStack} />
       <Stack.Screen name="ClaimStack" component={ClaimStack} />
       <Stack.Screen name="ScanStack" component={ScanStack} />
     </Stack.Navigator>

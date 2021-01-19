@@ -135,7 +135,7 @@ class StartScreen extends React.Component {
               <TouchableOpacity
               style = {{
                 position:'absolute',
-                top:Dimensions.get('window').height/11.8,
+                top:Dimensions.get('window').height/16,
                 left:Dimensions.get('window').width/1.6,
                }}
               onPress = { async () =>{
@@ -144,8 +144,8 @@ class StartScreen extends React.Component {
                 this.forceUpdate()
               }}
               >
-          <View style = {{height:30, width: Dimensions.get('window').width/3.789, backgroundColor:'#004799', borderRadius:30, justifyContent:'center', alignItems:'center'}}>   
-           <Text style = {{fontSize:10, fontWeight:'bold', color: 'white'}}>
+          <View style = {{height:30, width: Dimensions.get('window').width/3, backgroundColor:'#004799', borderRadius:30, justifyContent:'center', alignItems:'center'}}>   
+           <Text style = {{fontSize:8, fontWeight:'bold', color: 'white'}}>
               {translate("Set language")}
            </Text>
            </View> 
@@ -156,7 +156,7 @@ class StartScreen extends React.Component {
             position: 'absolute',
             height: Dimensions.get('window').width/3.789,
             width: Dimensions.get('window').width/3.789,
-            top:Dimensions.get('window').height/4.656,
+            top:Dimensions.get('window').height/6.2,
             borderRadius:1000,
             left:Dimensions.get('window').width/1.5,
             justifyContent:'center',
@@ -165,7 +165,7 @@ class StartScreen extends React.Component {
           }
             
                 onPress ={() =>{
-                    this.props.navigation.push('ClaimStack', {
+                    this.props.navigation.navigate('ClaimStack', {
                         params: {},
                         screen: 'PolicyInfo',
                       })

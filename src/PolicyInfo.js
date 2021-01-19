@@ -62,6 +62,33 @@ const translate = memoize(
   (key, config) => i18n.t(key, config),
   (key, config) => (config ? key + JSON.stringify(config) : key),
 );
+const translationGetters = {
+  // lazy requires (metro bundler does not support symlinks)
+  en: () => require('./translations/eng.json'),
+  de: () => require('./translations/De.json'),
+};
+
+const setI18nConfig = async (userSelect) => {
+  let lang = userSelect
+  if(RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) == null && lang == null) lang = await userLanguageSelect(false)
+   
+  const {languageTag, isRTL} =
+    lang || RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters))
+ 
+  // clear translation cache
+  translate.cache.clear();
+  // update layout direction
+  try {
+    I18nManager.allowRTL(false);
+  } catch (e) {
+    console.log(e);
+  }
+  // set i18n-js config
+  i18n.translations = {[languageTag]: translationGetters[languageTag]()};
+  i18n.locale = languageTag;
+  console.log('++ ' + JSON.stringify(languageTag))
+  return JSON.stringify(languageTag)
+};
 
 
 class PolicyInfo extends React.Component {
@@ -72,6 +99,7 @@ class PolicyInfo extends React.Component {
     YellowBox.ignoreWarnings(['']);
 
     this.state = {
+      didBlurSubscription: null,
       optionStyles: {
         optionTouchable: {
           underlayColor: '#E5ECF5',
@@ -112,12 +140,23 @@ class PolicyInfo extends React.Component {
     };
   }
 
-  componentDidMount() {
+ async componentDidMount() {
+   this.state.didBlurSubscription = this.props.navigation.addListener(
+      'focus',
+     async () => {
+        console.log(':::::::::::::::::::::::---------------' + this.props.language)
+        if(this.props.language.includes('en')) await setI18nConfig({languageTag: 'en', isRTL: false})
+        else await setI18nConfig({languageTag: 'de', isRTL: false})
+        this.forceUpdate()
+      },
+      () =>{
+        console.log(';;;;;;;;;;;;;;;;')
+      }
+      )
+      
   }
-
-  componentWillUnmount() {
-  }
-
+ 
+  
   renderLoading = () => {
     return (
       <View
@@ -184,10 +223,24 @@ class PolicyInfo extends React.Component {
             <StatusBar />
           </View>
         )}
+        <View style = {{flexDirection:'row'}}>
+        <TouchableOpacity
+        onPress = {()=>{
+          this.props.navigation.navigate('infoStack', {
+            params: {Document: [], index: -1},
+            screen: 'StartScreen',
+          });
+        }}
+        >
+        <Image 
+        style = {styles.backButton}
+        source = {require('./img/back_circle.png')} />
+        </TouchableOpacity>
         <Image
           source={require('./img/CareConceptLogo.png')}
           style={styles.logo}
         />
+        </View>
         <KeyboardAvoidingView>
           <ScrollView contentContainerStyle={{flexGrow: 1}}>
             <View style={{flex: 1, alignItems: 'center', marginBottom: 200}}>
@@ -199,14 +252,14 @@ class PolicyInfo extends React.Component {
                   marginBottom: 20,
                   textAlign: 'center',
                 }}>
-                *Press these (
+                *{translate("Press these")} (
                 {
                   <Image
                     source={require('./img/questionMark.png')}
                     style={{width: 20, height: 20}}
                   />
                 }
-                ) icons for instructions
+                ) {translate("icons for instructions")}
               </Text>
               <TouchableOpacity
                 onPress={() => {
@@ -411,7 +464,7 @@ const styles = StyleSheet.create({
   logo: {
     width:Dimensions.get('window').width/2,
     height: Dimensions.get('window').height/9,
-    marginLeft: 15,
+    marginLeft: 5,
     marginBottom: 20,
   },
   headerText: {
@@ -429,6 +482,12 @@ const styles = StyleSheet.create({
     color: '#E67F00',
     alignSelf: 'center',
     textAlign: 'center',
+  },
+  backButton:{
+    marginLeft:10,
+    marginTop:10,
+    height:Dimensions.get('window').height/16,
+    width: Dimensions.get('window').height/16,
   },
   button: {
     width: Dimensions.get('window').width / 2.5,

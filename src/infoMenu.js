@@ -56,21 +56,18 @@ import * as RNLocalize from 'react-native-localize';
 import i18n from 'i18n-js';
 import memoize from 'lodash.memoize'; // Use for caching/memoize for better performance
 
-
-
 const translate = memoize(
   (key, config) => i18n.t(key, config),
   (key, config) => (config ? key + JSON.stringify(config) : key),
 );
 
-
 class InfoMenu extends React.Component {
-  constructor(props) {  
+  constructor(props) {
     super(props);
 
     this.state = {
-     imprintView: false,
-     privacyView:false
+      imprintView: false,
+      privacyView: false,
     };
     console.log(this.props);
   }
@@ -92,112 +89,58 @@ class InfoMenu extends React.Component {
     );
   };
   render() {
- 
-    if(this.state.imprintView || this.state.privacyView){
-        return(
-            <View style={{flex: 1, backgroundColor: '#004799'}}>
-         
-          <TouchableOpacity
-            style={{
-              marginLeft: 20,
-              margin: 10,
-              backgroundColor: 'orange',
-              height: Dimensions.get('screen').height / 17,
-              width: Dimensions.get('screen').width / 3.5,
-              justifyContent: 'center',
-              alignItems: 'center',
-              borderTopLeftRadius: 200,
-              borderBottomLeftRadius: 200,
-            }}
-            onPress={() => {
-              this.setState({imprintView:false})
-              this.setState({privacyView:false})
-            }}>
-            <View>
-              <Text style={{color: 'white', fontSize: 12}}>
-                {translate('Go Back')}
-              </Text>
+      return (
+        <ImageBackground
+          style={styles.container}
+          source={require('./img/background.jpg')}
+          style={{resizeMode: 'stretch', flex: 1}}>
+          {Platform.OS != 'android' && (
+            <View style={{paddingTop: getStatusBarHeight()}}>
+              <StatusBar />
             </View>
-          </TouchableOpacity>
+          )}
+          <Image
+            source={require('./img/CareConceptLogo.png')}
+            style={styles.logo}
+          />
+
           <WebView
             startInLoadingState
             renderLoading={this.renderLoading}
             source={{
               uri:
-                this.props.language.includes('en') && 'https://www.care-concept.de/scripte/sniplets/app_general_information_eng.php?navilang=eng' ||
-                 this.props.language.includes('de') && "https://www.care-concept.de/scripte/sniplets/app_general_information.php"
+                (this.props.language.includes('en') &&
+                  'https://www.care-concept.de/scripte/sniplets/app_general_information_eng.php?navilang=eng') ||
+                (this.props.language.includes('de') &&
+                  'https://www.care-concept.de/scripte/sniplets/app_general_information.php'),
             }}
             style={{marginTop: 20}}
           />
-        </View>
-        )
-    }
-    else{
-            return (
-            <ImageBackground
-                style={styles.container}
-                source={require('./img/background.jpg')}
-                style={{resizeMode: 'stretch', flex: 1}}>
-                {Platform.OS != 'android' && (
-                <View style={{paddingTop: getStatusBarHeight()}}>
-                    <StatusBar />
-                </View>
-                )}
-                <Image
-                source={require('./img/CareConceptLogo.png')}
-                style={styles.logo}
-                />
-
-                <View style = {{justifyContence:'center',alignItems:'center'}}>
-                    <TouchableOpacity
-                    onPress = {()=> this.setState({imprintView: true})}
-                    style = {styles.buttonStyle}
-                    >
-                        <Text style = {styles.buttonText}>
-                            Imprint
-                        </Text>
-                    </TouchableOpacity>
-
-                </View>
-                <View style = {{justifyContence:'center',alignItems:'center'}}>
-                    <TouchableOpacity
-                     onPress = {()=> this.setState({privacyView: true})}
-                     style = {styles.buttonStyle}
-                    >
-                        <Text style = {styles.buttonText}>
-                            Privacy information
-                        </Text>
-                    </TouchableOpacity>
-
-                </View>
-            
-            </ImageBackground>
-            );
-    }
+        </ImageBackground>
+      );
+    
   }
-
-
 }
 
 const styles = StyleSheet.create({
-  buttonText:{
-    color:'white',
-    fontSize:13,
-    fontWeight:'bold'
+  buttonText: {
+    color: 'white',
+    fontSize: 13,
+    fontWeight: 'bold',
   },
-  buttonStyle:{
-      height:Dimensions.get('window').height/16,
-      width:Dimensions.get('window').width/1.6,
-      borderRadius:20,
-      alignSelf:'center',
-      justifyContent:'center',
-      alignItems:'center',
-      backgroundColor:'#f59b00',
-      margin:40
+  buttonStyle: {
+    height: Dimensions.get('window').height / 16,
+    width: Dimensions.get('window').width / 1.6,
+    borderRadius: 20,
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f59b00',
+    margin: 40,
   },
   logo: {
-    width:Dimensions.get('window').width/2,
-    height: Dimensions.get('window').height/9,
+    width: Dimensions.get('window').width / 2,
+    height: Dimensions.get('window').height / 9,
     marginLeft: 15,
     marginBottom: 20,
   },
@@ -211,9 +154,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return {
-  
-  };
+  return {};
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(InfoMenu);
