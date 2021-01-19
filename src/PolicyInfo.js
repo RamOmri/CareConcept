@@ -200,9 +200,6 @@ class PolicyInfo extends React.Component {
           });
         }}
         >
-        <Image 
-        style = {styles.backButton}
-        source = {require('./img/back_circle.png')} />
         </TouchableOpacity>
         <Image
           source={require('./img/CareConceptLogo.png')}
@@ -432,7 +429,7 @@ const styles = StyleSheet.create({
   logo: {
     width:Dimensions.get('window').width/2,
     height: Dimensions.get('window').height/9,
-    marginLeft: 5,
+    marginLeft: 20,
     marginBottom: 20,
   },
   headerText: {

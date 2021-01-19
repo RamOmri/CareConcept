@@ -725,6 +725,8 @@ class DocumentInfo extends React.Component {
     return correctFields
   }
 
+ 
+
   componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
   }
