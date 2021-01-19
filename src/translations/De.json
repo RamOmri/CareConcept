@@ -51,5 +51,6 @@
  "Scan Document":"Dokument scannen",
  "Please wait while we send your claim":"Bitte warten Sie, während wir Ihren Antrag abschicken...",
  "Language":"Sprache",
- "Set language" : "Sprache einstellen"
+ "Set language" : "Sprache einstellen",
+ "Please enter a valid birth date": "Bitte geben Sie ein gültiges Geburtsdatum ein"
 }

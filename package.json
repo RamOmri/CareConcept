@@ -31,6 +31,7 @@
     "react-native": "0.63.3",
     "react-native-amazing-cropper": "^0.1.4",
     "react-native-base64": "^0.2.1",
+    "react-native-common-date-picker": "^2.3.3",
     "react-native-fs": "^2.16.6",
     "react-native-gesture-handler": "^1.8.0",
     "react-native-image-base64": "^0.1.4",

@@ -16,7 +16,9 @@ import {
   Dimensions,
   Keyboard,
   I18nManager,
-  ActivityIndicator
+  ActivityIndicator,
+  Platform,
+  Modal
 } from 'react-native';
 
 import {
@@ -56,7 +58,7 @@ import * as RNLocalize from 'react-native-localize';
 import i18n from 'i18n-js';
 import memoize from 'lodash.memoize'; // Use for caching/memoize for better performance
 import {WebView} from 'react-native-webview';
-
+import {DatePicker} from "react-native-common-date-picker";
 const translationGetters = {
   // lazy requires (metro bundler does not support symlinks)
   en: () => require('./translations/eng.json'),
@@ -388,24 +390,62 @@ class DocumentInfo extends React.Component {
             </Text>
           </View>
         </TouchableOpacity>
-        <DateTimePickerModal
+       {(Platform.OS == 'ios') && <DateTimePickerModal
           isVisible={this.state.isDatePickerVisible}
           mode="date"
           date={new Date()}
           onConfirm={(date) => {
-            this.handleConfirm(date);
+            this.handleConfirmIOS(date);
           }}
           onCancel={() => {
             this.setState({isDatePickerVisible: false});
           }}
-        />
+        />}
+
+        {(Platform.OS == 'android' && this.state.isDatePickerVisible) && <DatePicker
+        type = 'DD-MM-YYYY'
+        monthDisplayMode={'en-short'}
+    confirm={date => {
+      date = date.split("-")
+      let birthDate = date[2] + "/" + date[1] + "/" + date[0]
+      console.log(birthDate)
+      if(this.checkBirthDateAndroid(birthDate)){
+          this.state.infoObj = {
+      ...this.state.infoObj,
+      dateStatus: birthDate,
+    };
+    this.props.set_date(birthDate);
+    this.setState({isDatePickerVisible:false})
+      }
+      else{
+        alert(translate("Please enter a valid birth date"))
+      }
+       
+    }}
+    minDate = {'1920/01/01'}
+    cancel = {()=> this.setState({isDatePickerVisible:false})}
+    toolBarConfirmStyle = {{color:'#004799', fontWeight:'bold'}}
+/>}
       </View>
     );
   }
 
-  handleConfirm = (date) => {
+  checkBirthDateAndroid = (birthDate) =>{
+   birthDate =  birthDate.split("/")
+  let year = new Date()
+   year = year.getFullYear().toString()
+
+    if(parseInt(year) - parseInt(birthDate[2]) >= 100){
+      return false
+    }
+    else{
+    return true
+  }
+}
+
+  handleConfirmIOS = (date) => {
     console.log('::::::::::::::::::: ++++' + this._calculateAge(date)[1]);
-    this.state.isDatePickerVisible = false;
+    
     var day = parseInt(date.getDate().toString());
     var month = (date.getMonth() + 1).toString();
     var year = date.getFullYear().toString();
@@ -420,8 +460,9 @@ class DocumentInfo extends React.Component {
       ...this.state.infoObj,
       dateStatus: birthDate,
     };
+    this.setState({isDatePickerVisible:false})
     if (this._calculateAge(date)[0] < 0 || this._calculateAge(date)[1] >= 100) {
-      alert('Please enter a valid birth date');
+      alert(translate('Please enter a valid birth date'));
     } else {
       this.props.set_date(birthDate);
     }
@@ -470,13 +511,13 @@ class DocumentInfo extends React.Component {
               text={translate('No')}
             />
           </MenuOptions>
-          {this.renderIsFromSameAccount()}
+          {this.renderSendMoneyTo()}
         </Menu>
       </View>
     );
   }
 
-  renderIsFromSameAccount = () => {
+  renderSendMoneyTo = () => {
     return (
       <View style={{}}>
         <Text style={styles.questionText}>
