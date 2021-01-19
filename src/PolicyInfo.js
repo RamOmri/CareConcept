@@ -116,16 +116,11 @@ class PolicyInfo extends React.Component {
   componentDidMount() {
     console.log('!!!!!!!!!!!!!!!! '+ this.props.language)
     RNLocalize.addEventListener('change', this.handleLocalizationChange);
-    BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
   }
 
   componentWillUnmount() {
     RNLocalize.removeEventListener('change', this.handleLocalizationChange);
-    BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
   }
-  onBackPress = () => {
-    return true;
-  };
 
   renderLoading = () => {
     return (

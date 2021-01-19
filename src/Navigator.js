@@ -1,6 +1,8 @@
 import React, {Component, useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
 
 import {
   StyleSheet,
@@ -19,6 +21,7 @@ import {
 } from 'react-native';
 
 import StartScreen from './startScreen'
+import InfoMenu from './infoMenu'
 
 import Scanner from './Scanner';
 import ScanPreview from './ScanPreview';
@@ -29,6 +32,7 @@ import SummaryScreen from './SummaryScreen';
 import DocumentInfo from './DocumentInfo';
 
 const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 
 const ScanStack = () => (
   <Stack.Navigator
@@ -58,13 +62,44 @@ const ClaimStack = () => (
   </Stack.Navigator>
 );
 
+const infoStack = () => (
+  <Tab.Navigator
+  tabBarOptions={
+    {
+        style: {
+            flex:0.13,
+            flexDirection: 'row',
+            alignSelf: 'center',
+            elevation: 6,
+            fontSize:16,
+            backgroundColor:'#004799',
+            justifyContent:'center',
+            alignItems:'center'
+        },
+        labelStyle: {
+          fontSize: 14,
+          fontWeight:'bold'
+          
+        },
+        inactiveTintColor: 'white',
+        activeTintColor:'#f59b00'
+    }
+}
+  >
+ <Tab.Screen name = "Start" component = {StartScreen} />
+ <Tab.Screen name = "Information" component = {InfoMenu} />
+  {/* <Tab.Screen name="Settings" component={SettingsScreen} /> */}
+  </Tab.Navigator>
+)
+
 export default () => (
   <NavigationContainer>
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
-      }}>
-      <Stack.Screen name = "startScreen" component = {StartScreen} />
+      }
+      }>
+      <Stack.Screen name = "infoStack" component = {infoStack} />
       <Stack.Screen name="ClaimStack" component={ClaimStack} />
       <Stack.Screen name="ScanStack" component={ScanStack} />
     </Stack.Navigator>
