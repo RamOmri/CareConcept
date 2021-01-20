@@ -405,7 +405,8 @@ class DocumentInfo extends React.Component {
         {(Platform.OS == 'android' && this.state.isDatePickerVisible) && <DatePicker
         type = 'DD-MM-YYYY'
         monthDisplayMode={'en-short'}
-    confirm={date => {
+
+        confirm={date => {
       date = date.split("-")
       let birthDate = date[2] + "/" + date[1] + "/" + date[0]
       console.log(birthDate)
@@ -422,6 +423,7 @@ class DocumentInfo extends React.Component {
       }
        
     }}
+    onDateChange={new Date()}
     minDate = {'1920/01/01'}
     cancel = {()=> this.setState({isDatePickerVisible:false})}
     toolBarConfirmStyle = {{color:'#004799', fontWeight:'bold'}}

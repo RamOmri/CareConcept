@@ -33,6 +33,9 @@ import PolicyInfo from './PolicyInfo';
 import SummaryScreen from './SummaryScreen';
 import DocumentInfo from './DocumentInfo';
 
+import {connect} from 'react-redux';
+import {setLanguage} from './actions/policInfoActions';
+
 import * as RNLocalize from 'react-native-localize';
 import i18n from 'i18n-js';
 import memoize from 'lodash.memoize'; // Use for caching/memoize for better performance
@@ -48,10 +51,9 @@ const translate = memoize(
   (key, config) => i18n.t(key, config),
   (key, config) => (config ? key + JSON.stringify(config) : key),
 );
-
 const setI18nConfig = async () => {
-   
-  const {languageTag, isRTL} = RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) || await userLanguageSelect()
+  const {languageTag, isRTL} = ("ende".includes(RNLocalize.getLocales()[0].languageCode)) && 
+                                RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) || await userLanguageSelect()
  
   // clear translation cache
   translate.cache.clear();
@@ -185,18 +187,6 @@ const infoStack = ({lang}) =>(
   </Tab.Navigator>
 
 )
-const mapStateToProps = (state) => {
-  //alert(JSON.stringify(state))
-  return {
-    language: state.policyInfoReducers.policyInfo.language,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-
-  };
-};
 
 
 
@@ -210,6 +200,8 @@ class Navigator extends React.Component{
 
   async componentDidMount(){
     let lang = await setI18nConfig()
+    this.props.setLanguage(lang)
+    console.log(this.props.language)
     this.setState({isLangSelected:true})
   }
    render(){
@@ -243,5 +235,20 @@ const styles = StyleSheet.create({
   tabs: {},
 });
 
-export default Navigator
+
+
+const mapStateToProps = (state) => {
+  //alert(JSON.stringify(state))
+  return {
+    language: state.policyInfoReducers.policyInfo.language,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setLanguage: (lang) => dispatch(setLanguage(lang))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Navigator)
 

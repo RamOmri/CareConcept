@@ -129,7 +129,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setLanguage: (lang) => dispatch(setLanguage(lang))
   };
 };
 

@@ -47,6 +47,7 @@ import {
   changeInsuranceNumber,
   changeGender,
   changeName,
+  setLanguage
 } from './actions/policInfoActions';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {PERMISSIONS, check, request, RESULTS} from 'react-native-permissions';
