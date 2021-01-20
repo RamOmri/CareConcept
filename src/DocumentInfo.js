@@ -18,7 +18,7 @@ import {
   I18nManager,
   ActivityIndicator,
   Platform,
-  Modal
+  Modal,
 } from 'react-native';
 
 import {
@@ -47,9 +47,7 @@ import {
   setBIC,
   setAccountHolder,
 } from './actions/claimActions';
-import {
-  setLanguage
-} from './actions/policInfoActions'
+import {setLanguage} from './actions/policInfoActions';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import bic from 'bic';
 var IBAN = require('iban');
@@ -58,7 +56,7 @@ import * as RNLocalize from 'react-native-localize';
 import i18n from 'i18n-js';
 import memoize from 'lodash.memoize'; // Use for caching/memoize for better performance
 import {WebView} from 'react-native-webview';
-import {DatePicker} from "react-native-common-date-picker";
+import {DatePicker} from 'react-native-common-date-picker';
 const translationGetters = {
   // lazy requires (metro bundler does not support symlinks)
   en: () => require('./translations/eng.json'),
@@ -70,7 +68,6 @@ const translate = memoize(
   (key, config) => (config ? key + JSON.stringify(config) : key),
 );
 
-
 class DocumentInfo extends React.Component {
   constructor(props) {
     super(props);
@@ -80,15 +77,15 @@ class DocumentInfo extends React.Component {
       docType: 'Select',
       sendMoneyToContractualServices: 'Select',
       isDatePickerVisible: false,
-      renderGeneralInfoWeb:false,
-      renderDocTypeInfoWeb:false,
+      renderGeneralInfoWeb: false,
+      renderDocTypeInfoWeb: false,
       infoObj: {
         pages: [],
       },
       menuStyle: {
         triggerText: {
           color: '#f59b00',
-          fontSize:14
+          fontSize: 14,
         },
         triggerWrapper: {
           padding: 5,
@@ -173,7 +170,6 @@ class DocumentInfo extends React.Component {
     }
   }
 
-
   renderLoading = () => {
     return (
       <View
@@ -192,48 +188,57 @@ class DocumentInfo extends React.Component {
   };
 
   render() {
-    if(this.state.renderGeneralInfoWeb || this.state.renderDocTypeInfoWeb){
-      return(
+    if (this.state.renderGeneralInfoWeb || this.state.renderDocTypeInfoWeb) {
+      return (
         <View style={{flex: 1, backgroundColor: '#004799'}}>
-         <View style = {{height:Dimensions.get('screen').height/15}}>
-        <TouchableOpacity
-          style={{
-            marginLeft: 20,
-            margin: 10,
-            backgroundColor: 'orange',
-            height: Dimensions.get('screen').height / 17,
-            width: Dimensions.get('screen').width / 4,
-            justifyContent: 'center',
-            alignItems: 'center',
-            borderTopLeftRadius: 200,
-            borderBottomLeftRadius: 200,
-          }}
-          onPress={() => {
-            this.setState({renderGeneralInfoWeb: false})
-            this.setState({renderDocTypeInfoWeb: false})
-          }}>
-          <View>
-            <Text style={{color: 'white', fontSize: 12}}>
-              {translate('Go Back')}
-            </Text>
+          <View style={{height: Dimensions.get('screen').height / 15}}>
+            <TouchableOpacity
+              style={{
+                marginLeft: 20,
+                margin: 10,
+                backgroundColor: 'orange',
+                height: Dimensions.get('screen').height / 17,
+                width: Dimensions.get('screen').width / 4,
+                justifyContent: 'center',
+                alignItems: 'center',
+                borderTopLeftRadius: 200,
+                borderBottomLeftRadius: 200,
+              }}
+              onPress={() => {
+                this.setState({renderGeneralInfoWeb: false});
+                this.setState({renderDocTypeInfoWeb: false});
+              }}>
+              <View>
+                <Text style={{color: 'white', fontSize: 12}}>
+                  {translate('Go Back')}
+                </Text>
+              </View>
+            </TouchableOpacity>
           </View>
-        </TouchableOpacity>
+          <View style={{flex: 0.9}}>
+            <WebView
+              startInLoadingState
+              renderLoading={this.renderLoading}
+              source={{
+                uri:
+                  (this.props.language.includes('en') &&
+                    this.state.renderGeneralInfoWeb &&
+                    'https://www.care-concept.de/scripte/sniplets/app_general_information_2_eng.php?navilang=eng') ||
+                  (this.props.language.includes('en') &&
+                    this.state.renderDocTypeInfoWeb &&
+                    'https://www.care-concept.de/scripte/sniplets/app_general_information_3_eng.php?navilang=eng') ||
+                  (this.props.language.includes('de') &&
+                    this.state.renderGeneralInfoWeb &&
+                    'https://www.care-concept.de/scripte/sniplets/app_general_information_2.php') ||
+                  (this.props.language.includes('de') &&
+                    this.state.renderDocTypeInfoWeb &&
+                    'https://www.care-concept.de/scripte/sniplets/app_general_information_3.php'),
+              }}
+              style={{marginTop: 20}}
+            />
+          </View>
         </View>
-        <View style = {{flex:0.9}}>
-        <WebView
-          startInLoadingState
-          renderLoading={this.renderLoading}
-          source={{
-            uri:  this.props.language.includes('en') && this.state.renderGeneralInfoWeb && 'https://www.care-concept.de/scripte/sniplets/app_general_information_2_eng.php?navilang=eng' ||
-                 this.props.language.includes('en') && this.state.renderDocTypeInfoWeb && 'https://www.care-concept.de/scripte/sniplets/app_general_information_3_eng.php?navilang=eng'||
-                 this.props.language.includes('de') && this.state.renderGeneralInfoWeb && 'https://www.care-concept.de/scripte/sniplets/app_general_information_2.php'||
-                 this.props.language.includes('de') && this.state.renderDocTypeInfoWeb && 'https://www.care-concept.de/scripte/sniplets/app_general_information_3.php'  ,
-          }}
-          style={{marginTop: 20}}
-        />
-        </View>
-      </View>
-    )   
+      );
     }
     return (
       <ImageBackground
@@ -247,10 +252,7 @@ class DocumentInfo extends React.Component {
         )}
 
         {Platform.OS === 'ios' && (
-          <View
-            style={{
-           
-            }}>
+          <View style={{}}>
             <TouchableOpacity
               onPress={() => {
                 this.onBackPress();
@@ -258,13 +260,13 @@ class DocumentInfo extends React.Component {
               <View
                 style={{
                   marginLeft: 10,
-                    backgroundColor: 'orange',
-                    height: Dimensions.get('window').height / 17,
-                    width: Dimensions.get('window').width / 4,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    borderTopLeftRadius: 200,
-                    borderBottomLeftRadius: 200,
+                  backgroundColor: 'orange',
+                  height: Dimensions.get('window').height / 17,
+                  width: Dimensions.get('window').width / 4,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  borderTopLeftRadius: 200,
+                  borderBottomLeftRadius: 200,
                 }}>
                 <Text style={{color: 'white', fontSize: 11}}>
                   {translate('Go Back')}
@@ -279,10 +281,15 @@ class DocumentInfo extends React.Component {
         />
         <View style={{}}>
           <ScrollView>
-            <View style={{marginBottom: 150, justifyContent:'center', marginLeft:20}}>
+            <View
+              style={{
+                marginBottom: 150,
+                justifyContent: 'center',
+                marginLeft: 20,
+              }}>
               <TouchableOpacity
                 onPress={() => {
-                  this.setState({renderGeneralInfoWeb: true})
+                  this.setState({renderGeneralInfoWeb: true});
                 }}>
                 <View
                   style={{
@@ -294,7 +301,6 @@ class DocumentInfo extends React.Component {
                     source={require('./img/questionMark.png')}
                     style={{width: 50, height: 50}}
                   />
-                
                 </View>
               </TouchableOpacity>
 
@@ -338,7 +344,7 @@ class DocumentInfo extends React.Component {
                 </Menu>
                 <TouchableOpacity
                   onPress={() => {
-                    this.setState({renderDocTypeInfoWeb: true})
+                    this.setState({renderDocTypeInfoWeb: true});
                   }}>
                   <View style={{flexDirection: 'row', marginLeft: 10}}>
                     <Image
@@ -364,7 +370,7 @@ class DocumentInfo extends React.Component {
 
   renderAge() {
     return (
-      <View style={{justifyContent: 'center',}}>
+      <View style={{justifyContent: 'center'}}>
         <Text style={styles.questionText}>
           {translate('Please enter the birthdate of the insured person')}{' '}
         </Text>
@@ -390,39 +396,34 @@ class DocumentInfo extends React.Component {
             </Text>
           </View>
         </TouchableOpacity>
-      <DateTimePickerModal
+        <DateTimePickerModal
           isVisible={this.state.isDatePickerVisible}
           mode="date"
           date={new Date()}
           onConfirm={(date) => {
-            this.handleConfirmIOS(date);
+            this.handleConfirm(date);
           }}
           onCancel={() => {
             this.setState({isDatePickerVisible: false});
           }}
         />
-
-      
       </View>
     );
   }
 
-  checkBirthDateAndroid = (birthDate) =>{
-   birthDate =  birthDate.split("/")
-  let year = new Date()
-   year = year.getFullYear().toString()
+  checkBirthDateAndroid = (birthDate) => {
+    birthDate = birthDate.split('/');
+    let year = new Date();
+    year = year.getFullYear().toString();
 
-    if(parseInt(year) - parseInt(birthDate[2]) >= 100){
-      return false
+    if (parseInt(year) - parseInt(birthDate[2]) >= 100) {
+      return false;
+    } else {
+      return true;
     }
-    else{
-    return true
-  }
-}
+  };
 
-  handleConfirmIOS = (date) => {
-    console.log('::::::::::::::::::: ++++' + this._calculateAge(date)[1]);
-    
+  handleConfirm = (date) => {
     var day = parseInt(date.getDate().toString());
     var month = (date.getMonth() + 1).toString();
     var year = date.getFullYear().toString();
@@ -432,15 +433,17 @@ class DocumentInfo extends React.Component {
     if (parseInt(month) < 10) {
       month = '0' + month;
     }
-    let birthDate = day + '/' + month + '/' + year;
-    this.state.infoObj = {
-      ...this.state.infoObj,
-      dateStatus: birthDate,
-    };
-    this.setState({isDatePickerVisible:false})
+
     if (this._calculateAge(date)[0] < 0 || this._calculateAge(date)[1] >= 100) {
       alert(translate('Please enter a valid birth date'));
+      console.log(this.state.isDatePickerVisible)
     } else {
+      let birthDate = day + '/' + month + '/' + year;
+      this.state.infoObj = {
+        ...this.state.infoObj,
+        dateStatus: birthDate,
+      };
+      this.setState({isDatePickerVisible: false});
       this.props.set_date(birthDate);
     }
   };
@@ -454,7 +457,7 @@ class DocumentInfo extends React.Component {
 
   renderClaimInfo() {
     return (
-      <View style = {{}}>
+      <View style={{}}>
         <Text style={styles.questionText}>
           {translate('Is the document you are about to scan from Germany')}
         </Text>
@@ -543,7 +546,7 @@ class DocumentInfo extends React.Component {
   };
   renderBankAccountDetails = () => {
     return (
-      <View style={{justifyContent: 'center',}}>
+      <View style={{justifyContent: 'center'}}>
         <Text style={styles.questionText}>
           {translate('Please enter the full name of the account holder')}
         </Text>
@@ -588,9 +591,8 @@ class DocumentInfo extends React.Component {
           }
         />
 
-        <View style={{justifyContent: 'center', }}>
-          <Text
-            style={styles.questionText}>
+        <View style={{justifyContent: 'center'}}>
+          <Text style={styles.questionText}>
             {translate('Please enter your')} BIC
           </Text>
           <TextInput
@@ -648,7 +650,7 @@ class DocumentInfo extends React.Component {
           }
         }}>
         <View style={styles.button}>
-          <Text style={{color: 'white', fontSize: 13, fontWeight:'bold'}}>
+          <Text style={{color: 'white', fontSize: 13, fontWeight: 'bold'}}>
             {translate('Continue')}
           </Text>
         </View>
@@ -657,8 +659,8 @@ class DocumentInfo extends React.Component {
   };
 
   checkFieldsBeforeContinue() {
-    let correctFields = true
-    let errorMessage = ''
+    let correctFields = true;
+    let errorMessage = '';
     if (this.state.infoObj.docType === 'Other Document')
       this.state.infoObj.sendMoneyToContractualServices = 'Yes';
 
@@ -666,43 +668,53 @@ class DocumentInfo extends React.Component {
       this.state.isDocumentGerman === 'Select' &&
       this.state.docType === 'Claim Document'
     ) {
-      errorMessage = translate('Please make sure all fields have been selected') + ' \n'
+      errorMessage =
+        translate('Please make sure all fields have been selected') + ' \n';
       correctFields = false;
     }
     if (
       this.state.infoObj.sendMoneyToContractualServices == 'No' &&
       !this.checkName(this.state.infoObj.AccountHolder)
     ) {
-      errorMessage = errorMessage + `${translate('please check your bank details')} (name)` + ' \n'
+      errorMessage =
+        errorMessage +
+        `${translate('please check your bank details')} (name)` +
+        ' \n';
       correctFields = false;
     }
     if (
-      this.state.infoObj.sendMoneyToContractualServices == 'No' &&
-      !bic.isValid(this.state.infoObj.BIC) ||
-       this.state.infoObj.sendMoneyToContractualServices == 'No' &&
-      this.props.bic == ''
+      (this.state.infoObj.sendMoneyToContractualServices == 'No' &&
+        !bic.isValid(this.state.infoObj.BIC)) ||
+      (this.state.infoObj.sendMoneyToContractualServices == 'No' &&
+        this.props.bic == '')
     ) {
-      errorMessage = errorMessage + `${translate('please check your bank details')} (BIC)` + ' \n'
+      errorMessage =
+        errorMessage +
+        `${translate('please check your bank details')} (BIC)` +
+        ' \n';
       correctFields = false;
-    } 
-    
+    }
+
     if (
-      this.state.infoObj.sendMoneyToContractualServices == 'No' &&
-      !IBAN.isValid(this.state.infoObj.IBAN) || this.state.infoObj.sendMoneyToContractualServices == 'No' &&
-      this.props.iban == ''
+      (this.state.infoObj.sendMoneyToContractualServices == 'No' &&
+        !IBAN.isValid(this.state.infoObj.IBAN)) ||
+      (this.state.infoObj.sendMoneyToContractualServices == 'No' &&
+        this.props.iban == '')
     ) {
-      errorMessage = errorMessage + `${translate('please check your bank details')} (IBAN)` + ' \n'
+      errorMessage =
+        errorMessage +
+        `${translate('please check your bank details')} (IBAN)` +
+        ' \n';
       correctFields = false;
     }
     if (!this.props.date) {
-      errorMessage = errorMessage + translate('Please enter a birth date') + ' \n'
+      errorMessage =
+        errorMessage + translate('Please enter a birth date') + ' \n';
       correctFields = false;
-    } 
-    if(!correctFields) alert(errorMessage)
-    return correctFields
+    }
+    if (!correctFields) alert(errorMessage);
+    return correctFields;
   }
-
- 
 
   componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
@@ -713,7 +725,10 @@ class DocumentInfo extends React.Component {
   }
 
   onBackPress = () => {
-   if (this.state.isEditing && !(this.state.renderDocTypeInfoWeb || this.state.renderGeneralInfoWeb)) {
+    if (
+      this.state.isEditing &&
+      !(this.state.renderDocTypeInfoWeb || this.state.renderGeneralInfoWeb)
+    ) {
       if (this.checkFieldsBeforeContinue()) {
         this.props.add(this.state.infoObj);
         this.props.navigation.navigate('ClaimStack', {
@@ -721,41 +736,41 @@ class DocumentInfo extends React.Component {
           screen: 'SummaryScreen',
         });
       } else return true;
-    } else if(!(this.state.renderDocTypeInfoWeb || this.state.renderGeneralInfoWeb)){
+    } else if (
+      !(this.state.renderDocTypeInfoWeb || this.state.renderGeneralInfoWeb)
+    ) {
       this.props.navigation.navigate('ClaimStack', {
         params: {},
         screen: 'SummaryScreen',
       });
     }
     return true;
-  
-  
   };
 }
 
 const styles = StyleSheet.create({
   logo: {
-    width:Dimensions.get('window').width/2,
-    height: Dimensions.get('window').height/9,
+    width: Dimensions.get('window').width / 2,
+    height: Dimensions.get('window').height / 9,
     marginLeft: 15,
     marginBottom: 20,
   },
   button: {
-    width: Dimensions.get('window').width/2.5,
+    width: Dimensions.get('window').width / 2.5,
     backgroundColor: '#E67F00',
     height: Dimensions.get('window').height / 16,
     justifyContent: 'center',
     alignItems: 'center',
-    alignSelf:'center',
-    borderRadius:40,
-    marginTop:20,
+    alignSelf: 'center',
+    borderRadius: 40,
+    marginTop: 20,
   },
   questionText: {
     width: 300,
     color: '#E67F00',
-    marginLeft:0,
+    marginLeft: 0,
     margin: 10,
-    fontWeight:'bold'
+    fontWeight: 'bold',
   },
   nameInput: {
     marginTop: 12,
@@ -768,7 +783,7 @@ const styles = StyleSheet.create({
   },
   policyInput: {
     margin: 10,
-    marginLeft:0,
+    marginLeft: 0,
     borderWidth: 1,
     width: 250,
     height: 40,
@@ -815,7 +830,7 @@ const mapDispatchToProps = (dispatch) => {
     set_AccountHolder: (accountHolder) =>
       dispatch(setAccountHolder(accountHolder)),
     set_date: (date) => dispatch(setDate(date)),
-    setLanguage: (lang) => dispatch(setLanguage(lang))
+    setLanguage: (lang) => dispatch(setLanguage(lang)),
   };
 };
 

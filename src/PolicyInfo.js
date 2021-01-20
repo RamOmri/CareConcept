@@ -237,7 +237,7 @@ class PolicyInfo extends React.Component {
                 />
               </TouchableOpacity>
               <Text style={styles.headerText}>
-                Please enter the information of the policy holder below
+                {translate("Please enter the information of the policy holder below")}
               </Text>
 
               <TextInput
@@ -299,7 +299,7 @@ class PolicyInfo extends React.Component {
                   }
                 }}>
                 <View style={styles.button}>
-                  <Text style={{color: 'white', fontSize: 15}}>
+                  <Text style={{color: 'white', fontSize: 12}}>
                     {translate('Continue')}
                   </Text>
                 </View>

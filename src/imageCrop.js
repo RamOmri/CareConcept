@@ -27,6 +27,12 @@ import {CropView} from 'react-native-image-crop-tools';
 import CameraRoll from '@react-native-community/cameraroll';
 import AmazingCropper, {DefaultFooter} from 'react-native-amazing-cropper';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
+import {WebView} from 'react-native-webview';
+
+import {connect} from 'react-redux';
+import {
+  setLanguage
+} from './actions/policInfoActions';
 
 import * as RNLocalize from 'react-native-localize';
 import i18n from 'i18n-js';
@@ -44,10 +50,11 @@ const translate = memoize(
 );
 
 
-export default class imageCrop extends React.Component {
+class imageCrop extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      renderWebView:false,
       infoObj: this.props.route.params.infoObj,
       cropRef: React.createRef(),
       imageHeight: 0,
@@ -76,6 +83,7 @@ export default class imageCrop extends React.Component {
           imageHeight: size.height,
           imageWidth: size.width,
           loading: false,
+          renderWebView:false,
         });
       })
       .catch((err) => alert(err));
@@ -92,11 +100,79 @@ export default class imageCrop extends React.Component {
     });
   };
 
+
+  renderLoading = () => {
+    return (
+      <View
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <ActivityIndicator size="large" color="#004799" />
+      </View>
+    );
+  };
+
   render() {
-    if (!this.state.loading) {
+    if(this.state.renderWebView){
+      return(
+        <View style={{flex: 1, backgroundColor: '#004799'}}>
+         
+          <TouchableOpacity
+            style={{
+              marginLeft: 20,
+              margin: 10,
+              backgroundColor: 'orange',
+              height: Dimensions.get('screen').height / 17,
+              width: Dimensions.get('screen').width / 4,
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderTopLeftRadius: 200,
+              borderBottomLeftRadius: 200,
+            }}
+            onPress={() => {
+              this.setState({renderWebView: false})
+            }}>
+            <View>
+              <Text style={{color: 'white', fontSize: 12}}>
+                {translate('Go Back')}
+              </Text>
+            </View>
+          </TouchableOpacity>
+          <WebView
+            startInLoadingState
+            renderLoading={this.renderLoading}
+            source={{
+              uri:
+                this.props.language.includes('en') && 'https://www.care-concept.de/scripte/sniplets/app_general_information_eng.php?navilang=eng' ||
+                 this.props.language.includes('de') && "https://www.care-concept.de/scripte/sniplets/app_general_information.php"
+            }}
+            style={{marginTop: 20}}
+          />
+        </View>
+      )
+    }
+    else if (!this.state.loading) {
       return (
         <React.Fragment>
-          <View style={{flex: 1}}>
+         
+          <View style={{flex: 1, }}>
+         <View style = {{flex:0.07, backgroundColor:'black', justifyContent:'center', alignItems:'center'}}>
+          <TouchableOpacity
+                onPress={() => {
+                  this.setState({renderWebView: true});
+                }}>
+                <Image
+                  source={require('./img/questionMark.png')}
+                  style={{width: Dimensions.get('window').width/10, height:Dimensions.get('window').width/10, marginTop:16}}
+                />
+              </TouchableOpacity>
+          </View>
             {Platform.OS != 'android' && (
               <View style={{paddingTop: getStatusBarHeight()}}>
                 <StatusBar />
@@ -139,7 +215,7 @@ export default class imageCrop extends React.Component {
 
   CustomCropperFooter = (props) => {
     return (
-      <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+      <View style={{flexDirection: 'row', justifyContent: 'center',}}>
         <TouchableOpacity
           onPress={() => {
             this.state.infoObj.pages.splice(
@@ -185,7 +261,7 @@ const styles = StyleSheet.create({
   button: {
     width: Dimensions.get('window').width/3.6,
     backgroundColor: '#E67F00',
-    height: Dimensions.get('window').height / 14,
+    height: Dimensions.get('window').height / 8,
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf:'center',
@@ -208,7 +284,24 @@ const styles = StyleSheet.create({
   },
   text:{
     color:'white',
-    fontSize:14,
+    fontSize:11,
+    marginBottom:50,
     fontWeight:'bold'
   }
 });
+
+
+const mapStateToProps = (state) => {
+  //alert(JSON.stringify(state))
+  return {
+    language: state.policyInfoReducers.policyInfo.language,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setLanguage: (lang) => dispatch(setLanguage(lang)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(imageCrop)
