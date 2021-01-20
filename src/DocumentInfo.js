@@ -390,7 +390,7 @@ class DocumentInfo extends React.Component {
             </Text>
           </View>
         </TouchableOpacity>
-       {(Platform.OS == 'ios') && <DateTimePickerModal
+      <DateTimePickerModal
           isVisible={this.state.isDatePickerVisible}
           mode="date"
           date={new Date()}
@@ -400,34 +400,9 @@ class DocumentInfo extends React.Component {
           onCancel={() => {
             this.setState({isDatePickerVisible: false});
           }}
-        />}
+        />
 
-        {(Platform.OS == 'android' && this.state.isDatePickerVisible) && <DatePicker
-        type = 'DD-MM-YYYY'
-        monthDisplayMode={'en-short'}
-
-        confirm={date => {
-      date = date.split("-")
-      let birthDate = date[2] + "/" + date[1] + "/" + date[0]
-      console.log(birthDate)
-      if(this.checkBirthDateAndroid(birthDate)){
-          this.state.infoObj = {
-      ...this.state.infoObj,
-      dateStatus: birthDate,
-    };
-    this.props.set_date(birthDate);
-    this.setState({isDatePickerVisible:false})
-      }
-      else{
-        alert(translate("Please enter a valid birth date"))
-      }
-       
-    }}
-    onDateChange={new Date()}
-    minDate = {'1920/01/01'}
-    cancel = {()=> this.setState({isDatePickerVisible:false})}
-    toolBarConfirmStyle = {{color:'#004799', fontWeight:'bold'}}
-/>}
+      
       </View>
     );
   }
