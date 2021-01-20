@@ -41,7 +41,6 @@ import {deleteDoc, deleteStateClaimInfo} from './actions/claimActions';
 import {deleteStatePolicyInfo} from './actions/policInfoActions';
 import {StackActions, NavigationActions} from 'react-navigation';
 import ImgToBase64 from 'react-native-image-base64';
-import base64Image from './base64Example';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {PDFDocument} from 'pdf-lib';
 const sha256 = require('sha256');
@@ -230,7 +229,7 @@ class SummaryScreen extends React.Component {
                   }}>
                   <View
                     style={styles.button}>
-                    <Text style={{color: 'white', fontSize: 13, fontWeight:'bold'}}>
+                    <Text style={{color: 'white', fontSize: 10, fontWeight:'bold'}}>
                       {translate('Scan Document')}
                     </Text>
                   </View>
@@ -250,7 +249,7 @@ class SummaryScreen extends React.Component {
                     }
                   }}>
                   <View style={styles.button}>
-                    <Text style={{color: 'white', fontSize: 13, fontWeight:'bold'}}>
+                    <Text style={{color: 'white', fontSize: 10, fontWeight:'bold'}}>
                       {translate('Send')}
                     </Text>
                   </View>
@@ -434,7 +433,7 @@ const styles = StyleSheet.create({
   button: {
     width: Dimensions.get('window').width/2.5,
     backgroundColor: '#E67F00',
-    height: Dimensions.get('window').height / 16,
+    height: Dimensions.get('window').height / 14,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius:40,

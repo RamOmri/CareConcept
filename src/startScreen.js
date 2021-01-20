@@ -39,65 +39,13 @@ import memoize from 'lodash.memoize'; // Use for caching/memoize for better perf
 
 
 
-const translationGetters = {
-  // lazy requires (metro bundler does not support symlinks)
-  en: () => require('./translations/eng.json'),
-  de: () => require('./translations/De.json'),
-};
 
 const translate = memoize(
   (key, config) => i18n.t(key, config),
   (key, config) => (config ? key + JSON.stringify(config) : key),
 );
 
-const setI18nConfig = async (userSelect) => {
-  let lang = userSelect
-  if(RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) == null && lang == null) lang = await userLanguageSelect(false)
-   
-  const {languageTag, isRTL} =
-    lang || RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters))
- 
-  // clear translation cache
-  translate.cache.clear();
-  // update layout direction
-  try {
-    I18nManager.allowRTL(false);
-  } catch (e) {
-    console.log(e);
-  }
-  // set i18n-js config
-  i18n.translations = {[languageTag]: translationGetters[languageTag]()};
-  i18n.locale = languageTag;
-  return JSON.stringify(languageTag)
-};
 
-
-const userLanguageSelect = async (isLangSelected) =>{
-  let lang = null
-  await new Promise((resolve, reject) => { Alert.alert(
-    "Language Selection:",
-    'Please select your language \n Bitte wählen Sie Ihre Sprache',
-    [
-      {
-        text: "English",
-        onPress: () =>{
-          lang = {languageTag: 'en', isRTL: false};
-          resolve()
-        }
-      },
-      {
-        text: 'Deutsch',
-        onPress: () =>{
-          lang = {languageTag: 'de', isRTL: false};
-          resolve()
-        }
-      },
-     
-    ]
-  )})
-  if(isLangSelected) setI18nConfig(lang)
-   return lang
-}
 
 class StartScreen extends React.Component {
   constructor(props) {
@@ -110,9 +58,7 @@ class StartScreen extends React.Component {
   }
 
   async componentDidMount() { 
-   let lang = await setI18nConfig(null)
-    this.forceUpdate()
-    this.props.setLanguage(lang)
+    
   }
 
   render() {
