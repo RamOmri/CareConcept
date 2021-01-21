@@ -162,17 +162,6 @@ class imageCrop extends React.Component {
         <React.Fragment>
          
           <View style={{flex: 1, }}>
-         <View style = {{flex:0.07, backgroundColor:'black', justifyContent:'center', alignItems:'center'}}>
-          <TouchableOpacity
-                onPress={() => {
-                  this.setState({renderWebView: true});
-                }}>
-                <Image
-                  source={require('./img/questionMark.png')}
-                  style={{width: Dimensions.get('window').width/10, height:Dimensions.get('window').width/10, marginTop:16}}
-                />
-              </TouchableOpacity>
-          </View>
             {Platform.OS != 'android' && (
               <View style={{paddingTop: getStatusBarHeight()}}>
                 <StatusBar />
@@ -261,7 +250,7 @@ const styles = StyleSheet.create({
   button: {
     width: Dimensions.get('window').width/3.6,
     backgroundColor: '#E67F00',
-    height: Dimensions.get('window').height / 8,
+    height: Dimensions.get('window').height / 15,
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf:'center',
@@ -285,8 +274,7 @@ const styles = StyleSheet.create({
   text:{
     color:'white',
     fontSize:11,
-    marginBottom:50,
-    fontWeight:'bold'
+    fontWeight:'700'
   }
 });
 

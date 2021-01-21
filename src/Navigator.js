@@ -136,21 +136,21 @@ const infoStack = ({lang}) =>(
      // setI18nConfig()
       if (route.name === 'Start') {
         return focused ? (<><Image source = {require('./img/startOrange.png')}/>
-                              <Text style = {{color:'orange', fontSize:12, fontWeight:'bold'}}>{translate('Start')}</Text></>) 
+                              <Text style = {{color:'orange', fontSize:12,}}>{translate('Start')}</Text></>) 
                               :(<><Image source = {require('./img/startWhite.png')}/>
-                              <Text style = {{color:'white', fontSize:12, fontWeight:'bold'}}>{translate('Start')}</Text></>);
+                              <Text style = {{color:'white', fontSize:12, }}>{translate('Start')}</Text></>);
       }else if(route.name === 'Imprint'){
         return focused ? (<><Image source = {require('./img/imprintOrange.png')}/>
-        <Text style = {{color:'orange', fontSize:12, fontWeight:'bold'}}>{translate("Imprint")}</Text></>)
+        <Text style = {{color:'orange', fontSize:12, fontWeight:'700'}}>{translate("Imprint")}</Text></>)
         :(<><Image source = {require('./img/imprintWhite.png')}/>
-        <Text style = {{color:'white', fontSize:12, fontWeight:'bold'}}>{translate("Imprint")}</Text></>)
+        <Text style = {{color:'white', fontSize:12, }}>{translate("Imprint")}</Text></>)
         
       }
       else if(route.name === 'privacy'){
         return focused ? (<><Image source = {require('./img/privacyOrange.png')}/>
-        <Text style = {{color:'orange', fontSize:12, fontWeight:'bold'}}>{translate("Privacy")}</Text></>)
+        <Text style = {{color:'orange', fontSize:12, fontWeight:'700'}}>{translate("Privacy")}</Text></>)
         :(<><Image source = {require('./img/privacyWhite.png')}/>
-        <Text style = {{color:'white', fontSize:12, fontWeight:'bold'}}>{translate("Privacy")}</Text></>)
+        <Text style = {{color:'white', fontSize:12, }}>{translate("Privacy")}</Text></>)
         
       }
       
@@ -172,7 +172,7 @@ const infoStack = ({lang}) =>(
         },
         labelStyle: {
           fontSize: 14,
-          fontWeight:'bold',
+          fontWeight:'700',
           
           
         },
@@ -211,6 +211,7 @@ class Navigator extends React.Component{
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
+        gestureEnabled: (Platform.OS !='android')
       }
       }>
       <Stack.Screen name = "infoStack"  component = {infoStack} />

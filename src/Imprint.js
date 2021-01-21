@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
   buttonText:{
     color:'white',
     fontSize:13,
-    fontWeight:'bold'
+    fontWeight:'700'
   },
   buttonStyle:{
       height:Dimensions.get('window').height/16,

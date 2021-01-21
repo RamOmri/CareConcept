@@ -245,36 +245,24 @@ class DocumentInfo extends React.Component {
         style={styles.container}
         source={require('./img/background.jpg')}
         style={{resizeMode: 'stretch', flex: 1}}>
-        {Platform.OS != 'android' && (
-          <View style={{paddingTop: getStatusBarHeight()}}>
+     {Platform.OS == 'ios' && (
+        <View style={{paddingTop: getStatusBarHeight()}}>
             <StatusBar />
           </View>
-        )}
+     )}
+         
+        
 
-        {Platform.OS === 'ios' && (
-          <View style={{}}>
-            <TouchableOpacity
-              onPress={() => {
-                this.onBackPress();
-              }}>
-              <View
-                style={{
-                  marginLeft: 10,
-                  backgroundColor: 'orange',
-                  height: Dimensions.get('window').height / 17,
-                  width: Dimensions.get('window').width / 4,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  borderTopLeftRadius: 200,
-                  borderBottomLeftRadius: 200,
+
+         {Platform.OS === 'ios' && (
+              <TouchableOpacity
+                onPress={() => {
+                 this.props.navigation.goBack()
                 }}>
-                <Text style={{color: 'white', fontSize: 11}}>
-                  {translate('Go Back')}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-        )}
+              <Image source = {this.props.language.includes('en') && require('./img/goBackEn.png') || this.props.language.includes('de') && require('./img/goBackDe.png')} 
+              style = {styles.goBackButton} />
+              </TouchableOpacity>
+            )}
         <Image
           source={require('./img/CareConceptLogo.png')}
           style={styles.logo}
@@ -650,7 +638,7 @@ class DocumentInfo extends React.Component {
           }
         }}>
         <View style={styles.button}>
-          <Text style={{color: 'white', fontSize: 13, fontWeight: 'bold'}}>
+          <Text style={{color: 'white', fontSize: 13, fontWeight: '700'}}>
             {translate('Continue')}
           </Text>
         </View>
@@ -781,6 +769,7 @@ const styles = StyleSheet.create({
     borderColor: '#f59b00',
     backgroundColor: '#E5ECF5',
   },
+  goBackButton:{marginLeft:10,resizeMode:'contain', height:Dimensions.get('window').height/15, width:Dimensions.get('window').width/5},
   policyInput: {
     margin: 10,
     marginLeft: 0,

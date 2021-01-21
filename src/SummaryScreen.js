@@ -38,7 +38,7 @@ import {
 import {connect} from 'react-redux';
 import {addDoc} from './actions/claimActions';
 import {deleteDoc, deleteStateClaimInfo} from './actions/claimActions';
-import {deleteStatePolicyInfo} from './actions/policInfoActions';
+import {deleteStatePolicyInfo, setLanguage} from './actions/policInfoActions';
 import {StackActions, NavigationActions} from 'react-navigation';
 import ImgToBase64 from 'react-native-image-base64';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
@@ -126,29 +126,14 @@ class SummaryScreen extends React.Component {
           )}
 
           <View style={{flex: 1}}>
-            {Platform.OS === 'ios' && (
+           
+             {Platform.OS === 'ios' && (
               <TouchableOpacity
                 onPress={() => {
-                  this.props.navigation.navigate('ClaimStack', {
-                    params: {},
-                    screen: 'PolicyInfo',
-                  });
+                 this.props.navigation.goBack()
                 }}>
-                <View
-                  style={{
-                    marginLeft: 10,
-                    backgroundColor: 'orange',
-                    height: Dimensions.get('window').height / 17,
-                    width: Dimensions.get('window').width / 4,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    borderTopLeftRadius: 200,
-                    borderBottomLeftRadius: 200,
-                  }}>
-                  <Text style={{color: 'white', fontSize: 12}}>
-                    {translate('Go Back')}
-                  </Text>
-                </View>
+              <Image source = {this.props.language.includes('en') && require('./img/goBackEn.png') || this.props.language.includes('de') && require('./img/goBackDe.png')} 
+              style = {styles.goBackButton} />
               </TouchableOpacity>
             )}
             <Image
@@ -388,12 +373,15 @@ class SummaryScreen extends React.Component {
       })
       .catch((error) => console.log('could not send ' + error));
     if (this.state.server_message == '200') {
+      let lang = this.props.language
+      console.log(lang)
       this.setState({isLoading: false});
       this.props.deleteStateClaimInfo();
       this.props.deleteStatePolicyInfo();
+      this.props.setLanguage(lang)
 
       alert(translate('Finished submitting claim'))
-      this.props.navigation.navigate('ClaimStack', {
+      this.props.navigation.push('ClaimStack', {
         params: {},
         screen: 'PolicyInfo',
       })
@@ -430,6 +418,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     margin: 10,
   },
+  goBackButton:{marginLeft:10,resizeMode:'contain', height:Dimensions.get('window').height/15, width:Dimensions.get('window').width/5},
   button: {
     width: Dimensions.get('window').width/2.5,
     backgroundColor: '#E67F00',
@@ -482,6 +471,7 @@ const mapStateToProps = (state) => {
   return {
     policyInfo: state.policyInfoReducers.policyInfo,
     docs: state.docReducer.docList,
+    language: state.policyInfoReducers.policyInfo.language,
   };
 };
 
@@ -490,6 +480,7 @@ const mapDispatchToProps = (dispatch) => {
     delete: (key) => dispatch(deleteDoc(key)),
     deleteStateClaimInfo: () => dispatch(deleteStateClaimInfo()),
     deleteStatePolicyInfo: () => dispatch(deleteStatePolicyInfo()),
+    setLanguage: (lang) => dispatch(setLanguage(lang))
   };
 };
 

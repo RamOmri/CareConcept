@@ -192,16 +192,17 @@ class PolicyInfo extends React.Component {
             <StatusBar />
           </View>
         )}
+        {Platform.OS === 'ios' && (
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.goBack()
+                }}>
+              <Image source = {this.props.language.includes('en') && require('./img/goBackEn.png') || this.props.language.includes('de') && require('./img/goBackDe.png')} 
+              style = {styles.goBackButton} />
+              </TouchableOpacity>
+            )}
         <View style = {{flexDirection:'row'}}>
-        <TouchableOpacity
-        onPress = {()=>{
-          this.props.navigation.navigate('infoStack', {
-            params: {Document: [], index: -1},
-            screen: 'StartScreen',
-          });
-        }}
-        >
-        </TouchableOpacity>
+        
         <Image
           source={require('./img/CareConceptLogo.png')}
           style={styles.logo}
@@ -214,7 +215,7 @@ class PolicyInfo extends React.Component {
                 style={{
                   color: '#004799',
                   fontSize: 10,
-                  fontWeight: 'bold',
+                  fontWeight: '700',
                   marginBottom: 20,
                   textAlign: 'center',
                 }}>
@@ -439,7 +440,7 @@ const styles = StyleSheet.create({
     margin: 15,
     marginBottom: 0,
     alignSelf: 'center',
-    fontWeight: 'bold',
+    fontWeight: '700',
     textAlign: 'center',
   },
   questionText: {
@@ -449,6 +450,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     textAlign: 'center',
   },
+  goBackButton:{marginLeft:10,resizeMode:'contain', height:Dimensions.get('window').height/15, width:Dimensions.get('window').width/5},
   backButton:{
     marginLeft:10,
     marginTop:10,

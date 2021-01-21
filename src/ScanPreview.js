@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     margin:10
   },
   buttonText: {
-    color: 'white', fontSize: 13, fontWeight:'bold'
+    color: 'white', fontSize: 13, fontWeight:'700'
   },
   preview: {
     flex: 1,

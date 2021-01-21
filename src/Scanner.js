@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginLeft:30,
     fontSize: 14,
-    fontWeight: 'bold',
+    fontWeight: '700',
     color: '#E67F00',
     justifyContent: 'center',
     alignItems: 'center',
