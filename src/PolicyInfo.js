@@ -140,7 +140,11 @@ class PolicyInfo extends React.Component {
 renderInfo(){
   return (
     <View style={{flex: 1, backgroundColor: '#004799'}}>
-     
+        {Platform.OS === 'ios' && (
+            <View style={{paddingTop: getStatusBarHeight()}}>
+              <StatusBar />
+            </View>
+          )}
       <TouchableOpacity
         onPress={() => {
           this.setState({renderWebView: false})

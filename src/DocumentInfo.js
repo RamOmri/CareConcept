@@ -276,6 +276,11 @@ class DocumentInfo extends React.Component {
   renderQuestionInfo(){
     return (
       <View style={{flex: 1, backgroundColor: '#004799'}}>
+           {Platform.OS === 'ios' && (
+            <View style={{paddingTop: getStatusBarHeight()}}>
+              <StatusBar />
+            </View>
+          )}
         <View style={{height: Dimensions.get('screen').height / 15}}>
           <TouchableOpacity
             
@@ -719,7 +724,8 @@ class DocumentInfo extends React.Component {
   onBackPress = () => {
     if (
       this.state.isEditing &&
-      !(this.state.renderDocTypeInfoWeb || this.state.renderGeneralInfoWeb)
+      !(this.state.renderDocTypeInfoWeb || this.state.renderGeneralInfoWeb || this.state.renderBillFromGermanyInfo || this.state.renderDatePickerInfo ||
+        this.state.renderWhoToPay)
     ) {
       if (this.checkFieldsBeforeContinue()) {
         this.props.add(this.state.infoObj);
@@ -729,7 +735,8 @@ class DocumentInfo extends React.Component {
         });
       } else return true;
     } else if (
-      !(this.state.renderDocTypeInfoWeb || this.state.renderGeneralInfoWeb)
+      !(this.state.renderDocTypeInfoWeb || this.state.renderGeneralInfoWeb || this.state.renderBillFromGermanyInfo || this.state.renderDatePickerInfo ||
+        this.state.renderWhoToPay)
     ) {
       this.props.navigation.navigate('ClaimStack', {
         params: {},

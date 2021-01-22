@@ -17,6 +17,7 @@ import {
   ActivityIndicator,
   BackHandler,
   I18nManager,
+  Platform,
 } from 'react-native';
 
 import {
@@ -95,6 +96,11 @@ class SummaryScreen extends React.Component {
   renderInfo() {
     return (
       <View style={{flex: 1, backgroundColor: '#004799'}}>
+           {Platform.OS === 'ios' && (
+            <View style={{paddingTop: getStatusBarHeight()}}>
+              <StatusBar />
+            </View>
+          )}
         <TouchableOpacity
           onPress={() => {
             this.setState({renderWebView: false});
@@ -114,10 +120,16 @@ class SummaryScreen extends React.Component {
           renderLoading={this.renderLoading}
           source={{
             uri:
-              (this.props.language.includes('en') &&
+              (this.props.language.includes('en') && (Platform.OS === 'android') &&
     'https://www.care-concept.de/scripte/sniplets/app_general_information_3_eng.php?navilang=eng') ||
-              (this.props.language.includes('de') &&
-                'https://www.care-concept.de/scripte/sniplets/app_general_information_3.php'),
+              (this.props.language.includes('de') && (Platform.OS === 'android') &&
+                'https://www.care-concept.de/scripte/sniplets/app_general_information_3.php')||
+
+                (this.props.language.includes('en') && (Platform.OS === 'ios') &&
+                'https://www.care-concept.de/scripte/sniplets/app_general_information_3io_eng.php?navilang=eng') ||
+                          (this.props.language.includes('de') && (Platform.OS === 'ios') &&
+                            'https://www.care-concept.de/scripte/sniplets/app_general_information_3io.php'),
+                
           }}
           style={{marginTop: 20}}
         />
