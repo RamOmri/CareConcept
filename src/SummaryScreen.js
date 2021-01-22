@@ -64,8 +64,6 @@ const translate = memoize(
   (key, config) => (config ? key + JSON.stringify(config) : key),
 );
 
-
-
 class SummaryScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -81,18 +79,50 @@ class SummaryScreen extends React.Component {
   }
 
   componentWillUnmount() {
-    
     BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
   }
 
   onBackPress = () => {
     if (!this.state.isLoading && !this.state.renderWebView) {
-      this.props.navigation.goBack()
-      return true
+      this.props.navigation.goBack();
+      return true;
     } else {
       return true;
     }
   };
+
+  renderInfo() {
+    return (
+      <View style={{flex: 1, backgroundColor: '#004799'}}>
+        <TouchableOpacity
+          onPress={() => {
+            this.setState({renderWebView: false});
+          }}>
+          <Image
+            source={
+              (this.props.language.includes('en') &&
+                require('./img/goBackEn.png')) ||
+              (this.props.language.includes('de') &&
+                require('./img/goBackDe.png'))
+            }
+            style={styles.goBackButton}
+          />
+        </TouchableOpacity>
+        <WebView
+          startInLoadingState
+          renderLoading={this.renderLoading}
+          source={{
+            uri:
+              (this.props.language.includes('en') &&
+                'https://www.care-concept.de/scripte/sniplets/app_general_information_3_eng.php?navilang=eng') ||
+              (this.props.language.includes('de') &&
+                'https://www.care-concept.de/scripte/sniplets/app_general_information_3.php'),
+          }}
+          style={{marginTop: 20}}
+        />
+      </View>
+    );
+  }
   renderLoading = () => {
     return (
       <View
@@ -123,38 +153,14 @@ class SummaryScreen extends React.Component {
             alignItems: 'center',
           }}>
           <Text style={styles.DocumentText}>
-            {translate("Please wait while we send your claim")}
+            {translate('Please wait while we send your claim')}
           </Text>
           <ActivityIndicator size="large" color="#004799" />
         </View>
       );
-    } 
-    else  if (this.state.renderWebView) {
-      return (
-        <View style={{flex: 1, backgroundColor: '#004799'}}>
-         
-         <TouchableOpacity
-                onPress={() => {
-                 this.setState({renderWebView: false})
-                }}>
-              <Image source = {this.props.language.includes('en') && require('./img/goBackEn.png') || 
-              this.props.language.includes('de') && require('./img/goBackDe.png')} 
-              style = {styles.goBackButton} />
-              </TouchableOpacity>
-          <WebView
-            startInLoadingState
-            renderLoading={this.renderLoading}
-            source={{
-              uri:
-                this.props.language.includes('en') && 'https://www.care-concept.de/scripte/sniplets/app_general_information_3_eng.php?navilang=eng' ||
-                 this.props.language.includes('de') && "https://www.care-concept.de/scripte/sniplets/app_general_information_3.php"
-            }}
-            style={{marginTop: 20}}
-          />
-        </View>
-      );
-    }
-    else {
+    } else if (this.state.renderWebView) {
+      return this.renderInfo();
+    } else {
       return (
         <ImageBackground
           style={styles.container}
@@ -167,14 +173,20 @@ class SummaryScreen extends React.Component {
           )}
 
           <View style={{flex: 1}}>
-           
-             {Platform.OS === 'ios' && (
+            {Platform.OS === 'ios' && (
               <TouchableOpacity
                 onPress={() => {
-                 this.props.navigation.goBack()
+                  this.props.navigation.goBack();
                 }}>
-              <Image source = {this.props.language.includes('en') && require('./img/goBackEn.png') || this.props.language.includes('de') && require('./img/goBackDe.png')} 
-              style = {styles.goBackButton} />
+                <Image
+                  source={
+                    (this.props.language.includes('en') &&
+                      require('./img/goBackEn.png')) ||
+                    (this.props.language.includes('de') &&
+                      require('./img/goBackDe.png'))
+                  }
+                  style={styles.goBackButton}
+                />
               </TouchableOpacity>
             )}
             <Image
@@ -182,8 +194,8 @@ class SummaryScreen extends React.Component {
               style={styles.logo}
             />
 
-            <View style = {{alignItems:'center', marginBottom:20}}>
-            <TouchableOpacity
+            <View style={{alignItems: 'center', marginBottom: 20}}>
+              <TouchableOpacity
                 onPress={() => {
                   this.setState({renderWebView: true});
                 }}>
@@ -200,7 +212,6 @@ class SummaryScreen extends React.Component {
                 justifyContent: 'space-between',
                 flexDirection: 'column',
               }}>
-                
               <FlatList
                 extraData={this.state}
                 data={this.props.docs}
@@ -248,13 +259,12 @@ class SummaryScreen extends React.Component {
               <View
                 style={{
                   //justifyContent: 'flex-end',
-                  justifyContent:'center',
+                  justifyContent: 'center',
                   marginBottom: 10,
                   alignItems: 'center',
-                  flexDirection:'row',
+                  flexDirection: 'row',
                   marginTop: 5,
                 }}>
-
                 <TouchableOpacity
                   onPress={() => {
                     if (this.props.docs.length < 20) {
@@ -266,9 +276,8 @@ class SummaryScreen extends React.Component {
                       alert(translate('Cannot send more than 20 documents'));
                     }
                   }}>
-                  <View
-                    style={styles.button}>
-                    <Text style={{color: 'white', fontSize: 10, }}>
+                  <View style={styles.button}>
+                    <Text style={{color: 'white', fontSize: 10}}>
                       {translate('Scan Document')}
                     </Text>
                   </View>
@@ -288,7 +297,7 @@ class SummaryScreen extends React.Component {
                     }
                   }}>
                   <View style={styles.button}>
-                    <Text style={{color: 'white', fontSize: 10,}}>
+                    <Text style={{color: 'white', fontSize: 10}}>
                       {translate('Send')}
                     </Text>
                   </View>
@@ -365,10 +374,15 @@ class SummaryScreen extends React.Component {
           .catch((err) => console.log('here2:::::::::::::::::::: ' + err));
         var page = pdfDoc.addPage();
 
-        console.log('!!!!!!!!!!!!!!!!!!!!!' + embeddedImage.height)
-        console.log(embeddedImage.width/page.getWidth())
-        console.log(embeddedImage.height/page.getHeight())
-        const pdfDims = embeddedImage.scale((page.getHeight()/embeddedImage.height > page.getWidth()/embeddedImage.width) && page.getWidth()/embeddedImage.width || page.getHeight()/embeddedImage.height);
+        console.log('!!!!!!!!!!!!!!!!!!!!!' + embeddedImage.height);
+        console.log(embeddedImage.width / page.getWidth());
+        console.log(embeddedImage.height / page.getHeight());
+        const pdfDims = embeddedImage.scale(
+          (page.getHeight() / embeddedImage.height >
+            page.getWidth() / embeddedImage.width &&
+            page.getWidth() / embeddedImage.width) ||
+            page.getHeight() / embeddedImage.height,
+        );
 
         page.drawImage(embeddedImage, {
           x: page.getWidth() / 2 - pdfDims.width / 2,
@@ -427,18 +441,22 @@ class SummaryScreen extends React.Component {
       })
       .catch((error) => console.log('could not send ' + error));
     if (this.state.server_message == '200') {
-      let lang = this.props.language
-      console.log(lang)
+      let lang = this.props.language;
+      console.log(lang);
       this.setState({isLoading: false});
       this.props.deleteStateClaimInfo();
       this.props.deleteStatePolicyInfo();
-      this.props.setLanguage(lang)
+      this.props.setLanguage(lang);
 
-      alert(translate("Thank you for uploading the  documents. We will contact you shortly"))
+      alert(
+        translate(
+          'Thank you for uploading the  documents We will contact you shortly',
+        ),
+      );
       this.props.navigation.push('ClaimStack', {
         params: {},
         screen: 'PolicyInfo',
-      })
+      });
     } else if (this.state.server_message != '400') {
       alert(translate('Something went wrong sending claim Please try again'));
       console.log(this.state.server_message);
@@ -449,8 +467,8 @@ class SummaryScreen extends React.Component {
 
 const styles = StyleSheet.create({
   logo: {
-    width:Dimensions.get('window').width/2,
-    height: Dimensions.get('window').height/9,
+    width: Dimensions.get('window').width / 2,
+    height: Dimensions.get('window').height / 9,
     marginLeft: 15,
   },
   DocumentText: {
@@ -470,15 +488,20 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     margin: 10,
   },
-  goBackButton:{marginLeft:10,resizeMode:'contain', height:Dimensions.get('window').height/15, width:Dimensions.get('window').width/5},
+  goBackButton: {
+    marginLeft: 10,
+    resizeMode: 'contain',
+    height: Dimensions.get('window').height / 15,
+    width: Dimensions.get('window').width / 5,
+  },
   button: {
-    width: Dimensions.get('window').width/2.5,
+    width: Dimensions.get('window').width / 2.5,
     backgroundColor: '#E67F00',
     height: Dimensions.get('window').height / 14,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius:40,
-    margin:10
+    borderRadius: 40,
+    margin: 10,
   },
   nameInput: {
     marginTop: 12,
@@ -532,7 +555,7 @@ const mapDispatchToProps = (dispatch) => {
     delete: (key) => dispatch(deleteDoc(key)),
     deleteStateClaimInfo: () => dispatch(deleteStateClaimInfo()),
     deleteStatePolicyInfo: () => dispatch(deleteStatePolicyInfo()),
-    setLanguage: (lang) => dispatch(setLanguage(lang))
+    setLanguage: (lang) => dispatch(setLanguage(lang)),
   };
 };
 

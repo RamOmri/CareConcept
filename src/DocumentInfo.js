@@ -170,62 +170,9 @@ class DocumentInfo extends React.Component {
     }
   }
 
-  renderLoading = () => {
-    return (
-      <View
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        <ActivityIndicator size="large" color="#004799" />
-      </View>
-    );
-  };
-
   render() {
     if (this.state.renderGeneralInfoWeb || this.state.renderDocTypeInfoWeb) {
-      return (
-        <View style={{flex: 1, backgroundColor: '#004799'}}>
-          <View style={{height: Dimensions.get('screen').height / 15}}>
-            <TouchableOpacity
-              
-              onPress={() => {
-                this.setState({renderGeneralInfoWeb: false});
-                this.setState({renderDocTypeInfoWeb: false});
-              }}>
-               <Image source = {this.props.language.includes('en') && require('./img/goBackEn.png') || this.props.language.includes('de') && require('./img/goBackDe.png')} 
-              style = {styles.goBackButton} />
-            </TouchableOpacity>
-          </View>
-          <View style={{flex: 0.9}}>
-            <WebView
-              startInLoadingState
-              renderLoading={this.renderLoading}
-              source={{
-                uri:
-                  (this.props.language.includes('en') &&
-                    this.state.renderGeneralInfoWeb &&
-                    'https://www.care-concept.de/scripte/sniplets/app_general_information_eng.php?navilang=eng') ||
-                  (this.props.language.includes('en') &&
-                    this.state.renderDocTypeInfoWeb &&
-                    'https://www.care-concept.de/scripte/sniplets/app_general_information_2_eng.php?navilang=eng') ||
-                  (this.props.language.includes('de') &&
-                    this.state.renderGeneralInfoWeb &&
-                    'https://www.care-concept.de/scripte/sniplets/app_general_information.php') ||
-                  (this.props.language.includes('de') &&
-                    this.state.renderDocTypeInfoWeb &&
-                    'https://www.care-concept.de/scripte/sniplets/app_general_information_2.php'),
-              }}
-              style={{marginTop: 20}}
-            />
-          </View>
-        </View>
-      );
+     return this.renderQuestionInfo()
     }
     return (
       <ImageBackground
@@ -237,9 +184,6 @@ class DocumentInfo extends React.Component {
             <StatusBar />
           </View>
      )}
-         
-        
-
 
          {Platform.OS === 'ios' && (
               <TouchableOpacity
@@ -342,6 +286,64 @@ class DocumentInfo extends React.Component {
       </ImageBackground>
     );
   }
+
+  renderQuestionInfo(){
+    return (
+      <View style={{flex: 1, backgroundColor: '#004799'}}>
+        <View style={{height: Dimensions.get('screen').height / 15}}>
+          <TouchableOpacity
+            
+            onPress={() => {
+              this.setState({renderGeneralInfoWeb: false});
+              this.setState({renderDocTypeInfoWeb: false});
+            }}>
+             <Image source = {this.props.language.includes('en') && require('./img/goBackEn.png') || this.props.language.includes('de') && require('./img/goBackDe.png')} 
+            style = {styles.goBackButton} />
+          </TouchableOpacity>
+        </View>
+        <View style={{flex: 0.9}}>
+          <WebView
+            startInLoadingState
+            renderLoading={this.renderLoading}
+            source={{
+              uri:
+                (this.props.language.includes('en') &&
+                  this.state.renderGeneralInfoWeb &&
+                  'https://www.care-concept.de/scripte/sniplets/app_general_information_eng.php?navilang=eng') ||
+                (this.props.language.includes('en') &&
+                  this.state.renderDocTypeInfoWeb &&
+                  'https://www.care-concept.de/scripte/sniplets/app_general_information_2_eng.php?navilang=eng') ||
+                (this.props.language.includes('de') &&
+                  this.state.renderGeneralInfoWeb &&
+                  'https://www.care-concept.de/scripte/sniplets/app_general_information.php') ||
+                (this.props.language.includes('de') &&
+                  this.state.renderDocTypeInfoWeb &&
+                  'https://www.care-concept.de/scripte/sniplets/app_general_information_2.php'),
+            }}
+            style={{marginTop: 20}}
+          />
+        </View>
+      </View>
+    );
+  }
+  renderLoading = () => {
+    return (
+      <View
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <ActivityIndicator size="large" color="#004799" />
+      </View>
+    );
+  };
+
+
 
   renderAge() {
     return (

@@ -136,6 +136,30 @@ class PolicyInfo extends React.Component {
     }
   };
  
+renderInfo(){
+  return (
+    <View style={{flex: 1, backgroundColor: '#004799'}}>
+     
+      <TouchableOpacity
+        onPress={() => {
+          this.setState({renderWebView: false})
+        }}>
+      <Image source = {this.props.language.includes('en') && require('./img/goBackEn.png') || this.props.language.includes('de') && require('./img/goBackDe.png')} 
+          style = {styles.goBackButton} />
+      </TouchableOpacity>
+      <WebView
+        startInLoadingState
+        renderLoading={this.renderLoading}
+        source={{
+          uri:
+            this.props.language.includes('en') && 'https://www.care-concept.de/scripte/sniplets/app_general_information_eng.php?navilang=eng' ||
+             this.props.language.includes('de') && "https://www.care-concept.de/scripte/sniplets/app_general_information.php"
+        }}
+        style={{marginTop: 20}}
+      />
+    </View>
+  );
+}
   
   renderLoading = () => {
     return (
@@ -155,28 +179,7 @@ class PolicyInfo extends React.Component {
   };
   render() {
     if (this.state.renderWebView) {
-      return (
-        <View style={{flex: 1, backgroundColor: '#004799'}}>
-         
-          <TouchableOpacity
-            onPress={() => {
-              this.setState({renderWebView: false})
-            }}>
-          <Image source = {this.props.language.includes('en') && require('./img/goBackEn.png') || this.props.language.includes('de') && require('./img/goBackDe.png')} 
-              style = {styles.goBackButton} />
-          </TouchableOpacity>
-          <WebView
-            startInLoadingState
-            renderLoading={this.renderLoading}
-            source={{
-              uri:
-                this.props.language.includes('en') && 'https://www.care-concept.de/scripte/sniplets/app_general_information_eng.php?navilang=eng' ||
-                 this.props.language.includes('de') && "https://www.care-concept.de/scripte/sniplets/app_general_information.php"
-            }}
-            style={{marginTop: 20}}
-          />
-        </View>
-      );
+     return this.renderInfo()
     }
 
     return (
@@ -346,26 +349,31 @@ class PolicyInfo extends React.Component {
   };
 
   checkInsuranceNumber = () => {
-    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     const numbers = '0123456789';
+    var insuranceNumber = this.props.insuranceNumber.toUpperCase()
     if (
-      alphabet.includes(this.props.insuranceNumber[0]) &&
-      alphabet.includes(this.props.insuranceNumber[1])
+      alphabet.includes(insuranceNumber[0]) &&
+      alphabet.includes(insuranceNumber[1])
     ) {
-      let policynumberlength = this.props.insuranceNumber.split('').length;
+      let policynumberlength = insuranceNumber.split('').length;
       if (policynumberlength != 11) return false;
       for (let i = 2; i <= 10; i++) {
-        if (!numbers.includes(this.props.insuranceNumber[i])) return false;
+        if (!numbers.includes(insuranceNumber[i])) return false;
       }
+      this.props.changeInsuranceNumber(insuranceNumber)
+      console.log(this.props.insuranceNumber)
       return true;
-    } else if (alphabet.includes(this.props.insuranceNumber[0])) {
-      let policynumberlength = this.props.insuranceNumber.split('').length;
+    } else if (alphabet.includes(insuranceNumber[0])) {
+      let policynumberlength = insuranceNumber.split('').length;
       if (policynumberlength != 10) return false;
       for (let i = 1; i < 10; i++) {
-        if (!numbers.includes(this.props.insuranceNumber.split('')[i])) {
+        if (!numbers.includes(insuranceNumber.split('')[i])) {
           return false;
         }
       }
+      this.props.changeInsuranceNumber(insuranceNumber)
+      console.log('fewfewfew' + this.props.insuranceNumber)
       return true;
     } else {
       return false;
