@@ -26,7 +26,7 @@
   "No": "No",
   "Is the bill/receipt from Germany": "Is the bill/receipt from Germany?",
   "Should contractual services": "Should contractual services be reimbursed to the biller (physician/hospital, etc.)?",
-  "Please enter the name of the account holder": "Please enter the full name of the account holder",
+  "Please enter the full name of the account holder": "Please enter the full name of the account holder",
   "Full Name": "Full Name",
   "Please enter your IBAN":"Please enter the IBAN",
   "Please enter your BIC":"Please enter the BIC",
@@ -62,6 +62,8 @@
   "Privacy":"Privacy",
   "Please enter the information of the policy holder below":"Please enter the information of the policy holder below",
   "The contractual services shall be reimbursed to the following account": "The contractual services shall be reimbursed to the following account: ",
-  "Thank you for uploading the documents We will contact you shortly":"Thank you for uploading the  documents. We will contact you shortly"
+  "Thank you for uploading the documents We will contact you shortly":"Thank you for uploading the  documents. We will contact you shortly",
+  "could not access camera please grant permission manually":"could not access camera, please grant permission manually",
+  "Could not access camera please grant permission through phone settings": "Could not access camera please grant permission through phone settings"
 
 }

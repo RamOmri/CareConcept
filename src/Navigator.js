@@ -210,7 +210,7 @@ class Navigator extends React.Component{
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
-        gestureEnabled: (Platform.OS !='android')
+        gestureEnabled: (Platform.OS =='android')
       }
       }>
       <Stack.Screen name = "infoStack"  component = {infoStack} />

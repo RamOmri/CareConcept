@@ -111,7 +111,7 @@ export default class Scanner extends React.Component {
                 setTimeout(() => {
                   let that = this;
                   if (that.state.isScanning === true) {
-                    alert(
+                    Alert.alert('',
                       translate(
                         'Scan timed out, please hold phone steady and try again',
                       ),

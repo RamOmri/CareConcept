@@ -19,6 +19,7 @@ import {
   I18nManager,
   BackHandler,
   Dimensions,
+  Alert,
   ActivityIndicator,
 } from 'react-native';
 
@@ -152,8 +153,10 @@ renderInfo(){
         renderLoading={this.renderLoading}
         source={{
           uri:
-            this.props.language.includes('en') && 'https://www.care-concept.de/scripte/sniplets/app_general_information_eng.php?navilang=eng' ||
-             this.props.language.includes('de') && "https://www.care-concept.de/scripte/sniplets/app_general_information.php"
+            this.props.language.includes('en') && 
+            'https://www.care-concept.de/scripte/sniplets/app_general_information_eng.php?navilang=eng' ||
+             this.props.language.includes('de') && 
+             "https://www.care-concept.de/scripte/sniplets/app_general_information.php"
         }}
         style={{marginTop: 20}}
       />
@@ -423,11 +426,11 @@ renderInfo(){
         });
       } else {
         this.setState({cameraPermissionGranted: false});
-        alert('could not access camera, please grant permission manually');
+        Alert.alert('',translate('could not access camera please grant permission manually'))
       }
     } else {
-      alert(
-        'Could not access camera, please grant permission through phone settings ',
+      Alert.alert('',
+        'Could not access camera please grant permission through phone settings',
       );
     }
   };

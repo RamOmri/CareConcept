@@ -91,7 +91,7 @@ class ScanPreview extends React.Component {
                   this.props.navigation.dispatch(resetAction);
                   // this.props.navigation.push('Scanner', {params:{img: [{url: this.state.finalImages}]}});
                 } else {
-                  alert(
+                  Alert.alert('',
                     translate(
                       'number of pages per document cannot be more than 20',
                     ),

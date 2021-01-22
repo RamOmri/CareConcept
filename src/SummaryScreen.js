@@ -9,6 +9,7 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
+  Alert,
   Dimensions,
   ImageBackground,
   FlatList,
@@ -114,7 +115,7 @@ class SummaryScreen extends React.Component {
           source={{
             uri:
               (this.props.language.includes('en') &&
-                'https://www.care-concept.de/scripte/sniplets/app_general_information_3_eng.php?navilang=eng') ||
+    'https://www.care-concept.de/scripte/sniplets/app_general_information_3_eng.php?navilang=eng') ||
               (this.props.language.includes('de') &&
                 'https://www.care-concept.de/scripte/sniplets/app_general_information_3.php'),
           }}
@@ -273,7 +274,7 @@ class SummaryScreen extends React.Component {
                         screen: 'DocumentInfo',
                       });
                     } else {
-                      alert(translate('Cannot send more than 20 documents'));
+                      Alert.alert('',translate('Cannot send more than 20 documents'));
                     }
                   }}>
                   <View style={styles.button}>
@@ -289,7 +290,7 @@ class SummaryScreen extends React.Component {
                       this.setState({isLoading: true});
                       this.constructObject();
                     } else {
-                      alert(
+                      Alert.alert('',
                         translate(
                           'Cannot send anything before you scan some documents',
                         ),
@@ -430,7 +431,7 @@ class SummaryScreen extends React.Component {
         if (res == '400') {
           this.state.server_message = '400';
           this.setState({isLoading: false});
-          alert(
+          Alert.alert('',
             `${JSON.stringify(data[0].arg3)} ${translate(
               'was entered incorrectly Please fix your entry and try again',
             )}`,
@@ -448,7 +449,7 @@ class SummaryScreen extends React.Component {
       this.props.deleteStatePolicyInfo();
       this.props.setLanguage(lang);
 
-      alert(
+      Alert.alert('',
         translate(
           'Thank you for uploading the documents We will contact you shortly',
         ),
@@ -458,7 +459,7 @@ class SummaryScreen extends React.Component {
         screen: 'PolicyInfo',
       });
     } else if (this.state.server_message != '400') {
-      alert(translate('Something went wrong sending claim Please try again'));
+      Alert.alert('',translate('Something went wrong sending claim Please try again'));
       console.log(this.state.server_message);
       this.setState({isLoading: false});
     }
