@@ -51,6 +51,8 @@ import * as RNLocalize from 'react-native-localize';
 import i18n from 'i18n-js';
 import memoize from 'lodash.memoize'; // Use for caching/memoize for better performance
 
+import {WebView} from 'react-native-webview';
+
 const translationGetters = {
   // lazy requires (metro bundler does not support symlinks)
   en: () => require('./translations/eng.json'),
@@ -72,6 +74,7 @@ class SummaryScreen extends React.Component {
       server_message: '',
       isLoading: false,
       finishedSending: false,
+      renderWebView: false,
     };
 
     BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
@@ -83,17 +86,29 @@ class SummaryScreen extends React.Component {
   }
 
   onBackPress = () => {
-    if (!this.state.isLoading) {
-      this.props.navigation.navigate('ClaimStack', {
-        params: {},
-        screen: 'PolicyInfo',
-      })
+    if (!this.state.isLoading && !this.state.renderWebView) {
+      this.props.navigation.goBack()
       return true
     } else {
       return true;
     }
   };
-
+  renderLoading = () => {
+    return (
+      <View
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <ActivityIndicator size="large" color="#004799" />
+      </View>
+    );
+  };
   render() {
     if (this.state.isLoading) {
       return (
@@ -113,7 +128,33 @@ class SummaryScreen extends React.Component {
           <ActivityIndicator size="large" color="#004799" />
         </View>
       );
-    } else {
+    } 
+    else  if (this.state.renderWebView) {
+      return (
+        <View style={{flex: 1, backgroundColor: '#004799'}}>
+         
+         <TouchableOpacity
+                onPress={() => {
+                 this.setState({renderWebView: false})
+                }}>
+              <Image source = {this.props.language.includes('en') && require('./img/goBackEn.png') || 
+              this.props.language.includes('de') && require('./img/goBackDe.png')} 
+              style = {styles.goBackButton} />
+              </TouchableOpacity>
+          <WebView
+            startInLoadingState
+            renderLoading={this.renderLoading}
+            source={{
+              uri:
+                this.props.language.includes('en') && 'https://www.care-concept.de/scripte/sniplets/app_general_information_3_eng.php?navilang=eng' ||
+                 this.props.language.includes('de') && "https://www.care-concept.de/scripte/sniplets/app_general_information_3.php"
+            }}
+            style={{marginTop: 20}}
+          />
+        </View>
+      );
+    }
+    else {
       return (
         <ImageBackground
           style={styles.container}
@@ -141,12 +182,25 @@ class SummaryScreen extends React.Component {
               style={styles.logo}
             />
 
+            <View style = {{alignItems:'center', marginBottom:20}}>
+            <TouchableOpacity
+                onPress={() => {
+                  this.setState({renderWebView: true});
+                }}>
+                <Image
+                  source={require('./img/questionMark.png')}
+                  style={{width: 50, height: 50}}
+                />
+              </TouchableOpacity>
+            </View>
+
             <ScrollView
               contentContainerStyle={{
                 flexGrow: 1,
                 justifyContent: 'space-between',
                 flexDirection: 'column',
               }}>
+                
               <FlatList
                 extraData={this.state}
                 data={this.props.docs}
@@ -214,7 +268,7 @@ class SummaryScreen extends React.Component {
                   }}>
                   <View
                     style={styles.button}>
-                    <Text style={{color: 'white', fontSize: 10, fontWeight:'bold'}}>
+                    <Text style={{color: 'white', fontSize: 10, }}>
                       {translate('Scan Document')}
                     </Text>
                   </View>
@@ -234,7 +288,7 @@ class SummaryScreen extends React.Component {
                     }
                   }}>
                   <View style={styles.button}>
-                    <Text style={{color: 'white', fontSize: 10, fontWeight:'bold'}}>
+                    <Text style={{color: 'white', fontSize: 10,}}>
                       {translate('Send')}
                     </Text>
                   </View>
@@ -364,7 +418,7 @@ class SummaryScreen extends React.Component {
           this.setState({isLoading: false});
           alert(
             `${JSON.stringify(data[0].arg3)} ${translate(
-              'was entered incorrectly Please fix your entry and try agai',
+              'was entered incorrectly Please fix your entry and try again',
             )}`,
           );
         } else {
@@ -380,7 +434,7 @@ class SummaryScreen extends React.Component {
       this.props.deleteStatePolicyInfo();
       this.props.setLanguage(lang)
 
-      alert(translate('Finished submitting claim'))
+      alert(translate("Thank you for uploading the  documents. We will contact you shortly"))
       this.props.navigation.push('ClaimStack', {
         params: {},
         screen: 'PolicyInfo',
@@ -398,12 +452,10 @@ const styles = StyleSheet.create({
     width:Dimensions.get('window').width/2,
     height: Dimensions.get('window').height/9,
     marginLeft: 15,
-    marginBottom: 20,
   },
   DocumentText: {
     flexDirection: 'row',
     fontSize: 14,
-    fontWeight: 'bold',
     color: '#E67F00',
     justifyContent: 'center',
     alignItems: 'center',

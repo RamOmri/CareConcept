@@ -22,7 +22,7 @@ import {
 } from 'react-native';
 
 import StartScreen from './startScreen'
-import InfoMenu from './infoMenu'
+import Privacy from './Privacy'
 import Imprint from './Imprint'
 
 import Scanner from './Scanner';
@@ -127,7 +127,7 @@ const ClaimStack = () => (
   </Stack.Navigator>
 );
 
-const infoStack = ({lang}) =>(
+const infoStack = () =>(
   <Tab.Navigator
   
   screenOptions={({ route }) => ({
@@ -141,14 +141,14 @@ const infoStack = ({lang}) =>(
                               <Text style = {{color:'white', fontSize:12, }}>{translate('Start')}</Text></>);
       }else if(route.name === 'Imprint'){
         return focused ? (<><Image source = {require('./img/imprintOrange.png')}/>
-        <Text style = {{color:'orange', fontSize:12, fontWeight:'700'}}>{translate("Imprint")}</Text></>)
+        <Text style = {{color:'orange', fontSize:12}}>{translate("Imprint")}</Text></>)
         :(<><Image source = {require('./img/imprintWhite.png')}/>
         <Text style = {{color:'white', fontSize:12, }}>{translate("Imprint")}</Text></>)
         
       }
-      else if(route.name === 'privacy'){
+      else if(route.name === 'Privacy'){
         return focused ? (<><Image source = {require('./img/privacyOrange.png')}/>
-        <Text style = {{color:'orange', fontSize:12, fontWeight:'700'}}>{translate("Privacy")}</Text></>)
+        <Text style = {{color:'orange', fontSize:12, }}>{translate("Privacy")}</Text></>)
         :(<><Image source = {require('./img/privacyWhite.png')}/>
         <Text style = {{color:'white', fontSize:12, }}>{translate("Privacy")}</Text></>)
         
@@ -172,7 +172,6 @@ const infoStack = ({lang}) =>(
         },
         labelStyle: {
           fontSize: 14,
-          fontWeight:'700',
           
           
         },
@@ -182,8 +181,8 @@ const infoStack = ({lang}) =>(
 }
   >
  <Tab.Screen name = "Start" component = {StartScreen} />
- <Tab.Screen name = "privacy" component = {InfoMenu} />
- <Tab.Screen name = "Imprint" component = {InfoMenu} />
+ <Tab.Screen name = "Privacy" component = {Privacy} />
+ <Tab.Screen name = "Imprint" component = {Imprint} />
   </Tab.Navigator>
 
 )

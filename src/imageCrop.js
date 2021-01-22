@@ -274,7 +274,6 @@ const styles = StyleSheet.create({
   text:{
     color:'white',
     fontSize:11,
-    fontWeight:'700'
   }
 });
 

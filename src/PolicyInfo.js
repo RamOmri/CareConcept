@@ -118,12 +118,23 @@ class PolicyInfo extends React.Component {
         },
       },
     };
+    BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
   }
 
- async componentDidMount() {
-  
-      
+ 
+  componentWillUnmount() {
+    
+    BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
   }
+
+  onBackPress = () => {
+    if (!this.state.renderWebView) {
+      this.props.navigation.goBack()
+      return true
+    } else {
+      return true;
+    }
+  };
  
   
   renderLoading = () => {
@@ -148,25 +159,11 @@ class PolicyInfo extends React.Component {
         <View style={{flex: 1, backgroundColor: '#004799'}}>
          
           <TouchableOpacity
-            style={{
-              marginLeft: 20,
-              margin: 10,
-              backgroundColor: 'orange',
-              height: Dimensions.get('screen').height / 17,
-              width: Dimensions.get('screen').width / 4,
-              justifyContent: 'center',
-              alignItems: 'center',
-              borderTopLeftRadius: 200,
-              borderBottomLeftRadius: 200,
-            }}
             onPress={() => {
               this.setState({renderWebView: false})
             }}>
-            <View>
-              <Text style={{color: 'white', fontSize: 12}}>
-                {translate('Go Back')}
-              </Text>
-            </View>
+          <Image source = {this.props.language.includes('en') && require('./img/goBackEn.png') || this.props.language.includes('de') && require('./img/goBackDe.png')} 
+              style = {styles.goBackButton} />
           </TouchableOpacity>
           <WebView
             startInLoadingState
@@ -197,7 +194,8 @@ class PolicyInfo extends React.Component {
                 onPress={() => {
                   this.props.navigation.goBack()
                 }}>
-              <Image source = {this.props.language.includes('en') && require('./img/goBackEn.png') || this.props.language.includes('de') && require('./img/goBackDe.png')} 
+              <Image source = {this.props.language.includes('en') && require('./img/goBackEn.png') ||
+               this.props.language.includes('de') && require('./img/goBackDe.png')} 
               style = {styles.goBackButton} />
               </TouchableOpacity>
             )}
@@ -215,7 +213,6 @@ class PolicyInfo extends React.Component {
                 style={{
                   color: '#004799',
                   fontSize: 10,
-                  fontWeight: '700',
                   marginBottom: 20,
                   textAlign: 'center',
                 }}>
@@ -237,9 +234,7 @@ class PolicyInfo extends React.Component {
                   style={{width: 50, height: 50}}
                 />
               </TouchableOpacity>
-              <Text style={styles.headerText}>
-                {translate("Please enter the information of the policy holder below")}
-              </Text>
+              
 
               <TextInput
                 style={styles.policyInput}
@@ -251,22 +246,25 @@ class PolicyInfo extends React.Component {
                 }
                 value={this.props.insuranceNumber}
               />
+              <Text style={styles.headerText}>
+                {translate("Please enter the information of the policy holder below")}
+              </Text>
               <Text style={styles.questionText}>
-                {translate("Select policy holder's sex")}
+                {translate("Salutation")}
               </Text>
               <Menu>
                 <MenuTrigger
-                  text={translate(this.props.gender)}
+                  text={translate(this.props.gender == 'Male' && "Mr" || this.props.gender == 'Female' && "Ms" || 'Select')}
                   customStyles={this.state.menuStyle}
                 />
                 <MenuOptions customStyles={this.state.optionStyles}>
                   <MenuOption
                     onSelect={() => this.props.changeGender('Male')}
-                    text={translate('Male')}
+                    text={translate('Mr')}
                   />
                   <MenuOption
                     onSelect={() => this.props.changeGender('Female')}
-                    text={translate('Female')}
+                    text={translate('Ms')}
                   />
                 </MenuOptions>
               </Menu>
@@ -319,7 +317,7 @@ class PolicyInfo extends React.Component {
       fieldsCorrect = false;
     } 
     if (this.props.gender === 'Select') {
-      errorMessage = errorMessage + translate('Please select your gender') + ' \n'
+      errorMessage = errorMessage + translate('Salutation') + ' \n'
       fieldsCorrect = false
     }
      if (this.props.FirstName === '' || this.props.Surname === '') {
@@ -437,10 +435,9 @@ const styles = StyleSheet.create({
   headerText: {
     color: '#004799',
     fontSize: 17,
-    margin: 15,
+    margin: 10,
     marginBottom: 0,
     alignSelf: 'center',
-    fontWeight: '700',
     textAlign: 'center',
   },
   questionText: {

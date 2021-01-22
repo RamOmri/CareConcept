@@ -193,26 +193,13 @@ class DocumentInfo extends React.Component {
         <View style={{flex: 1, backgroundColor: '#004799'}}>
           <View style={{height: Dimensions.get('screen').height / 15}}>
             <TouchableOpacity
-              style={{
-                marginLeft: 20,
-                margin: 10,
-                backgroundColor: 'orange',
-                height: Dimensions.get('screen').height / 17,
-                width: Dimensions.get('screen').width / 4,
-                justifyContent: 'center',
-                alignItems: 'center',
-                borderTopLeftRadius: 200,
-                borderBottomLeftRadius: 200,
-              }}
+              
               onPress={() => {
                 this.setState({renderGeneralInfoWeb: false});
                 this.setState({renderDocTypeInfoWeb: false});
               }}>
-              <View>
-                <Text style={{color: 'white', fontSize: 12}}>
-                  {translate('Go Back')}
-                </Text>
-              </View>
+               <Image source = {this.props.language.includes('en') && require('./img/goBackEn.png') || this.props.language.includes('de') && require('./img/goBackDe.png')} 
+              style = {styles.goBackButton} />
             </TouchableOpacity>
           </View>
           <View style={{flex: 0.9}}>
@@ -223,16 +210,16 @@ class DocumentInfo extends React.Component {
                 uri:
                   (this.props.language.includes('en') &&
                     this.state.renderGeneralInfoWeb &&
-                    'https://www.care-concept.de/scripte/sniplets/app_general_information_2_eng.php?navilang=eng') ||
+                    'https://www.care-concept.de/scripte/sniplets/app_general_information_eng.php?navilang=eng') ||
                   (this.props.language.includes('en') &&
                     this.state.renderDocTypeInfoWeb &&
-                    'https://www.care-concept.de/scripte/sniplets/app_general_information_3_eng.php?navilang=eng') ||
+                    'https://www.care-concept.de/scripte/sniplets/app_general_information_2_eng.php?navilang=eng') ||
                   (this.props.language.includes('de') &&
                     this.state.renderGeneralInfoWeb &&
-                    'https://www.care-concept.de/scripte/sniplets/app_general_information_2.php') ||
+                    'https://www.care-concept.de/scripte/sniplets/app_general_information.php') ||
                   (this.props.language.includes('de') &&
                     this.state.renderDocTypeInfoWeb &&
-                    'https://www.care-concept.de/scripte/sniplets/app_general_information_3.php'),
+                    'https://www.care-concept.de/scripte/sniplets/app_general_information_2.php'),
               }}
               style={{marginTop: 20}}
             />
@@ -447,7 +434,7 @@ class DocumentInfo extends React.Component {
     return (
       <View style={{}}>
         <Text style={styles.questionText}>
-          {translate('Is the document you are about to scan from Germany')}
+          {translate("Is the bill/receipt from Germany")}
         </Text>
         <Menu>
           <MenuTrigger
@@ -535,6 +522,9 @@ class DocumentInfo extends React.Component {
   renderBankAccountDetails = () => {
     return (
       <View style={{justifyContent: 'center'}}>
+        <Text style = {{marginTop:30, color:"#004799", fontSize:15, marginRight:10}}>
+          {translate( "The contractual services shall be reimbursed to the following account")}
+        </Text>
         <Text style={styles.questionText}>
           {translate('Please enter the full name of the account holder')}
         </Text>
@@ -558,7 +548,7 @@ class DocumentInfo extends React.Component {
         />
 
         <Text style={styles.questionText}>
-          {translate('Please enter your')} IBAN
+          {translate('Please enter your IBAN')} 
         </Text>
         <TextInput
           style={styles.policyInput}
@@ -581,7 +571,7 @@ class DocumentInfo extends React.Component {
 
         <View style={{justifyContent: 'center'}}>
           <Text style={styles.questionText}>
-            {translate('Please enter your')} BIC
+            {translate('Please enter your BIC')} 
           </Text>
           <TextInput
             style={styles.policyInput}
@@ -638,7 +628,7 @@ class DocumentInfo extends React.Component {
           }
         }}>
         <View style={styles.button}>
-          <Text style={{color: 'white', fontSize: 13, fontWeight: '700'}}>
+          <Text style={{color: 'white', fontSize: 13}}>
             {translate('Continue')}
           </Text>
         </View>
@@ -758,7 +748,6 @@ const styles = StyleSheet.create({
     color: '#E67F00',
     marginLeft: 0,
     margin: 10,
-    fontWeight: 'bold',
   },
   nameInput: {
     marginTop: 12,

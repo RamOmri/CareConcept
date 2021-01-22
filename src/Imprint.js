@@ -72,9 +72,18 @@ class Imprint extends React.Component {
      imprintView: false,
      privacyView:false
     };
-    console.log(this.props);
+    BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
   }
 
+ 
+  componentWillUnmount() {
+    
+    BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
+  }
+
+  onBackPress = () => {
+      return true;
+  };
   renderLoading = () => {
     return (
       <View
@@ -112,8 +121,8 @@ class Imprint extends React.Component {
             renderLoading={this.renderLoading}
             source={{
               uri:
-                this.props.language.includes('en') && 'https://www.care-concept.de/scripte/sniplets/app_general_information_eng.php?navilang=eng' ||
-                 this.props.language.includes('de') && "https://www.care-concept.de/scripte/sniplets/app_general_information.php"
+                this.props.language.includes('en') && 'https://www.care-concept.de/wir_ueber_uns/impressum_app_eng.php?navilang=eng' ||
+                 this.props.language.includes('de') && "https://www.care-concept.de/wir_ueber_uns/impressum_app.php"
             }}
             style={{marginTop: 20}}
           />
@@ -131,7 +140,6 @@ const styles = StyleSheet.create({
   buttonText:{
     color:'white',
     fontSize:13,
-    fontWeight:'700'
   },
   buttonStyle:{
       height:Dimensions.get('window').height/16,

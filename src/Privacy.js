@@ -61,7 +61,7 @@ const translate = memoize(
   (key, config) => (config ? key + JSON.stringify(config) : key),
 );
 
-class InfoMenu extends React.Component {
+class Privacy extends React.Component {
   constructor(props) {
     super(props);
 
@@ -69,9 +69,18 @@ class InfoMenu extends React.Component {
       imprintView: false,
       privacyView: false,
     };
-    console.log(this.props);
+    BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
   }
 
+ 
+  componentWillUnmount() {
+    
+    BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
+  }
+
+  onBackPress = () => {
+      return true;
+  };
   renderLoading = () => {
     return (
       <View
@@ -110,9 +119,9 @@ class InfoMenu extends React.Component {
             source={{
               uri:
                 (this.props.language.includes('en') &&
-                  'https://www.care-concept.de/scripte/sniplets/app_general_information_eng.php?navilang=eng') ||
+                'https://www.care-concept.de/wir_ueber_uns/datenschutz_app_eng.php?navilang=eng') ||
                 (this.props.language.includes('de') &&
-                  'https://www.care-concept.de/scripte/sniplets/app_general_information.php'),
+                  'https://www.care-concept.de/wir_ueber_uns/datenschutz_app.php'),
             }}
             style={{marginTop: 20}}
           />
@@ -126,7 +135,6 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     fontSize: 13,
-    fontWeight: '700',
   },
   buttonStyle: {
     height: Dimensions.get('window').height / 16,
@@ -157,4 +165,4 @@ const mapDispatchToProps = (dispatch) => {
   return {};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(InfoMenu);
+export default connect(mapStateToProps, mapDispatchToProps)(Privacy);
