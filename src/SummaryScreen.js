@@ -450,7 +450,7 @@ class SummaryScreen extends React.Component {
 
       alert(
         translate(
-          'Thank you for uploading the  documents We will contact you shortly',
+          'Thank you for uploading the documents We will contact you shortly',
         ),
       );
       this.props.navigation.push('ClaimStack', {
