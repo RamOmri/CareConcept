@@ -489,6 +489,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#E67F00',
     justifyContent: 'center',
+    textAlign:'center',
     alignItems: 'center',
   },
   documentScanButton: {
