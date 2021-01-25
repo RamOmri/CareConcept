@@ -328,7 +328,7 @@ class SummaryScreen extends React.Component {
     var time = Math.floor(new Date().getTime() / 1000).toString();
     let objectToSend = {
       apikey: sha256('GCrzJC4Jb.un4Gd%8njJ' + time),
-      user_language: 'eng',
+      user_language: this.props.language.includes('en') && 'eng' || 'ger',
       timestamp: time,
       payload: new Array(),
     };
@@ -466,9 +466,9 @@ class SummaryScreen extends React.Component {
           'Thank you for uploading the documents We will contact you shortly',
         ),
       );
-      this.props.navigation.push('ClaimStack', {
+      this.props.navigation.navigate('infoStack', {
         params: {},
-        screen: 'PolicyInfo',
+        screen: 'startScreen',
       });
     } else if (this.state.server_message != '400') {
       Alert.alert('',translate('Something went wrong sending claim Please try again'));
