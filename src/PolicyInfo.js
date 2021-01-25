@@ -327,7 +327,7 @@ renderInfo(){
       fieldsCorrect = false;
     } 
     if (this.props.gender === 'Select') {
-      errorMessage = errorMessage + translate('Salutation') + ' \n'
+      errorMessage = errorMessage + translate('Please enter your salutation') + ' \n'
       fieldsCorrect = false
     }
      if (this.props.FirstName === '' || this.props.Surname === '') {
