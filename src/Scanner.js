@@ -13,6 +13,7 @@ import {
   Dimensions,
   ActivityIndicator,
   I18nManager,
+  Platform,
 } from 'react-native';
 
 import {
@@ -30,6 +31,7 @@ import {getStatusBarHeight} from 'react-native-status-bar-height';
 import * as RNLocalize from 'react-native-localize';
 import i18n from 'i18n-js';
 import memoize from 'lodash.memoize'; // Use for caching/memoize for better performance
+
 
 const translationGetters = {
   // lazy requires (metro bundler does not support symlinks)
@@ -65,9 +67,11 @@ export default class Scanner extends React.Component {
     );
   }
 
-  handleScannedDocument(Img, init) {
+  async handleScannedDocument(Img, init) {
+    let image = Img
+    
     this.setState({isScanning: false});
-    this.state.infoObj.pages.push({url: Img});
+    this.state.infoObj.pages.push({url: image});
     this.props.navigation.navigate('ScanStack', {
       params: {infoObj: this.state.infoObj},
       screen: 'imageCrop',

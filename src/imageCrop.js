@@ -28,6 +28,8 @@ import CameraRoll from '@react-native-community/cameraroll';
 import AmazingCropper, {DefaultFooter} from 'react-native-amazing-cropper';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {WebView} from 'react-native-webview';
+import ImageResizer from 'react-native-image-resizer';
+
 
 import {connect} from 'react-redux';
 import {
@@ -64,6 +66,14 @@ class imageCrop extends React.Component {
   }
 
   async componentDidMount() {
+    if(Platform.OS == "ios"){
+      console.log(this.state.infoObj.pages[this.state.infoObj.pages.length - 1].url)
+      await ImageResizer.createResizedImage( this.state.infoObj.pages[this.state.infoObj.pages.length - 1].url, 2000, 2000, "JPEG", 80)
+      .then(response => { 
+        this.state.infoObj.pages[this.state.infoObj.pages.length - 1].url = response.uri
+       console.log(response.size)
+      })
+     }
     await this.getImageSize(
       this.state.infoObj.pages[this.state.infoObj.pages.length - 1].url,
     );

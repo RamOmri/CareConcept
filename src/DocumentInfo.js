@@ -58,6 +58,7 @@ import i18n from 'i18n-js';
 import memoize from 'lodash.memoize'; // Use for caching/memoize for better performance
 import {WebView} from 'react-native-webview';
 import {DatePicker} from 'react-native-common-date-picker';
+import ImageResizer from 'react-native-image-resizer';
 const translationGetters = {
   // lazy requires (metro bundler does not support symlinks)
   en: () => require('./translations/eng.json'),
