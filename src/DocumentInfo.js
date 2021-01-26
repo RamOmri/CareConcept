@@ -174,7 +174,7 @@ class DocumentInfo extends React.Component {
          {Platform.OS === 'ios' && (
               <TouchableOpacity
                 onPress={() => {
-                 this.props.navigation.goBack()
+                 this.onBackPress()
                 }}>
               <Image source = {this.props.language.includes('en') && require('./img/goBackEn.png') || this.props.language.includes('de') && require('./img/goBackDe.png')} 
               style = {styles.goBackButton} />
