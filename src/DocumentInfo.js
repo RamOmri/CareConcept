@@ -116,7 +116,7 @@ class DocumentInfo extends React.Component {
           backgroundColor: '#004799',
           margin: 10,
           borderRadius: 10,
-          height: 40,
+          height: 60,
           justifyContent: 'center',
           alignItems: 'center',
         },
@@ -373,6 +373,7 @@ class DocumentInfo extends React.Component {
         <DateTimePickerModal
           isVisible={this.state.isDatePickerVisible}
           mode="date"
+          locale = {(this.props.language.includes("de"))&&"de-DE"|| "en-EN"}
           date={new Date()}
           onConfirm={(date) => {
             this.handleConfirm(date);

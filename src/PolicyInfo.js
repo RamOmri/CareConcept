@@ -90,7 +90,7 @@ class PolicyInfo extends React.Component {
           backgroundColor: '#004799',
           margin: 3,
           borderRadius: 10,
-          height: 40,
+          height: 60,
           justifyContent: 'center',
           alignItems: 'center',
         },
