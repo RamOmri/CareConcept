@@ -189,7 +189,7 @@ class DocumentInfo extends React.Component {
           <ScrollView>
             <View
               style={{
-                marginBottom: 150,
+                marginBottom: 130,
                 justifyContent: 'center',
                 marginLeft: 20,
               }}>
@@ -635,6 +635,7 @@ class DocumentInfo extends React.Component {
 
   renderContinue = () => {
     return (
+      <View style = {{marginBottom:130}}>
       <TouchableOpacity
         onPress={() => {
           if (this.state.isEditing && this.checkFieldsBeforeContinue()) {
@@ -655,6 +656,8 @@ class DocumentInfo extends React.Component {
           </Text>
         </View>
       </TouchableOpacity>
+      
+      </View>
     );
   };
 
