@@ -443,6 +443,7 @@ class SummaryScreen extends React.Component {
         if (res == '400') {
           this.state.server_message = '400';
           this.setState({isLoading: false});
+          this.onBackPress()
           Alert.alert('',
             `${JSON.stringify(data[0].arg3)} ${translate(
               'was entered incorrectly Please fix your entry and try again',

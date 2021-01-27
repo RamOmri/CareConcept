@@ -85,9 +85,9 @@ class StartScreen extends React.Component {
             position: 'absolute',
             height: Dimensions.get('window').width/3.789,
             width: Dimensions.get('window').width/3.789,
-            top:Dimensions.get('window').height/6.2,
+            top:Dimensions.get('window').height/7.4,
             borderRadius:1000,
-            left:Dimensions.get('window').width/1.5,
+            left:Dimensions.get('window').width/1.54,
             justifyContent:'center',
             alignItems:'center'
           }
