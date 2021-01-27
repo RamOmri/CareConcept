@@ -38,7 +38,7 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>"Access is required for scanning documents.
+	<string>"Access is required for scanning documents./
 	Der Zugang wird benötigt, um Dokumente zu scannen."</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>

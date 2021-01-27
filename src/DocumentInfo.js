@@ -678,7 +678,7 @@ class DocumentInfo extends React.Component {
     ) {
       errorMessage =
         errorMessage +
-        `${translate('please check your bank details')} (name)` +
+        `${translate('please check your bank details')} ${this.props.lang.includes("de")&& "Name" || "name"}` +
         ' \n';
       correctFields = false;
     }
