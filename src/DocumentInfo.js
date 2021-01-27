@@ -595,6 +595,7 @@ class DocumentInfo extends React.Component {
             {translate('Please enter your BIC')} 
           </Text>
           <TextInput
+          autoCapitalize = "characters"
             style={styles.policyInput}
             placeholder="BIC"
             placeholderTextColor="#004799"
