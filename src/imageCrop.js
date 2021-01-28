@@ -12,7 +12,6 @@ import {
   ActivityIndicator,
   Platform,
   I18nManager,
-  BackHandler
 } from 'react-native';
 
 import {
@@ -65,11 +64,8 @@ class imageCrop extends React.Component {
       loading: true,
     };
   }
- 
 
- 
   async componentDidMount() {
-    BackHandler.addEventListener('hardwareBackPress', this.backPress);
     if(Platform.OS == "ios"){
       console.log(this.state.infoObj.pages[this.state.infoObj.pages.length - 1].url)
       await ImageResizer.createResizedImage( this.state.infoObj.pages[this.state.infoObj.pages.length - 1].url, 2000, 2000, "JPEG", 80)
@@ -82,18 +78,13 @@ class imageCrop extends React.Component {
       this.state.infoObj.pages[this.state.infoObj.pages.length - 1].url,
     );
   }
-   async onDone(croppedImageUri) {
+
+  async onDone(croppedImageUri) {
     this.state.infoObj.pages.splice(this.state.infoObj.pages.length - 1, 1, {
       url: croppedImageUri,
     });
     await this.getImageSize(croppedImageUri);
   }
- componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress', this.backPress);
-  }
-backPress = () =>{
-  return false
-}
 
   async getImageSize(img) {
     await ImageSize.getSize(img)
@@ -113,7 +104,6 @@ backPress = () =>{
     console.log(err);
   };
   onContinue = () => {
-    BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
     this.props.navigation.navigate('ScanStack', {
       params: {infoObj: this.state.infoObj},
       screen: 'ScanPreview',
@@ -181,7 +171,7 @@ backPress = () =>{
       return (
         <React.Fragment>
          
-          <View style={{flex: 0.8, }}>
+          <View style={{flex: 1, }}>
             {Platform.OS != 'android' && (
               <View style={{paddingTop: getStatusBarHeight()}}>
                 <StatusBar />
@@ -224,7 +214,7 @@ backPress = () =>{
 
   CustomCropperFooter = (props) => {
     return (
-      <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+      <View style={{flexDirection: 'row', justifyContent: 'center',}}>
         <TouchableOpacity
           onPress={() => {
             this.state.infoObj.pages.splice(
