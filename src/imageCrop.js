@@ -113,6 +113,7 @@ backPress = () =>{
     console.log(err);
   };
   onContinue = () => {
+    BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
     this.props.navigation.navigate('ScanStack', {
       params: {infoObj: this.state.infoObj},
       screen: 'ScanPreview',

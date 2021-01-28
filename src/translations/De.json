@@ -63,6 +63,12 @@
  "Thank you for uploading the documents We will contact you shortly": "Vielen Dank für den Upload der Dokumente. Wir werden uns zeitnah bei Ihnen melden. \n Wichtiger Hinweis: Bitte reichen Sie die Dokumente nicht noch einmal per Post oder E-Mail ein.",
  "could not access camera please grant permission manually": "Die App konnte nicht auf die Kamera zugreifen, bitte erteilen Sie die Erlaubnis manuell",
  "Could not access camera please grant permission through phone settings": "Die App konnte nicht auf die Kamera zugreifen, bitte gewähren Sie die Erlaubnis über die Telefoneinstellungen",
- "Please enter your salutation":"Bitte geben Sie Ihre Anrede ein"
+ "Please enter your salutation":"Bitte geben Sie Ihre Anrede ein",
+
+ "You can start scanning documents by pressing the scan document button below": "Sie können das Scannen von Dokumenten starten, indem Sie auf die Schaltfläche Dokument scannen unten drücken", 
+ "Press the show document button below to view all the pages of your document": "Drücken Sie die Schaltfläche Dokument anzeigen unten, um alle Seiten Ihres Dokuments anzuzeigen",
+ "Show Document": "Dokument anzeigen",
+ "You can view and edit the document by pressing here":"\nZur Anzeige und Bearbeitung des Dokuments klicken Sie bitte hier.",
+ "Here you can edit the information you put in and view the pages of the document by pressing the Show Document button":"Hier können Sie die Informationen zum Dokument ändern und die einzelnen Seiten des Dokuments aufrufen durch Klick auf Dokument anzeigen"
 
 }

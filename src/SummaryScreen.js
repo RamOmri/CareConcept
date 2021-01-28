@@ -502,7 +502,7 @@ const styles = StyleSheet.create({
     marginLeft:10,
     marginRight:10,
     fontSize: 14,
-    color: '#E67F00',
+    color: '#004799',
     justifyContent: 'center',
     textAlign:'center',
     alignItems: 'center',

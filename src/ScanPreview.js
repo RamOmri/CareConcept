@@ -57,6 +57,9 @@ class ScanPreview extends React.Component {
     this.state.infoObj.pages.reverse();
   }
 
+  onBackPress = () =>{
+    return false
+  }
   render() {
     return (
       <View style={{marginTop: 10}}>
@@ -107,6 +110,7 @@ class ScanPreview extends React.Component {
             <TouchableOpacity
               style={styles.button}
               onPress={() => {
+                BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
                 this.props.navigation.navigate('ClaimStack', {
                   params: {},
                   screen: 'SummaryScreen',

@@ -79,10 +79,12 @@ onBackPress = () =>{
     
     this.setState({isScanning: false});
     this.state.infoObj.pages.push({url: image});
+    BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
     this.props.navigation.navigate('ScanStack', {
       params: {infoObj: this.state.infoObj},
       screen: 'imageCrop',
     });
+    
   }
   render() {
     return <React.Fragment>{this.renderScanner()}</React.Fragment>;
@@ -129,6 +131,7 @@ onBackPress = () =>{
                     );
                     that.state.pdfScannerReference.current.forceUpdate();
                     that.setState({isScanning: false});
+
                   }
                 }, 9000);
               }}>
