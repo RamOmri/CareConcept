@@ -14,6 +14,7 @@ import {
   ActivityIndicator,
   I18nManager,
   Platform,
+  BackHandler
 } from 'react-native';
 
 import {
@@ -59,6 +60,7 @@ export default class Scanner extends React.Component {
   }
 
   componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.backPress);
     this.willFocusSubscription = this.props.navigation.addListener(
       'willFocus',
       () => {
@@ -66,7 +68,12 @@ export default class Scanner extends React.Component {
       },
     );
   }
-
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
+  }
+onBackPress = () =>{
+  return false
+}
   async handleScannedDocument(Img, init) {
     let image = Img
     

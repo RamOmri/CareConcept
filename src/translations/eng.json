@@ -67,5 +67,7 @@
   "Could not access camera please grant permission through phone settings": "Could not access camera please grant permission through phone settings",
   "Please enter your salutation":"Please enter your salutation",
   "Show Document":"Show Document",
-  "Press the show document button below to view all the pages of your document":"Press the 'show document' button below to view all the pages of your document"
+  "Press the show document button below to view all the pages of your document":"Press the 'show document' button below to view all the pages of your document",
+  "You can start scanning documents by pressing the scan document button below": "You can start scanning documents by pressing the Scan Document button below"
+
 }

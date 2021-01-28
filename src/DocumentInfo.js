@@ -642,6 +642,7 @@ class DocumentInfo extends React.Component {
       <View style = {{marginBottom:130}}>
       <TouchableOpacity
         onPress={() => {
+          BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
           if (this.state.isEditing && this.checkFieldsBeforeContinue()) {
             this.props.navigation.navigate('ScanStack', {
               params: {infoObj: this.state.infoObj},

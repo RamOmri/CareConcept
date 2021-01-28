@@ -219,7 +219,7 @@ class SummaryScreen extends React.Component {
               </TouchableOpacity>
             </View>
               {this.props.docs == 0 &&  <Text style = {styles.text}>
-                 You can start scanning documents by pressing the "Scan Document" button below
+                 {translate("You can start scanning documents by pressing the scan document button below")}
                 </Text>}
             <ScrollView
               contentContainerStyle={{

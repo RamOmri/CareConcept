@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   Dimensions,
   I18nManager,
+  BackHandler
 } from 'react-native';
 
 import {
@@ -135,6 +136,7 @@ class ScanPreview extends React.Component {
                 onPress={() => {
                   this.state.infoObj.pages.reverse();
                   this.props.add(this.state.infoObj);
+                  BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
                   this.props.navigation.navigate('ClaimStack', {
                     params: {},
                     screen: 'SummaryScreen',
