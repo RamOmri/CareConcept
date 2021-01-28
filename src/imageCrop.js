@@ -181,7 +181,7 @@ backPress = () =>{
       return (
         <React.Fragment>
          
-          <View style={{flex: 1, }}>
+          <View style={{flex: 0.8, }}>
             {Platform.OS != 'android' && (
               <View style={{paddingTop: getStatusBarHeight()}}>
                 <StatusBar />
@@ -224,7 +224,7 @@ backPress = () =>{
 
   CustomCropperFooter = (props) => {
     return (
-      <View style={{flexDirection: 'row', justifyContent: 'center',}}>
+      <View style={{flexDirection: 'row', justifyContent: 'center'}}>
         <TouchableOpacity
           onPress={() => {
             this.state.infoObj.pages.splice(
