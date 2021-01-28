@@ -108,9 +108,9 @@ class SummaryScreen extends React.Component {
           <Image
             source={
               (this.props.language.includes('en') &&
-                require('./img/goBackEn.png')) ||
+                require('./img/editPolicyHolderEn.png')) ||
               (this.props.language.includes('de') &&
-                require('./img/goBackDe.png'))
+                require('./img/editPolicyHolderDe.png'))
             }
             style={styles.goBackButton}
           />
