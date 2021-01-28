@@ -181,8 +181,8 @@ class DocumentInfo extends React.Component {
                 onPress={() => {
                  this.onBackPress()
                 }}>
-              <Image source = {this.props.language.includes('en') && require('./img/goBackEn.png') || this.props.language.includes('de') && require('./img/goBackDe.png')} 
-              style = {styles.goBackButton} />
+            {!this.state.isEditing && <Image source = {this.props.language.includes('en') && require('./img/goBackEn.png') || this.props.language.includes('de') && require('./img/goBackDe.png')} 
+              style = {styles.goBackButton} />}
               </TouchableOpacity>
             )}
         <Image

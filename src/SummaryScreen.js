@@ -108,9 +108,9 @@ class SummaryScreen extends React.Component {
           <Image
             source={
               (this.props.language.includes('en') &&
-                require('./img/editPolicyHolderEn.png')) ||
+                require('./img/goBackEn.png')) ||
               (this.props.language.includes('de') &&
-                require('./img/editPolicyHolderDe.png'))
+                require('./img/goBackDe.png'))
             }
             style={styles.goBackButton}
           />
@@ -194,11 +194,14 @@ class SummaryScreen extends React.Component {
                 <Image
                   source={
                     (this.props.language.includes('en') &&
-                      require('./img/goBackEn.png')) ||
+                      require('./img/editPolicyHolderEn.png')) ||
                     (this.props.language.includes('de') &&
-                      require('./img/goBackDe.png'))
+                      require('./img/editPolicyHolderDe.png'))
                   }
-                  style={styles.goBackButton}
+                  style={{marginLeft: 10,
+                    resizeMode: 'contain',
+                    height: Dimensions.get('window').height / 15,
+                    width: Dimensions.get('window').width / 3,}}
                 />
               </TouchableOpacity>
             )}
