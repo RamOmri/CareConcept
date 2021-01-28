@@ -189,6 +189,11 @@ class DocumentInfo extends React.Component {
           source={require('./img/CareConceptLogo.png')}
           style={styles.logo}
         />
+       {this.state.isEditing &&
+        <Text style = {{color:"#004799", fontSize:15, marginRight:8, textAlign:'center', marginLeft:8,}}>
+          {translate("Here you can edit the information you put in and view the pages of the document by pressing the Show Document button")}
+        </Text>}
+
         <View style={{}}>
           <ScrollView>
             <View

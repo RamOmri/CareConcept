@@ -255,7 +255,11 @@ class SummaryScreen extends React.Component {
                         'with',
                       )} ${item.document.pages.length} ${translate(
                         'pages',
-                      )}`}</Text>
+                      )}${translate("You can view and edit the document by pressing here")} `}
+                      </Text>
+                      <Text style = {styles.DocumentText}>
+                        
+                      </Text>
                       <Image
                         source={{uri: item.document.pages[0].url}}
                         style={{
@@ -495,11 +499,14 @@ const styles = StyleSheet.create({
   },
   DocumentText: {
     flexDirection: 'row',
+    marginLeft:10,
+    marginRight:10,
     fontSize: 14,
     color: '#E67F00',
     justifyContent: 'center',
     textAlign:'center',
     alignItems: 'center',
+    marginBottom:0
   },
   documentScanButton: {
     flex: 1,
