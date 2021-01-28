@@ -153,6 +153,10 @@ class DocumentInfo extends React.Component {
         ...this.state,
         infoObj: this.props.route.params.infoObj.document,
       };
+      this.state.sendMoneyToContractualServices = this.state.infoObj.sendMoneyToContractualServices
+      this.state.isDocumentGerman = this.state.infoObj.isDocumentGerman
+      this.state.docType = this.state.infoObj.docType
+      console.log(this.props.route.params.infoObj)
       delete this.state.infoObj.key;
     }
   }
@@ -652,7 +656,7 @@ class DocumentInfo extends React.Component {
         }}>
         <View style={styles.button}>
           <Text style={{color: 'white', fontSize: 13}}>
-            {translate('Continue')}
+            {!this.state.isEditing && translate('Continue') || translate("Show Document")}
           </Text>
         </View>
       </TouchableOpacity>
@@ -668,7 +672,7 @@ class DocumentInfo extends React.Component {
       this.state.infoObj.sendMoneyToContractualServices = 'Yes';
 
     if (
-      this.state.isDocumentGerman === 'Select' &&
+       this.state.isDocumentGerman === 'Select' &&
       this.state.docType === 'Claim Document'
     ) {
       errorMessage =
@@ -728,7 +732,7 @@ class DocumentInfo extends React.Component {
   }
 
   onBackPress = () => {
-    if (
+  /*   if (
       this.state.isEditing &&
       !(this.state.renderDocTypeInfoWeb || this.state.renderGeneralInfoWeb || this.state.renderBillFromGermanyInfo || this.state.renderDatePickerInfo ||
         this.state.renderWhoToPay)
@@ -741,6 +745,16 @@ class DocumentInfo extends React.Component {
         });
       } else return true;
     } else if (
+      !(this.state.renderDocTypeInfoWeb || this.state.renderGeneralInfoWeb || this.state.renderBillFromGermanyInfo || this.state.renderDatePickerInfo ||
+        this.state.renderWhoToPay)
+    ) {
+      this.props.navigation.navigate('ClaimStack', {
+        params: {},
+        screen: 'SummaryScreen',
+      });
+    } */
+    if(this.state.isEditing) Alert.alert('', translate('Press the show document button below to view all the pages of your document'))
+    else if (
       !(this.state.renderDocTypeInfoWeb || this.state.renderGeneralInfoWeb || this.state.renderBillFromGermanyInfo || this.state.renderDatePickerInfo ||
         this.state.renderWhoToPay)
     ) {
