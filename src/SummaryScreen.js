@@ -218,7 +218,9 @@ class SummaryScreen extends React.Component {
                 />
               </TouchableOpacity>
             </View>
-
+              {this.props.docs == 0 &&  <Text style = {styles.text}>
+                 You can start scanning documents by pressing the "Scan Document" button below
+                </Text>}
             <ScrollView
               contentContainerStyle={{
                 flexGrow: 1,
@@ -296,7 +298,7 @@ class SummaryScreen extends React.Component {
                   </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity
+               {(this.props.docs.length != 0) && <TouchableOpacity
                   onPress={() => {
                     if (this.props.docs.length != 0) {
                       this.setState({isLoading: true});
@@ -314,7 +316,7 @@ class SummaryScreen extends React.Component {
                       {translate('Send')}
                     </Text>
                   </View>
-                </TouchableOpacity>
+                </TouchableOpacity>}
               </View>
             </ScrollView>
           </View>
@@ -484,6 +486,12 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width / 2,
     height: Dimensions.get('window').height / 9,
     marginLeft: 15,
+  },
+  text:{
+    fontSize:30,
+    color: '#004799',
+    textAlign:'center',
+    margin:10,
   },
   DocumentText: {
     flexDirection: 'row',

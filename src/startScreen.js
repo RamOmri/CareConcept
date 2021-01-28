@@ -14,6 +14,7 @@ import {
   ActivityIndicator,
   I18nManager,
   ImageBackground,
+  BackHandler
 } from 'react-native';
 
 import {
@@ -57,9 +58,17 @@ class StartScreen extends React.Component {
     
   }
 
-  async componentDidMount() { 
-    
+  componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
   }
+  
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
+  }
+  
+  onBackPress = () => { 
+      return true;
+  };
 
   render() {
     return (
