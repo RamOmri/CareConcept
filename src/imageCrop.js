@@ -172,11 +172,6 @@ class imageCrop extends React.Component {
         <React.Fragment>
          
           <View style={{flex: 1, }}>
-            {Platform.OS != 'android' && (
-              <View style={{paddingTop: getStatusBarHeight()}}>
-                <StatusBar />
-              </View>
-            )}
             <AmazingCropper
               footerComponent={<this.CustomCropperFooter />}
               onDone={(croppedImageUri) => {
