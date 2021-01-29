@@ -21,6 +21,7 @@ import {
   Dimensions,
   Alert,
   ActivityIndicator,
+  DeviceEventEmitter
 } from 'react-native';
 
 import {WebView} from 'react-native-webview';
@@ -119,16 +120,23 @@ class PolicyInfo extends React.Component {
         },
       },
     };
-    BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
+  
   }
 
  
-  componentWillUnmount() {
-    
-    BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
+  componentDidMount(){
+    BackHandler.addEventListener("hardwareBackPress", this.onBackPress)
   }
 
+  componentWillUnmount() {
+    BackHandler.removeEventListener("hardwareBackPress", this.onBackPress)
+   /*  this.didFocus.remove();
+    this.willBlur.remove(); */
+  }
+
+ 
   onBackPress = () => {
+    console.log(1)
     if (!this.state.renderWebView) {
       this.props.navigation.goBack()
       return true

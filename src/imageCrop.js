@@ -12,6 +12,8 @@ import {
   ActivityIndicator,
   Platform,
   I18nManager,
+  BackHandler,
+  DeviceEventEmitter
 } from 'react-native';
 
 import {
@@ -66,6 +68,7 @@ class imageCrop extends React.Component {
   }
 
   async componentDidMount() {
+    BackHandler.addEventListener("hardwareBackPress", this.onBackPress)
     if(Platform.OS == "ios"){
       console.log(this.state.infoObj.pages[this.state.infoObj.pages.length - 1].url)
       await ImageResizer.createResizedImage( this.state.infoObj.pages[this.state.infoObj.pages.length - 1].url, 2000, 2000, "JPEG", 80)
@@ -79,6 +82,14 @@ class imageCrop extends React.Component {
     );
   }
 
+  
+  componentWillUnmount() {
+    BackHandler.removeEventListener("hardwareBackPress", this.onBackPress)
+  }
+  onBackPress = () =>{
+    console.log(5)
+    return true
+  }
   async onDone(croppedImageUri) {
     this.state.infoObj.pages.splice(this.state.infoObj.pages.length - 1, 1, {
       url: croppedImageUri,
@@ -101,8 +112,9 @@ class imageCrop extends React.Component {
   }
 
   onError = (err) => {
-    console.log(err);
+    console.log(err);  
   };
+  
   onContinue = () => {
     this.props.navigation.navigate('ScanStack', {
       params: {infoObj: this.state.infoObj},
@@ -216,16 +228,16 @@ class imageCrop extends React.Component {
               this.state.infoObj.pages.length - 1,
               1,
             );
-            if (Platform.OS === 'ios')
+            if (Platform.OS === 'ios'){
               this.props.navigation.push('ScanStack', {
                 params: {infoObj: this.state.infoObj},
                 screen: 'Scanner',
-              });
-            else
+              });}
+            else{
               this.props.navigation.navigate('ScanStack', {
                 params: {infoObj: this.state.infoObj},
                 screen: 'Scanner',
-              });
+              });}
           }}
           style={styles.button}>
           <Text style={styles.text}>{translate('Rescan')}</Text>

@@ -20,6 +20,7 @@ import {
   Platform,
   Modal,
   Alert,
+  DeviceEventEmitter
 } from 'react-native';
 
 import {
@@ -126,6 +127,7 @@ class DocumentInfo extends React.Component {
         },
       },
     };
+
     this.setPrefilledDateAndBankDetails();
     this.check_if_editing();
   }
@@ -647,7 +649,7 @@ class DocumentInfo extends React.Component {
       <View style = {{marginBottom:130}}>
       <TouchableOpacity
         onPress={() => {
-          BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
+
           if (this.state.isEditing && this.checkFieldsBeforeContinue()) {
             this.props.navigation.navigate('ScanStack', {
               params: {infoObj: this.state.infoObj},
@@ -730,14 +732,15 @@ class DocumentInfo extends React.Component {
   }
 
   componentDidMount() {
-    BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
+    BackHandler.addEventListener("hardwareBackPress", this.onBackPress)
   }
 
   componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
+    BackHandler.removeEventListener("hardwareBackPress", this.onBackPress)
   }
 
   onBackPress = () => {
+    console.log(3)
   /*   if (
       this.state.isEditing &&
       !(this.state.renderDocTypeInfoWeb || this.state.renderGeneralInfoWeb || this.state.renderBillFromGermanyInfo || this.state.renderDatePickerInfo ||

@@ -18,6 +18,7 @@ import {
   BackHandler,
   I18nManager,
   Platform,
+  DeviceEventEmitter
 } from 'react-native';
 
 import {
@@ -76,18 +77,23 @@ class SummaryScreen extends React.Component {
       finishedSending: false,
       renderWebView: false,
     };
+  
+   
+  }
 
-    BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
+  componentDidMount(){
+    BackHandler.addEventListener("hardwareBackPress", this.onBackPress)
   }
 
   componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
+    BackHandler.removeEventListener("hardwareBackPress", this.onBackPress)
   }
 
   onBackPress = () => {
+    console.log(2)
     if (!this.state.isLoading && !this.state.renderWebView) {
       this.props.navigation.goBack();
-      return true;
+      return true
     } else {
       return true;
     }

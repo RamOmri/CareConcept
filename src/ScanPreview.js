@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   Dimensions,
   I18nManager,
+  DeviceEventEmitter,
   BackHandler
 } from 'react-native';
 
@@ -54,11 +55,15 @@ class ScanPreview extends React.Component {
   }
 
   componentDidMount() {
+    BackHandler.addEventListener("hardwareBackPress", this.onBackPress)
     this.state.infoObj.pages.reverse();
   }
-
+  componentWillUnmount() {
+    BackHandler.removeEventListener("hardwareBackPress", this.onBackPress)
+  }
   onBackPress = () =>{
-    return false
+    console.log(6)
+    return true
   }
   render() {
     return (
@@ -110,7 +115,6 @@ class ScanPreview extends React.Component {
             <TouchableOpacity
               style={styles.button}
               onPress={() => {
-                BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
                 this.props.navigation.navigate('ClaimStack', {
                   params: {},
                   screen: 'SummaryScreen',
@@ -140,7 +144,6 @@ class ScanPreview extends React.Component {
                 onPress={() => {
                   this.state.infoObj.pages.reverse();
                   this.props.add(this.state.infoObj);
-                  BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
                   this.props.navigation.navigate('ClaimStack', {
                     params: {},
                     screen: 'SummaryScreen',

@@ -14,7 +14,8 @@ import {
   ActivityIndicator,
   I18nManager,
   Platform,
-  BackHandler
+  BackHandler,
+  DeviceEventEmitter
 } from 'react-native';
 
 import {
@@ -54,32 +55,25 @@ export default class Scanner extends React.Component {
       pdfScannerReference: React.createRef(),
       infoObj: this.props.route.params.infoObj,
     };
-    const unsubscribe = this.props.navigation.addListener('focus', () => {
-      this.forceUpdate();
-    });
+  
   }
 
   componentDidMount() {
-    BackHandler.addEventListener('hardwareBackPress', this.backPress);
-    this.willFocusSubscription = this.props.navigation.addListener(
-      'willFocus',
-      () => {
-        this.forceUpdate();
-      },
-    );
+    BackHandler.addEventListener("hardwareBackPress", this.onBackPress)
+    
   }
   componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
+    BackHandler.removeEventListener("hardwareBackPress", this.onBackPress)
   }
 onBackPress = () =>{
-  return false
+  console.log(4)
+  return true
 }
   async handleScannedDocument(Img, init) {
     let image = Img
     
     this.setState({isScanning: false});
     this.state.infoObj.pages.push({url: image});
-    BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
     this.props.navigation.navigate('ScanStack', {
       params: {infoObj: this.state.infoObj},
       screen: 'imageCrop',
