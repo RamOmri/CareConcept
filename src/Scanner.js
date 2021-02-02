@@ -105,8 +105,9 @@ onBackPress = () =>{
           enableTorch={false}
           quality={1}
           detectionRefreshRateInMS={1}
-         // saveOnDevice = {true}
           detectionCountBeforeCapture={10000}
+          detectionCountBeforeCapture={100000}
+
         />
 
         <View style={{flex: 0.12}}>
@@ -118,14 +119,23 @@ onBackPress = () =>{
                 this.state.pdfScannerReference.current.capture();
                 setTimeout(() => {
                   let that = this;
+                  console.log("here")
                   if (that.state.isScanning === true) {
                     Alert.alert('',
                       translate(
                         'Scan timed out, please hold phone steady and try again',
                       ),
                     );
+                    if(Platform.OS === "ios"){ 
+                      this.props.navigation.push('ScanStack', {
+                      params: {infoObj: this.state.infoObj},
+                      screen: 'Scanner',
+                    });
+                  }
+                  else{
                     that.state.pdfScannerReference.current.forceUpdate();
                     that.setState({isScanning: false});
+                  }
 
                   }
                 }, 9000);
