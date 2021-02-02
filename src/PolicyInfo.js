@@ -347,7 +347,7 @@ renderInfo(){
       fieldsCorrect = false
     }
     
-    if(!fieldsCorrect) alert(errorMessage)
+    if(!fieldsCorrect) Alert.alert('',errorMessage)
     return fieldsCorrect
   };
 

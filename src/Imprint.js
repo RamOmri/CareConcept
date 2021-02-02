@@ -120,9 +120,9 @@ class Imprint extends React.Component {
             startInLoadingState
             renderLoading={this.renderLoading}
             source={{
-              uri:
-                this.props.language.includes('en') && 'https://www.care-concept.de/wir_ueber_uns/impressum_app_eng.php?navilang=eng' ||
+              uri: this.props.language.includes('en') && 'https://www.care-concept.de/wir_ueber_uns/impressum_app_eng.php?navilang=eng' ||
                  this.props.language.includes('de') && "https://www.care-concept.de/wir_ueber_uns/impressum_app.php"
+               
             }}
             style={{marginTop: 20}}
           />

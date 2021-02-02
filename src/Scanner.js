@@ -105,6 +105,7 @@ onBackPress = () =>{
           enableTorch={false}
           quality={1}
           detectionRefreshRateInMS={1}
+         // saveOnDevice = {true}
           detectionCountBeforeCapture={10000}
         />
 
