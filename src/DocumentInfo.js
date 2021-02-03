@@ -762,8 +762,8 @@ class DocumentInfo extends React.Component {
         screen: 'SummaryScreen',
       });
     } */
-    if(this.state.isEditing) Alert.alert('', translate('Press the show document button below to view all the pages of your document'))
-    else if (
+  
+     if (
       !(this.state.renderDocTypeInfoWeb || this.state.renderGeneralInfoWeb || this.state.renderBillFromGermanyInfo || this.state.renderDatePickerInfo ||
         this.state.renderWhoToPay)
     ) {
@@ -771,7 +771,7 @@ class DocumentInfo extends React.Component {
         params: {},
         screen: 'SummaryScreen',
       });
-    }
+    } else if(this.state.isEditing) Alert.alert('', translate('Press the show document button below to view all the pages of your document'))
     return true;
   };
 }

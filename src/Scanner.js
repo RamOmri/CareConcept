@@ -105,7 +105,6 @@ onBackPress = () =>{
           enableTorch={false}
           quality={1}
           detectionRefreshRateInMS={1}
-          detectionCountBeforeCapture={10000}
           detectionCountBeforeCapture={100000}
 
         />
