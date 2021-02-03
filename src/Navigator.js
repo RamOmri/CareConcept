@@ -18,12 +18,14 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
-  I18nManager
+  I18nManager,
+  Dimensions
 } from 'react-native';
 
 import StartScreen from './startScreen'
 import Privacy from './Privacy'
 import Imprint from './Imprint'
+import HowToVid from './HowToVid'
 
 import Scanner from './Scanner';
 import ScanPreview from './ScanPreview';
@@ -32,6 +34,7 @@ import imageCrop from './imageCrop';
 import PolicyInfo from './PolicyInfo';
 import SummaryScreen from './SummaryScreen';
 import DocumentInfo from './DocumentInfo';
+
 
 import {connect} from 'react-redux';
 import {setLanguage} from './actions/policInfoActions';
@@ -139,6 +142,13 @@ const infoStack = () =>(
                               <Text style = {{color:'orange', fontSize:12,}}>{translate('Start')}</Text></>) 
                               :(<><Image source = {require('./img/startWhite.png')}/>
                               <Text style = {{color:'white', fontSize:12, }}>{translate('Start')}</Text></>);
+                              }
+      else if(route.name === 'HowToVid'){
+        return focused ? (<>
+          <Image  source = {require('./img/HowToOrange.png')}/>
+        <Text style = {{color:'orange', fontSize:12,}}>{translate('How to video')}</Text></>) 
+        :(<><Image source = {require('./img/HowToBlue.png')}/>
+        <Text style = {{color:'white', fontSize:12, }}>{translate('How to video')}</Text></>);
       }else if(route.name === 'Imprint'){
         return focused ? (<><Image source = {require('./img/imprintOrange.png')}/>
         <Text style = {{color:'orange', fontSize:12}}>{translate("Imprint")}</Text></>)
@@ -151,7 +161,6 @@ const infoStack = () =>(
         <Text style = {{color:'orange', fontSize:12, }}>{translate("Privacy")}</Text></>)
         :(<><Image source = {require('./img/privacyWhite.png')}/>
         <Text style = {{color:'white', fontSize:12, }}>{translate("Privacy")}</Text></>)
-        
       }
       
     },
@@ -181,6 +190,7 @@ const infoStack = () =>(
 }
   >
  <Tab.Screen name = "Start" component = {StartScreen} />
+ <Tab.Screen name = 'HowToVid' component = {HowToVid} />
  <Tab.Screen name = "Privacy" component = {Privacy} />
  <Tab.Screen name = "Imprint" component = {Imprint} />
   </Tab.Navigator>

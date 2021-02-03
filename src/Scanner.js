@@ -126,6 +126,7 @@ onBackPress = () =>{
                       ),
                     );
                     if(Platform.OS === "ios"){ 
+                      this.props.navigation.pop()
                       this.props.navigation.push('ScanStack', {
                       params: {infoObj: this.state.infoObj},
                       screen: 'Scanner',
