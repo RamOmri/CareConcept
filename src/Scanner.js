@@ -115,7 +115,6 @@ onBackPress = () =>{
               style={styles.scanButton}
               onPress={() => {
                 this.setState({isScanning: true});
-                this.state.pdfScannerReference.current.capture();
                 setTimeout(() => {
                   let that = this;
                   console.log("here")
@@ -126,6 +125,7 @@ onBackPress = () =>{
                       ),
                     );
                     if(Platform.OS === "ios"){ 
+                      console.log("===================")
                       this.props.navigation.pop()
                       this.props.navigation.push('ScanStack', {
                       params: {infoObj: this.state.infoObj},
@@ -139,6 +139,7 @@ onBackPress = () =>{
 
                   }
                 }, 9000);
+                this.state.pdfScannerReference.current.capture();
               }}>
               <Text style={{fontSize: 18, color: 'white', margin: 10}}>
                 {translate('Scan')}
