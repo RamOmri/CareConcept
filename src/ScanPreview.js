@@ -22,7 +22,6 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-import DocumentScanner from '@woonivers/react-native-document-scanner';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import {connect} from 'react-redux';
 import {addDoc} from './actions/claimActions';

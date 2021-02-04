@@ -25,7 +25,6 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-import DocumentScanner from '@woonivers/react-native-document-scanner';
 import ImageSize from 'react-native-image-size';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
@@ -92,22 +91,7 @@ onBackPress = () =>{
             <StatusBar />
           </View>
         )}
-        <DocumentScanner
-          ref={this.state.pdfScannerReference}
-          style={styles.scanner}
-          onPictureTaken={(picture) => {
-            this.handleScannedDocument(
-              picture.croppedImage,
-              picture.initialImage,
-            );
-          }}
-          overlayColor="rgba(255,130,0, 0.7)"
-          enableTorch={false}
-          quality={1}
-          detectionRefreshRateInMS={1}
-          detectionCountBeforeCapture={100000}
-
-        />
+        
 
         <View style={{flex: 0.12}}>
           {(!this.state.isScanning && (

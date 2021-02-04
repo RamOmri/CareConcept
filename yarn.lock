@@ -1501,11 +1501,6 @@
   dependencies:
     "eslint-visitor-keys" "^1.1.0"
 
-"@woonivers/react-native-document-scanner@^2.1.1":
-  "integrity" "sha512-DJVRhEOtY8I8RzcG64mmFZqaoRqnpAOjeiI2gU5XnjyIuSkURp5YnfiH21i/fOx/xLPhIuf1MRvEWK1l74F9CQ=="
-  "resolved" "https://registry.npmjs.org/@woonivers/react-native-document-scanner/-/react-native-document-scanner-2.1.1.tgz"
-  "version" "2.1.1"
-
 "abab@^2.0.3":
   "integrity" "sha512-9IK9EadsbHo6jLWIpxpR6pL0sazTXV6+SQv25ZB+F7Bj9mJNaOc4nCRabwd5M/JwmUa8idz6Eci6eKfJryPs6Q=="
   "resolved" "https://registry.npmjs.org/abab/-/abab-2.0.5.tgz"
