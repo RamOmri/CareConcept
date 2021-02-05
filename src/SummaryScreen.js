@@ -44,7 +44,7 @@ import {deleteStatePolicyInfo, setLanguage} from './actions/policInfoActions';
 import {StackActions, NavigationActions} from 'react-navigation';
 import ImgToBase64 from 'react-native-image-base64';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
-import {PDFDocument} from 'pdf-lib';
+import {PDFDocument, degrees} from 'pdf-lib';
 const sha256 = require('sha256');
 var RNFS = require('react-native-fs');
 import base64 from 'react-native-base64';
@@ -401,17 +401,20 @@ class SummaryScreen extends React.Component {
           .catch((err) => console.log('here2:::::::::::::::::::: ' + err));
         var page = pdfDoc.addPage();
         const pdfDims = embeddedImage.scale(
-          (page.getHeight() / embeddedImage.height >
-            page.getWidth() / embeddedImage.width &&
-            page.getWidth() / embeddedImage.width) ||
-            page.getHeight() / embeddedImage.height,
+          (page.getHeight() / embeddedImage.width >
+            page.getWidth() / embeddedImage.height &&
+            page.getWidth() / embeddedImage.height) ||
+            page.getHeight() / embeddedImage.width,
         );
-
+          console.log(
+            `page dims ${page.getWidth()} ${page.getHeight()} img dims: ${pdfDims.height} ${pdfDims.width}`
+          )
         page.drawImage(embeddedImage, {
-          x: page.getHeight() / 2 - pdfDims.height / 2,
-          y: page.getWidth() / 2 - pdfDims.width / 2,
+          x: page.getWidth() / 2 - pdfDims.height / 2,
+          y:  page.getHeight(),
           width: pdfDims.width,
           height: pdfDims.height,
+          rotate: degrees(-90),
         });
       }
       let pdfBytes = await pdfDoc.save();
@@ -458,8 +461,8 @@ class SummaryScreen extends React.Component {
       let lang = this.props.language;
       console.log(lang);
       this.setState({isLoading: false});
-      this.props.deleteStateClaimInfo();
-      this.props.deleteStatePolicyInfo();
+     /* this.props.deleteStateClaimInfo();
+      this.props.deleteStatePolicyInfo(); */
       this.props.setLanguage(lang);
 
       Alert.alert('',

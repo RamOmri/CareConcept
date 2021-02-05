@@ -374,7 +374,7 @@ onBackPress = () =>{
                       </Text>
                       </TouchableOpacity> */}
 
-<TouchableOpacity
+{ <TouchableOpacity
                       
                       activeOpacity={0.8}
                       style={{
@@ -390,7 +390,7 @@ onBackPress = () =>{
                       <Text style={{ fontSize:12, color:"white", textAlign:"center"}}>
                        {"document detection"}
                       </Text>
-                      </TouchableOpacity> 
+                      </TouchableOpacity> }
                
                       <TouchableOpacity
                       
@@ -487,12 +487,11 @@ onBackPress = () =>{
           }}
             onPictureTaken={this.onPictureTaken}
             onPictureProcessed={({croppedImage, initialImage})=>{
-              console.log("reaches here")
               this.handleScannedDocument(croppedImage, initialImage, this.state.infoObj)
             }}
             enableTorch={this.state.flashEnabled}
             ref={this.state.ScannerRef}
-            capturedQuality={1}
+            capturedQuality={0.8}
             onRectangleDetected={({ detectedRectangle }) => this.setState({ detectedRectangle })}
             onDeviceSetup={this.onDeviceSetup}
             onTorchChanged={({ enabled }) => this.setState({ flashEnabled: enabled })}
