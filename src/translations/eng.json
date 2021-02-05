@@ -73,6 +73,8 @@
   "You can view and edit the document by pressing here":"\n(view and edit the document by pressing here)",
   "Here you can edit the information you put in and view the pages of the document by pressing the Show Document button": "Here you can edit the document's information and view the pages of the document by pressing the Show Document button",
   "How to video": "How to",
-  "Cancel":"Cancel"
-
+  "Cancel":"Cancel",
+  "Flash":"Flash",
+  "document detection":"document detection",
+  "Please wait until screen turns on before scanning":"Please wait until the screen turns on before scanning"
 }

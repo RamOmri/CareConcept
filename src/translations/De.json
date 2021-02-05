@@ -71,6 +71,9 @@
  "Show Document": "Dokument anzeigen",
  "You can view and edit the document by pressing here":"\nZur Anzeige und Bearbeitung des Dokuments klicken Sie bitte hier.",
  "Here you can edit the information you put in and view the pages of the document by pressing the Show Document button":"Hier können Sie die Informationen zum Dokument ändern und die einzelnen Seiten des Dokuments aufrufen durch Klick auf Dokument anzeigen",
- "How to video": "Erklärvideo"
+ "How to video": "Erklärvideo",
+ "Flash":"Blitzlicht",
+ "document detection":"dokument erkennungs",
+ "Please wait until screen turns on before scanning":"Bitte warten Sie vor dem Scannen, bis sich der Bildschirm einschaltet"
 
 }

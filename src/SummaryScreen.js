@@ -461,8 +461,8 @@ class SummaryScreen extends React.Component {
       let lang = this.props.language;
       console.log(lang);
       this.setState({isLoading: false});
-     /* this.props.deleteStateClaimInfo();
-      this.props.deleteStatePolicyInfo(); */
+     this.props.deleteStateClaimInfo();
+      this.props.deleteStatePolicyInfo();
       this.props.setLanguage(lang);
 
       Alert.alert('',

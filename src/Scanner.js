@@ -228,7 +228,7 @@ onBackPress = () =>{
       
         })
       //  this.componentDidMount()
-     alert("Please wait until screen turns on before scanning")
+     alert(translate("Please wait until screen turns on before scanning"))
       }
     }, 2000);
     this.state.ScannerRef.current.capture();
@@ -289,7 +289,7 @@ onBackPress = () =>{
             onPress={() => this.setState({ flashEnabled: !flashEnabled })}
           >
             <Text style={{color:"white"}}>
-              Flash
+              {translate("Flash")}
             </Text>
           </TouchableOpacity>
         </View>
@@ -388,7 +388,7 @@ onBackPress = () =>{
                       }}
                     >
                       <Text style={{ fontSize:12, color:"white", textAlign:"center"}}>
-                       {"document detection"}
+                       {translate("document detection")}
                       </Text>
                       </TouchableOpacity> }
                
