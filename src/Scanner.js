@@ -73,8 +73,10 @@ export default class ScanScreen extends PureComponent {
       didLoadInitialLayout: false,
       detectedRectangle: false,
       isMultiTasking: false,
+      useScanner: true,
       loadingCamera: true,
       processingImage: false,
+      docScanned: false,
       takingPicture: false,
       overlayFlashOpacity: new Animated.Value(0),
       device: {
@@ -195,17 +197,17 @@ onBackPress = () =>{
     // Capture the current frame/rectangle. Triggers the flash animation and shows a
   // loading/processing state. Will not take another picture if already taking a picture.
   capture = () => {
-    console.log(this.state)
+   this.setState({docScanned: true})
     if(this.state.loadingCamera)return
     if (this.state.takingPicture) return;
     if (this.state.processingImage) return;
     this.setState({ takingPicture: true, processingImage: true });
     this.imageProcessorTimeout = setTimeout(() => {
       if (this.state.takingPicture) {
-        //this.componentWillUnmount()
         this.setState({
           infoObj: this.props.route.params.infoObj,
       flashEnabled: false,
+      docScanned: false,
       showScannerView: false,
       didLoadInitialLayout: false,
       detectedRectangle: false,
@@ -277,12 +279,12 @@ onBackPress = () =>{
     // Renders the flashlight button. Only shown if the device has a flashlight.
     renderFlashControl() {
       const { flashEnabled, device } = this.state;
-      if (!device.flashIsAvailable) return null;
+      if (!device.flashIsAvailable || this.state.docScanned) return null;
       return (
         <View >
           <TouchableOpacity
             style={{height:50, width:100,borderRadius:30, justifyContent:"center", alignItems:"center",
-              backgroundColor: flashEnabled ? '#00000080' : "#f59b00",  }}
+              backgroundColor: flashEnabled ? "#f59b00" : '#004799',  }}
             activeOpacity={0.8}
             onPress={() => this.setState({ flashEnabled: !flashEnabled })}
           >
@@ -296,9 +298,7 @@ onBackPress = () =>{
     // Renders the camera controls. This will show controls on the side for large tablet screens
   // or on the bottom for phones. (For small tablets it will adjust the view a little bit).
   renderCameraControls() {
-    if(this.state.loadingCamera){
-      return null
-    }
+    
     const dimensions = Dimensions.get('window');
     const aspectRatio = dimensions.height / dimensions.width;
     const isPhone = aspectRatio > 1.6;
@@ -343,19 +343,6 @@ onBackPress = () =>{
         </View>
       );
     }
-    if(this.state.loadingCamera){
-      return(
-        <>
-        <View style ={{flex:1 }}>
-         
-     
-           
-          </View>
-          
-        </>
-      )
-    
-              }
               return (
                 <>
                 <View style ={{flex:0.93, }}>
@@ -363,8 +350,10 @@ onBackPress = () =>{
                   {this.renderFlashControl()}
             </View>
                 </View>
-                  <View style={{flexDirection:"row", justifyContent:"center",}}>
-                {/*   <TouchableOpacity
+                  <View style={{flexDirection:"row", justifyContent:"center",marginRight:110}}>
+                {/* 
+                  uncomment this to add a cancel or go back button
+                <TouchableOpacity
                       
                       activeOpacity={0.8}
                       style={{
@@ -384,18 +373,36 @@ onBackPress = () =>{
                        {translate("Cancel")}
                       </Text>
                       </TouchableOpacity> */}
+
+<TouchableOpacity
+                      
+                      activeOpacity={0.8}
+                      style={{
+                        alignSelf:"center",
+                        justifyContent:"center", alignItems:"center",
+                      height:50, width:100, backgroundColor: this.state.useScanner ? "#f59b00" : '#004799',
+                    borderRadius:100,
+                  marginRight:10, marginTop:30,}}
+                      onPress={()=>{
+                        this.setState({useScanner: !this.state.useScanner})
+                      }}
+                    >
+                      <Text style={{ fontSize:12, color:"white", textAlign:"center"}}>
+                       {"document detection"}
+                      </Text>
+                      </TouchableOpacity> 
                
                       <TouchableOpacity
                       
                         activeOpacity={0.8}
                         style={{
-                          alignSelf:"center",
-                          justifyContent:"center", alignItems:"center",
+                        alignSelf:"center",
+                        justifyContent:"center", alignItems:"center",
                         height:100, width:100, backgroundColor:'#f59b00',
                       borderRadius:100}}
                         onPress={this.capture}
                       >
-                        <Text style={{ fontSize:25, color:"white"}}>
+                        <Text style={{ fontSize:22, color:"white"}}>
                          {translate("Scan")}
                         </Text>
                         </TouchableOpacity>
@@ -408,7 +415,7 @@ onBackPress = () =>{
   // Renders the camera controls or a loading/processing state
   renderCameraOverlay() {
     let loadingState = null;
-    if (this.state.loadingCamera) {
+    /* if (this.state.loadingCamera) {
       loadingState = (
         <View style={styles.overlay}>
           <View style={styles.loadingContainer}>
@@ -417,7 +424,7 @@ onBackPress = () =>{
           </View>
         </View>
       );
-    } else if (this.state.processingImage) {
+    } else  */if (this.state.processingImage) {
       loadingState = (
         <View style={styles.overlay}>
           <View style={styles.loadingContainer}>
@@ -442,7 +449,9 @@ onBackPress = () =>{
 
   
   async handleScannedDocument(croppedImage, initialImage, infoObj) {  
-    infoObj.pages.push({url: croppedImage});
+    let img = this.state.useScanner && croppedImage || initialImage
+    infoObj.pages.push({url: img});
+    this.componentWillUnmount()
     this.props.navigation.navigate('ScanStack', {
       params: {infoObj: infoObj},
       screen: 'imageCrop',
@@ -455,7 +464,7 @@ onBackPress = () =>{
     if (this.state.showScannerView) {
       const previewSize = this.getPreviewSize();
       let rectangleOverlay = null;
-      if (!this.state.loadingCamera && !this.state.processingImage) {
+      if (!this.state.loadingCamera && !this.state.processingImage && this.state.useScanner) {
         rectangleOverlay = (
           <RectangleOverlay
             detectedRectangle={this.state.detectedRectangle}
