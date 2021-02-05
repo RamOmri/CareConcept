@@ -400,10 +400,6 @@ class SummaryScreen extends React.Component {
           .embedJpg(bytes)
           .catch((err) => console.log('here2:::::::::::::::::::: ' + err));
         var page = pdfDoc.addPage();
-
-        console.log('!!!!!!!!!!!!!!!!!!!!!' + embeddedImage.height);
-        console.log(embeddedImage.width / page.getWidth());
-        console.log(embeddedImage.height / page.getHeight());
         const pdfDims = embeddedImage.scale(
           (page.getHeight() / embeddedImage.height >
             page.getWidth() / embeddedImage.width &&
@@ -412,8 +408,8 @@ class SummaryScreen extends React.Component {
         );
 
         page.drawImage(embeddedImage, {
-          x: page.getWidth() / 2 - pdfDims.width / 2,
-          y: page.getHeight() / 2 - pdfDims.height / 2,
+          x: page.getHeight() / 2 - pdfDims.height / 2,
+          y: page.getWidth() / 2 - pdfDims.width / 2,
           width: pdfDims.width,
           height: pdfDims.height,
         });
@@ -427,16 +423,6 @@ class SummaryScreen extends React.Component {
     return pdfArray;
   }
 
-  //If not used then please delete
-  /* _base64ToArrayBuffer(base64) {
-    var binary_string = new Buffer.from(base64, 'base64');
-    var len = binary_string.length;
-    var bytes = new Uint8Array(len);
-    for (var i = 0; i < len; i++) {
-      bytes[i] = binary_string.charCodeAt(i);
-    }
-    return bytes.buffer;
-  } */
 
   async sendObject(objectToSend) {
     var message_from_server;

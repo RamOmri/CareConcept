@@ -323,10 +323,10 @@ PODS:
     - React
   - RNLocalize (2.0.1):
     - React-Core
-  - RNPdfScanner (2.1.1):
-    - React
   - RNPermissions (3.0.0):
     - React-Core
+  - RNRectangleScanner (1.0.10):
+    - React
   - RNScreens (2.15.0):
     - React-Core
   - RNSVG (12.1.0):
@@ -397,8 +397,8 @@ DEPENDENCIES:
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNImageRotate (from `../node_modules/react-native-image-rotate`)
   - RNLocalize (from `../node_modules/react-native-localize`)
-  - "RNPdfScanner (from `../node_modules/@woonivers/react-native-document-scanner/ios`)"
   - RNPermissions (from `../node_modules/react-native-permissions`)
+  - RNRectangleScanner (from `../node_modules/react-native-rectangle-scanner/ios`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
@@ -496,10 +496,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-image-rotate"
   RNLocalize:
     :path: "../node_modules/react-native-localize"
-  RNPdfScanner:
-    :path: "../node_modules/@woonivers/react-native-document-scanner/ios"
   RNPermissions:
     :path: "../node_modules/react-native-permissions"
+  RNRectangleScanner:
+    :path: "../node_modules/react-native-rectangle-scanner/ios"
   RNScreens:
     :path: "../node_modules/react-native-screens"
   RNSVG:
@@ -559,8 +559,8 @@ SPEC CHECKSUMS:
   RNGestureHandler: 7a5833d0f788dbd107fbb913e09aa0c1ff333c39
   RNImageRotate: 61c62c5a907405821e28dc8c0e04e4fdc909b1fa
   RNLocalize: 41026b7c14878f1a1b381bc79f668f1fbf841adb
-  RNPdfScanner: bd89efba74959f3e4f863cc406fa962ea3a3af2f
   RNPermissions: 99dd8d4a30ff13509b949ca63cd1f69edc461775
+  RNRectangleScanner: 0bb9b67ed46f3558c8f956968b6c637946c3e78a
   RNScreens: 2ad555d4d9fa10b91bb765ca07fe9b29d59573f0
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
   RNVectorIcons: bc69e6a278b14842063605de32bec61f0b251a59

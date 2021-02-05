@@ -68,14 +68,13 @@ class imageCrop extends React.Component {
 
   async componentDidMount() {
     BackHandler.addEventListener("hardwareBackPress", this.onBackPress)
-    if(Platform.OS == "ios"){
-      console.log(this.state.infoObj.pages[this.state.infoObj.pages.length - 1].url)
+    /* if(Platform.OS == "ios"){
       await ImageResizer.createResizedImage( this.state.infoObj.pages[this.state.infoObj.pages.length - 1].url, 2000, 2000, "JPEG", 80)
       .then(response => { 
         this.state.infoObj.pages[this.state.infoObj.pages.length - 1].url = response.uri
        console.log(response.size)
       })
-     }
+     } */
     await this.getImageSize(
       this.state.infoObj.pages[this.state.infoObj.pages.length - 1].url,
     );

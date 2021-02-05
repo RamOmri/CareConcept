@@ -27,7 +27,7 @@ import Privacy from './Privacy'
 import Imprint from './Imprint'
 import HowToVid from './HowToVid'
 
-import Scanner from './Scanner';
+import ScanScreen from './Scanner';
 import ScanPreview from './ScanPreview';
 import imageCrop from './imageCrop';
 
@@ -110,7 +110,7 @@ const ScanStack = () => (
       lazy: false,
       gestureEnabled: !Platform.OS === 'ios',
     }}>
-    <Stack.Screen name="Scanner" component={Scanner} />
+    <Stack.Screen name="Scanner" component={ScanScreen} />
     <Stack.Screen name="imageCrop" component={imageCrop} />
     <Stack.Screen name="ScanPreview" component={ScanPreview} />
   </Stack.Navigator>
