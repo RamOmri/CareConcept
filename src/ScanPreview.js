@@ -62,7 +62,6 @@ class ScanPreview extends React.Component {
     BackHandler.removeEventListener("hardwareBackPress", this.onBackPress)
   }
   onBackPress = () =>{
-    console.log(6)
     return true
   }
   render() {
@@ -87,7 +86,6 @@ class ScanPreview extends React.Component {
               onPress={() => {
                 if (this.state.infoObj.pages.length < 20) {
                   this.state.infoObj.pages.reverse();
-                  // this.props.navigation.reset('ScanStack', {params:{img: [{url: this.state.finalImages}]}, screen: 'Scanner'})
                   const resetAction = CommonActions.reset({
                     index: 1,
                     routes: [
@@ -98,7 +96,6 @@ class ScanPreview extends React.Component {
                     ],
                   });
                   this.props.navigation.dispatch(resetAction);
-                  // this.props.navigation.push('Scanner', {params:{img: [{url: this.state.finalImages}]}});
                 } else {
                   Alert.alert('',
                     translate(

@@ -64,7 +64,7 @@ const setI18nConfig = async () => {
   try {
     I18nManager.allowRTL(false);
   } catch (e) {
-    console.log(e);
+    alert('Something went wrong, please contact technical support ' + e)
   }
   // set i18n-js config
   i18n.translations = {[languageTag]: translationGetters[languageTag]()};
@@ -210,7 +210,7 @@ class Navigator extends React.Component{
   async componentDidMount(){
     let lang = await setI18nConfig()
     this.props.setLanguage(lang)
-    console.log(this.props.language)
+    //console.log(this.props.language) <- uncomment this to get letter code from console
     this.setState({isLangSelected:true})
   }
    render(){

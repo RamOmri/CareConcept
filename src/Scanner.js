@@ -66,7 +66,6 @@ export default class Scanner extends React.Component {
     BackHandler.removeEventListener("hardwareBackPress", this.onBackPress)
   }
 onBackPress = () =>{
-  console.log(4)
   return true
 }
   async handleScannedDocument(Img, init) {
@@ -118,7 +117,6 @@ onBackPress = () =>{
                 this.state.pdfScannerReference.current.capture();
                 setTimeout(() => {
                   let that = this;
-                  console.log("here")
                   if (that.state.isScanning === true) {
                     Alert.alert('',
                       translate(

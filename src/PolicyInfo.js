@@ -136,7 +136,6 @@ class PolicyInfo extends React.Component {
 
  
   onBackPress = () => {
-    console.log(1)
     if (!this.state.renderWebView) {
       this.props.navigation.goBack()
       return true
@@ -377,7 +376,6 @@ renderInfo(){
         if (!numbers.includes(insuranceNumber[i])) return false;
       }
       this.props.changeInsuranceNumber(insuranceNumber)
-      console.log(this.props.insuranceNumber)
       return true;
     } else if (alphabet.includes(insuranceNumber[0])) {
       let policynumberlength = insuranceNumber.split('').length;
@@ -388,7 +386,6 @@ renderInfo(){
         }
       }
       this.props.changeInsuranceNumber(insuranceNumber)
-      console.log('fewfewfew' + this.props.insuranceNumber)
       return true;
     } else {
       return false;
@@ -421,7 +418,6 @@ renderInfo(){
   };
   handleCameraPermissionIOS = async () => {
     const res = await check(PERMISSIONS.IOS.CAMERA);
-    console.log(res);
     if (res === RESULTS.GRANTED) {
       this.setState({cameraPermissionGranted: true});
       this.props.navigation.navigate('ClaimStack', {
