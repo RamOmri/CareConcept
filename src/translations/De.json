@@ -12,7 +12,7 @@
   "Please enter your name": "Bitte geben Sie den Namen ein.",
 
   "Send": "Senden",
-  "was entered incorrectly Please fix your entry and try again": "wurde falsch eingegeben. Bitte korrigieren Sie Ihre Eingabe und versuchen Sie es erneut",
+  "was entered incorrectly Please fix your entry and try again": "wurde falsch eingegeben. Bitte korrigieren Sie Ihre Eingabe und versuchen Sie es erneut.",
   "Something went wrong sending claim Please try again": "Beim Senden des Dokuments ist ein Problem aufgetreten. Bitte versuchen Sie es erneut.",
   "Cannot send anything before you scan some documents": "Sie können nichts senden, bevor Sie ein Dokument gescannt haben!",
 
@@ -21,7 +21,7 @@
   "Which type of document are you about to scan": "Welche Art von Dokument wollen Sie scannen?",
   "Claim Document": "Beleg",
   "Other Document": "Sonstiges Dokument",
-  "Press for explanation": "Durch Berühren des Symbols erhalten Sie weitere Informationen",
+  "Press for explanation": "Durch Berühren des Symbols erhalten Sie weitere Informationen.",
   "Is the bill/receipt from Germany": "Handelt es sich um einen Beleg aus Deutschland?",
   "Yes": "Ja",
   "No": "Nein",
@@ -66,11 +66,14 @@
  "Could not access camera please grant permission through phone settings": "Die App konnte nicht auf die Kamera zugreifen, bitte erteilen Sie die Erlaubnis über die Telefoneinstellungen.",
 
   "Please enter your salutation":"Bitte wählen Sie die Anrede aus.",
- "You can start scanning documents by pressing the scan document button below": "Sie können das Scannen von Dokumenten starten, indem Sie auf die Schaltfläche Dokument scannen unten drücken", 
- "Press the show document button below to view all the pages of your document": "Drücken Sie die Schaltfläche Dokument anzeigen unten, um alle Seiten Ihres Dokuments anzuzeigen",
+ "You can start scanning documents by pressing the scan document button below": "Sie können das Scannen von Dokumenten starten, indem Sie auf die Schaltfläche\n Dokument scannen unten drücken.", 
+ "Press the show document button below to view all the pages of your document": "Drücken Sie die Schaltfläche Dokument anzeigen unten, um alle Seiten Ihres Dokuments anzuzeigen.",
  "Show Document": "Dokument anzeigen",
  "You can view and edit the document by pressing here":"\nZur Anzeige und Bearbeitung des Dokuments klicken Sie bitte hier.",
- "Here you can edit the information you put in and view the pages of the document by pressing the Show Document button":"Hier können Sie die Informationen zum Dokument ändern und die einzelnen Seiten des Dokuments aufrufen durch Klick auf Dokument anzeigen",
- "How to video": "Erklärvideo"
+ "Here you can edit the information you put in and view the pages of the document by pressing the Show Document button":"Hier können Sie die Informationen zum Dokument ändern und die einzelnen Seiten des Dokuments aufrufen durch Klick auf Dokument anzeigen.",
+ "How to video": "Erklärvideo",
+ "Flash":"Blitz",
+ "document detection":"Automatische Erkennung",
+ "Please wait until screen turns on before scanning":"Bitte warten Sie, bis sich der Bildschirm einschaltet, ehe Sie scannen."
 
 }
