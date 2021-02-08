@@ -88,22 +88,10 @@ class imageCrop extends React.Component {
     return true
   }
   async onDone(croppedImageUri) {
-    this.deleteCachedImage( this.state.infoObj.pages[this.state.infoObj.pages.length - 1].url)
     this.state.infoObj.pages.splice(this.state.infoObj.pages.length - 1, 1, {
       url: croppedImageUri,
     });
     await this.getImageSize(croppedImageUri);
-  }
-  deleteCachedImage = async (path) =>{
-    let RNFS = require('react-native-fs');
-    return RNFS.unlink(path)
-      .then(() => {
-        
-      })
-      // `unlink` will throw an error, if the item to unlink does not exist
-      .catch((err) => {
-        alert('Something went wrong, please clear cache of this app')
-      });
   }
 
   async getImageSize(img) {
@@ -228,9 +216,7 @@ class imageCrop extends React.Component {
       );
   }
  
-  deleteCachedImage = async (path) =>{
-    
-  }
+ 
   CustomCropperFooter = (props) => {
    
     return (

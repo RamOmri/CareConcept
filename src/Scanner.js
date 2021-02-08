@@ -88,7 +88,7 @@ onBackPress = () =>{
       })
       // `unlink` will throw an error, if the item to unlink does not exist
       .catch((err) => {
-        alert('Something went wrong, please clear cache of this app')
+        alert('Something went wrong, please clear cache of this app ' + err)
       });
   }
   render() {
