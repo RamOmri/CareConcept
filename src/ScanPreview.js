@@ -64,6 +64,17 @@ class ScanPreview extends React.Component {
   onBackPress = () =>{
     return true
   }
+  deleteCachedImage = async (path) =>{
+    let RNFS = require('react-native-fs');
+    return RNFS.unlink(path)
+      .then(() => {
+        
+      })
+      // `unlink` will throw an error, if the item to unlink does not exist
+      .catch((err) => {
+        console.log(err)
+      });
+  }
   render() {
     return (
       <View style={{marginTop: 10}}>
@@ -111,7 +122,10 @@ class ScanPreview extends React.Component {
 
             <TouchableOpacity
               style={styles.button}
-              onPress={() => {
+              onPress={async () => {
+                for(let i = 0; i < this.state.infoObj.pages.length; i++){
+                    await this.deleteCachedImage(this.state.infoObj.pages[i].url)
+                }
                 this.props.navigation.navigate('ClaimStack', {
                   params: {},
                   screen: 'SummaryScreen',

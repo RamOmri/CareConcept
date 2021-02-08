@@ -381,6 +381,17 @@ class SummaryScreen extends React.Component {
     this.sendObject(objectToSend);
   }
 
+
+  deleteCache = async (path) =>{
+    return RNFS.unlink(path)
+      .then(() => {
+        
+      })
+      // `unlink` will throw an error, if the item to unlink does not exist
+      .catch((err) => {
+        //console.log(err)
+      });
+  }
   async makeDocumentPagesPDF() {
     var bytes;
     let pdfArray = [];
@@ -414,6 +425,7 @@ class SummaryScreen extends React.Component {
           height: pdfDims.height,
         });
       }
+      this.deleteCache("file:///data/user/0/com.careconcept/cache/documents")
       let pdfBytes = await pdfDoc.save();
       let pdfBase64 = await base64.encodeFromByteArray(pdfBytes);
 

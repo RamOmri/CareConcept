@@ -69,8 +69,9 @@ onBackPress = () =>{
   return true
 }
   async handleScannedDocument(Img, init) {
-    let image = Img
+    this.deleteCachedImage(init)
     
+    let image = Img   
     this.setState({isScanning: false});
     this.state.infoObj.pages.push({url: image});
     this.props.navigation.navigate('ScanStack', {
@@ -78,6 +79,17 @@ onBackPress = () =>{
       screen: 'imageCrop',
     });
     
+  }
+  deleteCachedImage = async (path) =>{
+    let RNFS = require('react-native-fs');
+    return RNFS.unlink(path)
+      .then(() => {
+        
+      })
+      // `unlink` will throw an error, if the item to unlink does not exist
+      .catch((err) => {
+        alert('Something went wrong, please clear cache of this app')
+      });
   }
   render() {
     return <React.Fragment>{this.renderScanner()}</React.Fragment>;

@@ -88,10 +88,22 @@ class imageCrop extends React.Component {
     return true
   }
   async onDone(croppedImageUri) {
+    this.deleteCachedImage( this.state.infoObj.pages[this.state.infoObj.pages.length - 1].url)
     this.state.infoObj.pages.splice(this.state.infoObj.pages.length - 1, 1, {
       url: croppedImageUri,
     });
     await this.getImageSize(croppedImageUri);
+  }
+  deleteCachedImage = async (path) =>{
+    let RNFS = require('react-native-fs');
+    return RNFS.unlink(path)
+      .then(() => {
+        
+      })
+      // `unlink` will throw an error, if the item to unlink does not exist
+      .catch((err) => {
+        alert('Something went wrong, please clear cache of this app')
+      });
   }
 
   async getImageSize(img) {
@@ -215,16 +227,30 @@ class imageCrop extends React.Component {
         </View>
       );
   }
-
+ 
+  deleteCachedImage = async (path) =>{
+    
+  }
   CustomCropperFooter = (props) => {
+   
     return (
       <View style={{flexDirection: 'row', justifyContent: 'center',}}>
         <TouchableOpacity
-          onPress={() => {
+          onPress={async () => {
+            let imguri = this.state.infoObj.pages[this.state.infoObj.pages.length - 1]
             this.state.infoObj.pages.splice(
               this.state.infoObj.pages.length - 1,
               1,
             );
+            let RNFS = require('react-native-fs');
+           RNFS.unlink(imguri.url)
+            .then(() => {
+              
+            })
+            // `unlink` will throw an error, if the item to unlink does not exist
+            .catch((err) => {
+              alert('Something went wrong, please clear cache of this app')
+            });
             if (Platform.OS === 'ios'){
               this.props.navigation.push('ScanStack', {
                 params: {infoObj: this.state.infoObj},
