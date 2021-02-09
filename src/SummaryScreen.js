@@ -76,6 +76,7 @@ class SummaryScreen extends React.Component {
       isLoading: false,
       finishedSending: false,
       renderWebView: false,
+      cachePath: null
     };
   
    
@@ -395,11 +396,10 @@ class SummaryScreen extends React.Component {
   async makeDocumentPagesPDF() {
     var bytes;
     let pdfArray = [];
-    let cachePath;
     for (let d = 0; d < this.props.docs.length; d++) {
       var pdfDoc = await PDFDocument.create();
       let pages = this.props.docs[d].document.pages.map((a) => a.url);
-      cachePath = pages[0]
+      this.state.cachePath = pages[0]
       for (let i = 0; i < pages.length; i++) {
         await RNFS.readFile(pages[i], 'base64')
           .then((data) => {
@@ -425,13 +425,7 @@ class SummaryScreen extends React.Component {
           height: pdfDims.height,
         });
       }
-      let deletePath = cachePath
-      cachePath = cachePath.split('/')
-      deletePath = deletePath.replace(cachePath[cachePath.length - 1], '')
-      deletePath = deletePath.slice(0, -1)
-      console.log(deletePath)
-
-      this.deleteCache(deletePath)
+     
       let pdfBytes = await pdfDoc.save();
       let pdfBase64 = await base64.encodeFromByteArray(pdfBytes);
 
@@ -483,6 +477,11 @@ class SummaryScreen extends React.Component {
       })
       .catch((error) => alert('Something went wrong, please contact support ' + error));
     if (this.state.server_message == '200') {
+      let deletePath = this.state.cachePath
+      this.state.cachePath = this.state.cachePath.split('/')
+      deletePath = deletePath.replace('/'+this.state.cachePath[this.state.cachePath.length - 2]+'/'+this.state.cachePath[this.state.cachePath.length - 1], '')
+      console.log(deletePath)
+      this.deleteCache(deletePath)
       let lang = this.props.language;
 
       this.setState({isLoading: false});
