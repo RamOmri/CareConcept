@@ -384,9 +384,9 @@ class SummaryScreen extends React.Component {
 
 
   deleteCache = async (path) =>{
-    return RNFS.unlink(path)
+    return await RNFS.unlink(path)
       .then(() => {
-        
+        console.log('now deleted')
       })
       // `unlink` will throw an error, if the item to unlink does not exist
       .catch((err) => {
@@ -481,13 +481,13 @@ class SummaryScreen extends React.Component {
       this.state.cachePath = this.state.cachePath.split('/')
       deletePath = deletePath.replace('/'+this.state.cachePath[this.state.cachePath.length - 2]+'/'+this.state.cachePath[this.state.cachePath.length - 1], '')
       console.log(deletePath)
-      this.deleteCache(deletePath)
+     await this.deleteCache(deletePath)
       let lang = this.props.language;
-
       this.setState({isLoading: false});
       this.props.deleteStateClaimInfo();
       this.props.deleteStatePolicyInfo();
       this.props.setLanguage(lang);
+      
 
       Alert.alert('',
         translate(
