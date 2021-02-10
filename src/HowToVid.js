@@ -119,8 +119,8 @@ class HowToVid extends React.Component {
             startInLoadingState
             renderLoading={this.renderLoading}
             source={{
-              uri: this.props.language.includes('de') && 'https://www.care-concept.de/bilder/CCAG_app.mp4' ||
-                 this.props.language.includes('en') && "https://www.care-concept.de/bilder/CCAG_app_eng.mp4"
+              uri: this.props.language.includes('de') && 'https://www.care-concept.de/bilder/CCAG_app_ios.mp4' ||
+                 this.props.language.includes('en') && "https://www.care-concept.de/bilder/CCAG_app_ios_eng.mp4"
                
             }}
             style={{marginTop: 20}}

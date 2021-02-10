@@ -75,6 +75,7 @@ class SummaryScreen extends React.Component {
       isLoading: false,
       finishedSending: false,
       renderWebView: false,
+      cachePath: null
     };
   
    
@@ -157,6 +158,8 @@ class SummaryScreen extends React.Component {
       </View>
     );
   };
+
+
   render() {
     if (this.state.isLoading) {
       return (
@@ -381,15 +384,26 @@ class SummaryScreen extends React.Component {
     }
     this.sendObject(objectToSend);
   }
-
+deleteCache = async (path) =>{
+    return RNFS.unlink(path)
+      .then(() => {
+        console.log("deleted cache: " + path)
+       })
+      // `unlink` will throw an error, if the item to unlink does not exist
+      .catch((err) => {
+        console.log(err)
+      });
+  }
   async makeDocumentPagesPDF() {
     var bytes;
     let pdfArray = [];
-
+    let cachePath;
     for (let d = 0; d < this.props.docs.length; d++) {
       var pdfDoc = await PDFDocument.create();
       let pages = this.props.docs[d].document.pages.map((a) => a.url);
+      cachePath = pages[0]
       for (let i = 0; i < pages.length; i++) {
+        this.state.cachePath = pages[i]
         await RNFS.readFile(pages[i], 'base64')
           .then((data) => {
             bytes = data;
@@ -417,6 +431,7 @@ class SummaryScreen extends React.Component {
           rotate: degrees(-90),
         });
       }
+     
       let pdfBytes = await pdfDoc.save();
       let pdfBase64 = await base64.encodeFromByteArray(pdfBytes);
 
@@ -458,6 +473,14 @@ class SummaryScreen extends React.Component {
       })
       .catch((error) => console.log('could not send ' + error));
     if (this.state.server_message == '200') {
+      let deletePath = this.state.cachePath
+      this.state.cachePath = this.state.cachePath.split('/')
+      deletePath = deletePath.replace("/"+this.state.cachePath[this.state.cachePath.length - 1], '')
+      //deletePath = deletePath.slice(0, -1)
+      console.log(deletePath)
+       this.deleteCache(deletePath)
+       console.log("after")
+
       let lang = this.props.language;
       console.log(lang);
       this.setState({isLoading: false});

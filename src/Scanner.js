@@ -243,6 +243,17 @@ onBackPress = () =>{
       this.setState({ takingPicture: false });
       this.props.onPictureTaken(event);
     }
+    deleteCachedImage = async (path) =>{
+      let RNFS = require('react-native-fs');
+      return RNFS.unlink(path)
+        .then(() => {
+  
+         })
+        // `unlink` will throw an error, if the item to unlink does not exist
+        .catch((err) => {
+          alert('Something went wrong, please clear cache of this app ' + err)
+        });
+    }
     // Flashes the screen on capture
     triggerSnapAnimation() {
       Animated.sequence([
@@ -284,7 +295,7 @@ onBackPress = () =>{
         <View >
           <TouchableOpacity
             style={{height:50, width:100,borderRadius:30, justifyContent:"center", alignItems:"center",
-              backgroundColor: flashEnabled ? "#f59b00" : '#004799',  }}
+              backgroundColor: flashEnabled ? "green" : 'red',  }}
             activeOpacity={0.8}
             onPress={() => this.setState({ flashEnabled: !flashEnabled })}
           >
@@ -374,13 +385,13 @@ onBackPress = () =>{
                       </Text>
                       </TouchableOpacity> */}
 
-{ <TouchableOpacity
+ <TouchableOpacity
                       
                       activeOpacity={0.8}
                       style={{
                         alignSelf:"center",
                         justifyContent:"center", alignItems:"center",
-                      height:50, width:100, backgroundColor: this.state.useScanner ? "#f59b00" : '#004799',
+                      height:50, width:100, backgroundColor: this.state.useScanner ? "green" : 'red',
                     borderRadius:100,
                   marginRight:10, marginTop:30,}}
                       onPress={()=>{
@@ -390,7 +401,7 @@ onBackPress = () =>{
                       <Text style={{ fontSize:12, color:"white", textAlign:"center"}}>
                        {translate("document detection")}
                       </Text>
-                      </TouchableOpacity> }
+                      </TouchableOpacity> 
                
                       <TouchableOpacity
                       
@@ -450,6 +461,8 @@ onBackPress = () =>{
   
   async handleScannedDocument(croppedImage, initialImage, infoObj) {  
     let img = this.state.useScanner && croppedImage || initialImage
+    /* if(this.state.useScanner)this.deleteCachedImage(initialImage)
+    else this.deleteCachedImage(croppedImage) */
     infoObj.pages.push({url: img});
     this.componentWillUnmount()
     this.props.navigation.navigate('ScanStack', {
@@ -469,7 +482,7 @@ onBackPress = () =>{
           <RectangleOverlay
             detectedRectangle={this.state.detectedRectangle}
             previewRatio={previewSize}
-            backgroundColor="rgba(255,181,6, 0.2)"
+            backgroundColor="rgba(0, 71, 153, 0.2)"
             borderColor="rgb(255,181,6)"
             borderWidth={4}
           />
@@ -491,7 +504,7 @@ onBackPress = () =>{
             }}
             enableTorch={this.state.flashEnabled}
             ref={this.state.ScannerRef}
-            capturedQuality={0.8}
+            capturedQuality={0.5}
             onRectangleDetected={({ detectedRectangle }) => this.setState({ detectedRectangle })}
             onDeviceSetup={this.onDeviceSetup}
             onTorchChanged={({ enabled }) => this.setState({ flashEnabled: enabled })}
