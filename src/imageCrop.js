@@ -29,7 +29,6 @@ import CameraRoll from '@react-native-community/cameraroll';
 import AmazingCropper, {DefaultFooter} from 'react-native-amazing-cropper';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {WebView} from 'react-native-webview';
-import ImageResizer from 'react-native-image-resizer';
 
 
 import {connect} from 'react-redux';

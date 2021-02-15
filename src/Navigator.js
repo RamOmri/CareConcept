@@ -18,12 +18,14 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
-  I18nManager
+  I18nManager,
+  Dimensions
 } from 'react-native';
 
 import StartScreen from './startScreen'
-import InfoMenu from './infoMenu'
+import Privacy from './Privacy'
 import Imprint from './Imprint'
+import HowToVid from './HowToVid'
 
 import Scanner from './Scanner';
 import ScanPreview from './ScanPreview';
@@ -32,6 +34,7 @@ import imageCrop from './imageCrop';
 import PolicyInfo from './PolicyInfo';
 import SummaryScreen from './SummaryScreen';
 import DocumentInfo from './DocumentInfo';
+
 
 import {connect} from 'react-redux';
 import {setLanguage} from './actions/policInfoActions';
@@ -61,7 +64,7 @@ const setI18nConfig = async () => {
   try {
     I18nManager.allowRTL(false);
   } catch (e) {
-    console.log(e);
+    alert('Something went wrong, please contact technical support ' + e)
   }
   // set i18n-js config
   i18n.translations = {[languageTag]: translationGetters[languageTag]()};
@@ -127,33 +130,37 @@ const ClaimStack = () => (
   </Stack.Navigator>
 );
 
-const infoStack = ({lang}) =>(
+const infoStack = () =>(
   <Tab.Navigator
   
-  screenOptions={
-    
-    ({ route }) => ({
-      gestureEnabled: false,
+  screenOptions={({ route }) => ({
+   
     tabBarLabel: ({ focused, color, size }) => { 
      // setI18nConfig()
       if (route.name === 'Start') {
         return focused ? (<><Image source = {require('./img/startOrange.png')}/>
-                              <Text style = {{color:'orange', fontSize:12, fontWeight:'bold'}}>{translate('Start')}</Text></>) 
+                              <Text style = {{color:'orange', fontSize:12,}}>{translate('Start')}</Text></>) 
                               :(<><Image source = {require('./img/startWhite.png')}/>
-                              <Text style = {{color:'white', fontSize:12, fontWeight:'bold'}}>{translate('Start')}</Text></>);
+                              <Text style = {{color:'white', fontSize:12, }}>{translate('Start')}</Text></>);
+                              }
+      else if(route.name === 'HowToVid'){
+        return focused ? (<>
+          <Image  source = {require('./img/HowToOrange.png')}/>
+        <Text style = {{color:'orange', fontSize:12,}}>{translate('How to video')}</Text></>) 
+        :(<><Image source = {require('./img/HowToBlue.png')}/>
+        <Text style = {{color:'white', fontSize:12, }}>{translate('How to video')}</Text></>);
       }else if(route.name === 'Imprint'){
         return focused ? (<><Image source = {require('./img/imprintOrange.png')}/>
-        <Text style = {{color:'orange', fontSize:12, fontWeight:'bold'}}>{translate("Imprint")}</Text></>)
+        <Text style = {{color:'orange', fontSize:12}}>{translate("Imprint")}</Text></>)
         :(<><Image source = {require('./img/imprintWhite.png')}/>
-        <Text style = {{color:'white', fontSize:12, fontWeight:'bold'}}>{translate("Imprint")}</Text></>)
+        <Text style = {{color:'white', fontSize:12, }}>{translate("Imprint")}</Text></>)
         
       }
-      else if(route.name === 'privacy'){
+      else if(route.name === 'Privacy'){
         return focused ? (<><Image source = {require('./img/privacyOrange.png')}/>
-        <Text style = {{color:'orange', fontSize:12, fontWeight:'bold'}}>{translate("Privacy")}</Text></>)
+        <Text style = {{color:'orange', fontSize:12, }}>{translate("Privacy")}</Text></>)
         :(<><Image source = {require('./img/privacyWhite.png')}/>
-        <Text style = {{color:'white', fontSize:12, fontWeight:'bold'}}>{translate("Privacy")}</Text></>)
-        
+        <Text style = {{color:'white', fontSize:12, }}>{translate("Privacy")}</Text></>)
       }
       
     },
@@ -161,6 +168,7 @@ const infoStack = ({lang}) =>(
 
   tabBarOptions={
     {
+      
         style: {
             flex:0.13,
             flexDirection: 'row',
@@ -173,7 +181,6 @@ const infoStack = ({lang}) =>(
         },
         labelStyle: {
           fontSize: 14,
-          fontWeight:'bold',
           
           
         },
@@ -183,8 +190,9 @@ const infoStack = ({lang}) =>(
 }
   >
  <Tab.Screen name = "Start" component = {StartScreen} />
- <Tab.Screen name = "privacy" component = {InfoMenu} />
- <Tab.Screen name = "Imprint" component = {InfoMenu} />
+ <Tab.Screen name = 'HowToVid' component = {HowToVid} />
+ <Tab.Screen name = "Privacy" component = {Privacy} />
+ <Tab.Screen name = "Imprint" component = {Imprint} />
   </Tab.Navigator>
 
 )
@@ -202,7 +210,7 @@ class Navigator extends React.Component{
   async componentDidMount(){
     let lang = await setI18nConfig()
     this.props.setLanguage(lang)
-    console.log(this.props.language)
+    //console.log(this.props.language) <- uncomment this to get letter code from console
     this.setState({isLangSelected:true})
   }
    render(){
@@ -212,7 +220,7 @@ class Navigator extends React.Component{
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
-        gestureEnabled:false
+        gestureEnabled: (Platform.OS =='android')
       }
       }>
       <Stack.Screen name = "infoStack"  component = {infoStack} />

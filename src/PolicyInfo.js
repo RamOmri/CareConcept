@@ -19,21 +19,13 @@ import {
   I18nManager,
   BackHandler,
   Dimensions,
+  Alert,
   ActivityIndicator,
+  DeviceEventEmitter
 } from 'react-native';
 
 import {WebView} from 'react-native-webview';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-import DocumentScanner from '@woonivers/react-native-document-scanner';
-import ImageSize from 'react-native-image-size';
-import {CropView} from 'react-native-image-crop-tools';
 import {
   Menu,
   MenuOptions,
@@ -89,7 +81,7 @@ class PolicyInfo extends React.Component {
           backgroundColor: '#004799',
           margin: 3,
           borderRadius: 10,
-          height: 40,
+          height: 60,
           justifyContent: 'center',
           alignItems: 'center',
         },
@@ -118,13 +110,60 @@ class PolicyInfo extends React.Component {
         },
       },
     };
+  
   }
 
- async componentDidMount() {
-  
-      
-  }
  
+  componentDidMount(){
+    BackHandler.addEventListener("hardwareBackPress", this.onBackPress)
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener("hardwareBackPress", this.onBackPress)
+   /*  this.didFocus.remove();
+    this.willBlur.remove(); */
+  }
+
+ 
+  onBackPress = () => {
+    if (!this.state.renderWebView) {
+      this.props.navigation.goBack()
+      return true
+    } else {
+      return true;
+    }
+  };
+ 
+renderInfo(){
+  return (
+    <View style={{flex: 1, backgroundColor: '#004799'}}>
+        {Platform.OS === 'ios' && (
+            <View style={{paddingTop: getStatusBarHeight()}}>
+              <StatusBar />
+            </View>
+          )}
+      <TouchableOpacity
+        onPress={() => {
+          this.setState({renderWebView: false})
+        }}>
+      <Image source = {this.props.language.includes('en') && require('./img/goBackEn.png') || this.props.language.includes('de') && require('./img/goBackDe.png')} 
+          style = {styles.goBackButton} />
+      </TouchableOpacity>
+      <WebView
+        startInLoadingState
+        renderLoading={this.renderLoading}
+        source={{
+          uri:
+            this.props.language.includes('en') && 
+            'https://www.care-concept.de/scripte/sniplets/app_general_information_eng.php?navilang=eng' ||
+             this.props.language.includes('de') && 
+             "https://www.care-concept.de/scripte/sniplets/app_general_information.php"
+        }}
+        style={{marginTop: 20}}
+      />
+    </View>
+  );
+}
   
   renderLoading = () => {
     return (
@@ -144,42 +183,7 @@ class PolicyInfo extends React.Component {
   };
   render() {
     if (this.state.renderWebView) {
-      return (
-        <View style={{flex: 1, backgroundColor: '#004799'}}>
-         
-          <TouchableOpacity
-            style={{
-              marginLeft: 20,
-              margin: 10,
-              backgroundColor: 'orange',
-              height: Dimensions.get('screen').height / 17,
-              width: Dimensions.get('screen').width / 4,
-              justifyContent: 'center',
-              alignItems: 'center',
-              borderTopLeftRadius: 200,
-              borderBottomLeftRadius: 200,
-            }}
-            onPress={() => {
-              this.setState({renderWebView: false})
-            }}>
-            <View>
-              <Text style={{color: 'white', fontSize: 12}}>
-                {translate('Go Back')}
-              </Text>
-            </View>
-          </TouchableOpacity>
-          <WebView
-            startInLoadingState
-            renderLoading={this.renderLoading}
-            source={{
-              uri:
-                this.props.language.includes('en') && 'https://www.care-concept.de/scripte/sniplets/app_general_information_eng.php?navilang=eng' ||
-                 this.props.language.includes('de') && "https://www.care-concept.de/scripte/sniplets/app_general_information.php"
-            }}
-            style={{marginTop: 20}}
-          />
-        </View>
-      );
+     return this.renderInfo()
     }
 
     return (
@@ -187,25 +191,23 @@ class PolicyInfo extends React.Component {
         style={styles.container}
         source={require('./img/background.jpg')}
         style={{resizeMode: 'stretch', flex: 1}}>
-        {Platform.OS === 'ios' && (
+        {Platform.OS != 'android' && (
           <View style={{paddingTop: getStatusBarHeight()}}>
             <StatusBar />
           </View>
         )}
         {Platform.OS === 'ios' && (
-          <View style = {{marginLeft:10}}>
               <TouchableOpacity
                 onPress={() => {
                   this.props.navigation.goBack()
                 }}>
-              <Image 
-              style = {{marginLeft:0 ,resizeMode:"contain", height:Dimensions.get("window").height/16, width:Dimensions.get("window").width/5}}
-              source = {this.props.language.includes("de") && require("./img/goBackDe.png") || this.props.language.includes("en") && require("./img/goBackEn.png")} />
+              <Image source = {this.props.language.includes('en') && require('./img/goBackEn.png') ||
+               this.props.language.includes('de') && require('./img/goBackDe.png')} 
+              style = {styles.goBackButton} />
               </TouchableOpacity>
-              </View>
             )}
         <View style = {{flexDirection:'row'}}>
-       
+        
         <Image
           source={require('./img/CareConceptLogo.png')}
           style={styles.logo}
@@ -218,7 +220,6 @@ class PolicyInfo extends React.Component {
                 style={{
                   color: '#004799',
                   fontSize: 10,
-                  fontWeight: 'bold',
                   marginBottom: 20,
                   textAlign: 'center',
                 }}>
@@ -240,9 +241,7 @@ class PolicyInfo extends React.Component {
                   style={{width: 50, height: 50}}
                 />
               </TouchableOpacity>
-              <Text style={styles.headerText}>
-                {translate("Please enter the information of the policy holder below")}
-              </Text>
+              
 
               <TextInput
                 style={styles.policyInput}
@@ -254,22 +253,25 @@ class PolicyInfo extends React.Component {
                 }
                 value={this.props.insuranceNumber}
               />
+              <Text style={styles.headerText}>
+                {translate("Please enter the information of the policy holder below")}
+              </Text>
               <Text style={styles.questionText}>
-                {translate("Select policy holder's sex")}
+                {translate("Salutation")}
               </Text>
               <Menu>
                 <MenuTrigger
-                  text={translate(this.props.gender)}
+                  text={translate(this.props.gender == 'Male' && "Mr" || this.props.gender == 'Female' && "Ms" || 'Select')}
                   customStyles={this.state.menuStyle}
                 />
                 <MenuOptions customStyles={this.state.optionStyles}>
                   <MenuOption
                     onSelect={() => this.props.changeGender('Male')}
-                    text={translate('Male')}
+                    text={translate('Mr')}
                   />
                   <MenuOption
                     onSelect={() => this.props.changeGender('Female')}
-                    text={translate('Female')}
+                    text={translate('Ms')}
                   />
                 </MenuOptions>
               </Menu>
@@ -322,7 +324,7 @@ class PolicyInfo extends React.Component {
       fieldsCorrect = false;
     } 
     if (this.props.gender === 'Select') {
-      errorMessage = errorMessage + translate('Please select your gender') + ' \n'
+      errorMessage = errorMessage + translate('Please enter your salutation') + ' \n'
       fieldsCorrect = false
     }
      if (this.props.FirstName === '' || this.props.Surname === '') {
@@ -334,7 +336,7 @@ class PolicyInfo extends React.Component {
       fieldsCorrect = false
     }
     
-    if(!fieldsCorrect) alert(errorMessage)
+    if(!fieldsCorrect) Alert.alert('',errorMessage)
     return fieldsCorrect
   };
 
@@ -351,26 +353,29 @@ class PolicyInfo extends React.Component {
   };
 
   checkInsuranceNumber = () => {
-    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     const numbers = '0123456789';
+    var insuranceNumber = this.props.insuranceNumber.toUpperCase()
     if (
-      alphabet.includes(this.props.insuranceNumber[0]) &&
-      alphabet.includes(this.props.insuranceNumber[1])
+      alphabet.includes(insuranceNumber[0]) &&
+      alphabet.includes(insuranceNumber[1])
     ) {
-      let policynumberlength = this.props.insuranceNumber.split('').length;
+      let policynumberlength = insuranceNumber.split('').length;
       if (policynumberlength != 11) return false;
       for (let i = 2; i <= 10; i++) {
-        if (!numbers.includes(this.props.insuranceNumber[i])) return false;
+        if (!numbers.includes(insuranceNumber[i])) return false;
       }
+      this.props.changeInsuranceNumber(insuranceNumber)
       return true;
-    } else if (alphabet.includes(this.props.insuranceNumber[0])) {
-      let policynumberlength = this.props.insuranceNumber.split('').length;
+    } else if (alphabet.includes(insuranceNumber[0])) {
+      let policynumberlength = insuranceNumber.split('').length;
       if (policynumberlength != 10) return false;
       for (let i = 1; i < 10; i++) {
-        if (!numbers.includes(this.props.insuranceNumber.split('')[i])) {
+        if (!numbers.includes(insuranceNumber.split('')[i])) {
           return false;
         }
       }
+      this.props.changeInsuranceNumber(insuranceNumber)
       return true;
     } else {
       return false;
@@ -403,7 +408,6 @@ class PolicyInfo extends React.Component {
   };
   handleCameraPermissionIOS = async () => {
     const res = await check(PERMISSIONS.IOS.CAMERA);
-    console.log(res);
     if (res === RESULTS.GRANTED) {
       this.setState({cameraPermissionGranted: true});
       this.props.navigation.navigate('ClaimStack', {
@@ -420,11 +424,11 @@ class PolicyInfo extends React.Component {
         });
       } else {
         this.setState({cameraPermissionGranted: false});
-        alert('could not access camera, please grant permission manually');
+        Alert.alert('',translate('could not access camera please grant permission manually'))
       }
     } else {
-      alert(
-        'Could not access camera, please grant permission through phone settings ',
+      Alert.alert('',
+        'Could not access camera please grant permission through phone settings',
       );
     }
   };
@@ -434,17 +438,15 @@ const styles = StyleSheet.create({
   logo: {
     width:Dimensions.get('window').width/2,
     height: Dimensions.get('window').height/9,
-    margin:0,
     marginLeft: 20,
     marginBottom: 20,
   },
   headerText: {
     color: '#004799',
     fontSize: 17,
-    margin: 15,
+    margin: 10,
     marginBottom: 0,
     alignSelf: 'center',
-    fontWeight: 'bold',
     textAlign: 'center',
   },
   questionText: {
@@ -454,6 +456,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     textAlign: 'center',
   },
+  goBackButton:{marginLeft:10,resizeMode:'contain', height:Dimensions.get('window').height/15, width:Dimensions.get('window').width/5},
   backButton:{
     marginLeft:10,
     marginTop:10,

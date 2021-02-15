@@ -24,7 +24,6 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-import DocumentScanner from "@woonivers/react-native-document-scanner"
 import Navigator from './src/Navigator'
 import { MenuProvider } from 'react-native-popup-menu';
 

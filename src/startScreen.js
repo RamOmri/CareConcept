@@ -14,18 +14,8 @@ import {
   ActivityIndicator,
   I18nManager,
   ImageBackground,
+  BackHandler
 } from 'react-native';
-
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-import DocumentScanner from '@woonivers/react-native-document-scanner';
-import ImageSize from 'react-native-image-size';
-import ImageViewer from 'react-native-image-zoom-viewer';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {connect} from 'react-redux';
 import {setLanguage} from './actions/policInfoActions'
@@ -57,9 +47,17 @@ class StartScreen extends React.Component {
     
   }
 
-  async componentDidMount() { 
-    
+  componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
   }
+  
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
+  }
+  
+  onBackPress = () => { 
+      return true;
+  };
 
   render() {
     return (
@@ -85,9 +83,9 @@ class StartScreen extends React.Component {
             position: 'absolute',
             height: Dimensions.get('window').width/3.789,
             width: Dimensions.get('window').width/3.789,
-            top:Dimensions.get('window').height/6.2,
+            top:Dimensions.get('window').height/7.4,
             borderRadius:1000,
-            left:Dimensions.get('window').width/1.5,
+            left:Dimensions.get('window').width/1.54,
             justifyContent:'center',
             alignItems:'center'
           }
@@ -101,7 +99,7 @@ class StartScreen extends React.Component {
                 }}
             >
                  <View style = {{alignItems:'center', justifyContent:'center'}}>
-                    <Text style = {{color:'white', fontSize:16, fontWeight:'bold'}}>
+                    <Text style = {{color:'white', fontSize:16}}>
                             Start
                     </Text>
               </View>
