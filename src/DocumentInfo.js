@@ -19,6 +19,8 @@ import {
   ActivityIndicator,
   Platform,
   Modal,
+  Alert,
+  DeviceEventEmitter
 } from 'react-native';
 
 import {
@@ -57,6 +59,7 @@ import i18n from 'i18n-js';
 import memoize from 'lodash.memoize'; // Use for caching/memoize for better performance
 import {WebView} from 'react-native-webview';
 import {DatePicker} from 'react-native-common-date-picker';
+import ImageResizer from 'react-native-image-resizer';
 const translationGetters = {
   // lazy requires (metro bundler does not support symlinks)
   en: () => require('./translations/eng.json'),
@@ -79,6 +82,9 @@ class DocumentInfo extends React.Component {
       isDatePickerVisible: false,
       renderGeneralInfoWeb: false,
       renderDocTypeInfoWeb: false,
+      renderDatePickerInfo: false,
+      renderBillFromGermanyInfo: false,
+      renderWhoToPay: false,
       infoObj: {
         pages: [],
       },
@@ -102,24 +108,6 @@ class DocumentInfo extends React.Component {
           activeOpacity: 70,
         },
       },
-      /* optionsStyles : {
-        optionTouchable: {
-          underlayColor: 'white',
-          activeOpacity: 40,
-          
-          backgroundColor: 'white',
-        },
-        optionWrapper: {
-          backgroundColor: "purple",
-          height:70,
-          width:400,
-          paddingTop:15,
-        },
-        optionText: {
-          color: 'white',
-          marginLeft:20
-        },
-      }, */
       optionStyles: {
         optionTouchable: {
           underlayColor: '#E5ECF5',
@@ -129,7 +117,7 @@ class DocumentInfo extends React.Component {
           backgroundColor: '#004799',
           margin: 10,
           borderRadius: 10,
-          height: 40,
+          height: 60,
           justifyContent: 'center',
           alignItems: 'center',
         },
@@ -139,6 +127,7 @@ class DocumentInfo extends React.Component {
         },
       },
     };
+
     this.setPrefilledDateAndBankDetails();
     this.check_if_editing();
   }
@@ -166,124 +155,51 @@ class DocumentInfo extends React.Component {
         ...this.state,
         infoObj: this.props.route.params.infoObj.document,
       };
+      this.state.sendMoneyToContractualServices = this.state.infoObj.sendMoneyToContractualServices
+      this.state.isDocumentGerman = this.state.infoObj.isDocumentGerman
+      this.state.docType = this.state.infoObj.docType
       delete this.state.infoObj.key;
     }
   }
 
-  renderLoading = () => {
-    return (
-      <View
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        <ActivityIndicator size="large" color="#004799" />
-      </View>
-    );
-  };
-
   render() {
-    if (this.state.renderGeneralInfoWeb || this.state.renderDocTypeInfoWeb) {
-      return (
-        <View style={{flex: 1, backgroundColor: '#004799'}}>
-          <View style={{height: Dimensions.get('screen').height / 15}}>
-            <TouchableOpacity
-              style={{
-                marginLeft: 20,
-                margin: 10,
-                backgroundColor: 'orange',
-                height: Dimensions.get('screen').height / 17,
-                width: Dimensions.get('screen').width / 4,
-                justifyContent: 'center',
-                alignItems: 'center',
-                borderTopLeftRadius: 200,
-                borderBottomLeftRadius: 200,
-              }}
-              onPress={() => {
-                this.setState({renderGeneralInfoWeb: false});
-                this.setState({renderDocTypeInfoWeb: false});
-              }}>
-              <View>
-                <Text style={{color: 'white', fontSize: 12}}>
-                  {translate('Go Back')}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-          <View style={{flex: 0.9}}>
-            <WebView
-              startInLoadingState
-              renderLoading={this.renderLoading}
-              source={{
-                uri:
-                  (this.props.language.includes('en') &&
-                    this.state.renderGeneralInfoWeb &&
-                    'https://www.care-concept.de/scripte/sniplets/app_general_information_2_eng.php?navilang=eng') ||
-                  (this.props.language.includes('en') &&
-                    this.state.renderDocTypeInfoWeb &&
-                    'https://www.care-concept.de/scripte/sniplets/app_general_information_3_eng.php?navilang=eng') ||
-                  (this.props.language.includes('de') &&
-                    this.state.renderGeneralInfoWeb &&
-                    'https://www.care-concept.de/scripte/sniplets/app_general_information_2.php') ||
-                  (this.props.language.includes('de') &&
-                    this.state.renderDocTypeInfoWeb &&
-                    'https://www.care-concept.de/scripte/sniplets/app_general_information_3.php'),
-              }}
-              style={{marginTop: 20}}
-            />
-          </View>
-        </View>
-      );
+    if (this.state.renderGeneralInfoWeb || this.state.renderDocTypeInfoWeb || this.state.renderDatePickerInfo || this.state.renderBillFromGermanyInfo || this.state.renderWhoToPay) {
+     return this.renderQuestionInfo()
     }
     return (
       <ImageBackground
         style={styles.container}
         source={require('./img/background.jpg')}
         style={{resizeMode: 'stretch', flex: 1}}>
-        {Platform.OS != 'android' && (
-          <View style={{paddingTop: getStatusBarHeight()}}>
+     {Platform.OS == 'ios' && (
+        <View style={{paddingTop: getStatusBarHeight()}}>
             <StatusBar />
           </View>
-        )}
+     )}
 
-        {Platform.OS === 'ios' && (
-          <View style={{}}>
-            <TouchableOpacity
-              onPress={() => {
-                this.onBackPress();
-              }}>
-              <View
-                style={{
-                  marginLeft: 10,
-                  backgroundColor: 'orange',
-                  height: Dimensions.get('window').height / 17,
-                  width: Dimensions.get('window').width / 4,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  borderTopLeftRadius: 200,
-                  borderBottomLeftRadius: 200,
+         {Platform.OS === 'ios' && (
+              <TouchableOpacity
+                onPress={() => {
+                 this.onBackPress()
                 }}>
-                <Text style={{color: 'white', fontSize: 11}}>
-                  {translate('Go Back')}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-        )}
+            {!this.state.isEditing && <Image source = {this.props.language.includes('en') && require('./img/goBackEn.png') || this.props.language.includes('de') && require('./img/goBackDe.png')} 
+              style = {styles.goBackButton} />}
+              </TouchableOpacity>
+            )}
         <Image
           source={require('./img/CareConceptLogo.png')}
           style={styles.logo}
         />
+       {this.state.isEditing &&
+        <Text style = {{color:"#004799", fontSize:15, marginRight:8, textAlign:'center', marginLeft:8,}}>
+          {translate("Here you can edit the information you put in and view the pages of the document by pressing the Show Document button")}
+        </Text>}
+
         <View style={{}}>
           <ScrollView>
             <View
               style={{
-                marginBottom: 150,
+                marginBottom: 130,
                 justifyContent: 'center',
                 marginLeft: 20,
               }}>
@@ -368,12 +284,80 @@ class DocumentInfo extends React.Component {
     );
   }
 
+  renderQuestionInfo(){
+    return (
+      <View style={{flex: 1, backgroundColor: '#004799'}}>
+           {Platform.OS === 'ios' && (
+            <View style={{paddingTop: getStatusBarHeight()}}>
+              <StatusBar />
+            </View>
+          )}
+        <View style={{height: Dimensions.get('screen').height / 15}}>
+          <TouchableOpacity
+            
+            onPress={() => {
+              this.setState({renderGeneralInfoWeb: false});
+              this.setState({renderDocTypeInfoWeb: false});
+              this.setState({renderDatePickerInfo: false})
+              this.setState({renderBillFromGermanyInfo: false})
+              this.setState({renderWhoToPay: false})
+            }}>
+             <Image source = {this.props.language.includes('en') && require('./img/goBackEn.png') || this.props.language.includes('de') && require('./img/goBackDe.png')} 
+            style = {styles.goBackButton} />
+          </TouchableOpacity>
+        </View>
+        <View style={{flex: 0.9}}>
+          <WebView
+            startInLoadingState
+            renderLoading={this.renderLoading}
+            source={{
+              uri:
+                this.props.language.includes('en') &&
+                  (this.state.renderGeneralInfoWeb && 'https://www.care-concept.de/scripte/sniplets/app_general_information_3_eng.php?navilang=eng' ||
+                  this.state.renderDocTypeInfoWeb &&  'https://www.care-concept.de/scripte/sniplets/app_general_information_2_eng.php?navilang=eng' ||
+                  this.state.renderDatePickerInfo && 'https://www.care-concept.de/scripte/sniplets/app_general_information_4_eng.php?navilang=eng' || 
+                  this.state.renderBillFromGermanyInfo && 'https://www.care-concept.de/scripte/sniplets/app_general_information_5_eng.php?navilang=eng'||
+                  this.state.renderWhoToPay && 'https://www.care-concept.de/scripte/sniplets/app_general_information_6_eng.php?navilang=eng')
+                  || 
+                this.props.language.includes('de') &&
+                  (this.state.renderGeneralInfoWeb && 'https://www.care-concept.de/scripte/sniplets/app_general_information_3.php' ||              
+                  this.state.renderDocTypeInfoWeb && 'https://www.care-concept.de/scripte/sniplets/app_general_information_2.php'||
+                  this.state.renderDatePickerInfo && 'https://www.care-concept.de/scripte/sniplets/app_general_information_4.php' ||
+                  this.state.renderBillFromGermanyInfo && 'https://www.care-concept.de/scripte/sniplets/app_general_information_5.php'||
+                  this.state.renderWhoToPay && 'https://www.care-concept.de/scripte/sniplets/app_general_information_6.php'),
+            }}
+            style={{marginTop: 20}}
+          />
+        </View>
+      </View>
+    );
+  }
+  renderLoading = () => {
+    return (
+      <View
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <ActivityIndicator size="large" color="#004799" />
+      </View>
+    );
+  };
+
+
+
   renderAge() {
     return (
-      <View style={{justifyContent: 'center'}}>
+      <View style={{justifyContent: 'center',}}>
         <Text style={styles.questionText}>
           {translate('Please enter the birthdate of the insured person')}{' '}
         </Text>
+        <View style = {{flexDirection:'row'}}>
         <TouchableOpacity
           onPress={() => {
             this.setState({isDatePickerVisible: true});
@@ -399,6 +383,7 @@ class DocumentInfo extends React.Component {
         <DateTimePickerModal
           isVisible={this.state.isDatePickerVisible}
           mode="date"
+          locale = {(this.props.language.includes("de"))&&"de-DE"|| "en-EN"}
           date={new Date()}
           onConfirm={(date) => {
             this.handleConfirm(date);
@@ -407,6 +392,13 @@ class DocumentInfo extends React.Component {
             this.setState({isDatePickerVisible: false});
           }}
         />
+
+      {Platform.OS === 'android' &&  (<TouchableOpacity onPress = {()=> this.setState({renderDatePickerInfo: true})}>
+        <Image source = {require('./img/questionMark.png')}
+         style={{marginLeft: 10,width: 30, height: 30}}
+        />
+        </TouchableOpacity>)}
+        </View>
       </View>
     );
   }
@@ -435,8 +427,7 @@ class DocumentInfo extends React.Component {
     }
 
     if (this._calculateAge(date)[0] < 0 || this._calculateAge(date)[1] >= 100) {
-      alert(translate('Please enter a valid birth date'));
-      console.log(this.state.isDatePickerVisible)
+      Alert.alert('',translate('Please enter a valid birth date'));
     } else {
       let birthDate = day + '/' + month + '/' + year;
       this.state.infoObj = {
@@ -459,8 +450,9 @@ class DocumentInfo extends React.Component {
     return (
       <View style={{}}>
         <Text style={styles.questionText}>
-          {translate('Is the document you are about to scan from Germany')}
+          {translate("Is the bill/receipt from Germany")}
         </Text>
+        <View style = {{flexDirection:'row'}}>
         <Menu>
           <MenuTrigger
             text={translate(
@@ -490,9 +482,15 @@ class DocumentInfo extends React.Component {
               }}
               text={translate('No')}
             />
-          </MenuOptions>
+          </MenuOptions></Menu>
+          <TouchableOpacity onPress = {()=> this.setState({renderBillFromGermanyInfo: true})}>
+        <Image source = {require('./img/questionMark.png')}
+         style={{marginLeft: 10,width: 30, height: 30}}
+        />
+        </TouchableOpacity>
+</View>
           {this.renderSendMoneyTo()}
-        </Menu>
+        
       </View>
     );
   }
@@ -503,6 +501,7 @@ class DocumentInfo extends React.Component {
         <Text style={styles.questionText}>
           {translate('Should contractual services')}
         </Text>
+        <View style = {{flexDirection:'row'}}>
         <Menu>
           <MenuTrigger
             text={translate(
@@ -535,6 +534,12 @@ class DocumentInfo extends React.Component {
             />
           </MenuOptions>
         </Menu>
+        <TouchableOpacity onPress = {()=> this.setState({renderWhoToPay: true})}>
+        <Image source = {require('./img/questionMark.png')}
+         style={{marginLeft: 10,width: 30, height: 30}}
+        />
+        </TouchableOpacity>
+        </View>
         {(this.state.sendMoneyToContractualServices == 'Yes' ||
           this.state.infoObj.sendMoneyToContractualServices == 'Yes') &&
           this.renderContinue()}
@@ -547,6 +552,9 @@ class DocumentInfo extends React.Component {
   renderBankAccountDetails = () => {
     return (
       <View style={{justifyContent: 'center'}}>
+        <Text style = {{marginTop:30, color:"#004799", fontSize:15, marginRight:10}}>
+          {translate( "The contractual services shall be reimbursed to the following account")}
+        </Text>
         <Text style={styles.questionText}>
           {translate('Please enter the full name of the account holder')}
         </Text>
@@ -570,7 +578,7 @@ class DocumentInfo extends React.Component {
         />
 
         <Text style={styles.questionText}>
-          {translate('Please enter your')} IBAN
+          {translate('Please enter your IBAN')} 
         </Text>
         <TextInput
           style={styles.policyInput}
@@ -593,9 +601,10 @@ class DocumentInfo extends React.Component {
 
         <View style={{justifyContent: 'center'}}>
           <Text style={styles.questionText}>
-            {translate('Please enter your')} BIC
+            {translate('Please enter your BIC')} 
           </Text>
           <TextInput
+          autoCapitalize = "characters"
             style={styles.policyInput}
             placeholder="BIC"
             placeholderTextColor="#004799"
@@ -620,7 +629,6 @@ class DocumentInfo extends React.Component {
     );
   };
   checkName = (name) => {
-    console.log(name);
     if (name) {
       const utf8 =
         'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZüöäÜÖÄß0123456789 _çÇñÑëáé&;.-:';
@@ -635,8 +643,10 @@ class DocumentInfo extends React.Component {
 
   renderContinue = () => {
     return (
+      <View style = {{marginBottom:130}}>
       <TouchableOpacity
         onPress={() => {
+
           if (this.state.isEditing && this.checkFieldsBeforeContinue()) {
             this.props.navigation.navigate('ScanStack', {
               params: {infoObj: this.state.infoObj},
@@ -650,11 +660,13 @@ class DocumentInfo extends React.Component {
           }
         }}>
         <View style={styles.button}>
-          <Text style={{color: 'white', fontSize: 13, fontWeight: 'bold'}}>
-            {translate('Continue')}
+          <Text style={{color: 'white', fontSize: 13}}>
+            {!this.state.isEditing && translate('Continue') || translate("Show Document")}
           </Text>
         </View>
       </TouchableOpacity>
+      
+      </View>
     );
   };
 
@@ -665,7 +677,7 @@ class DocumentInfo extends React.Component {
       this.state.infoObj.sendMoneyToContractualServices = 'Yes';
 
     if (
-      this.state.isDocumentGerman === 'Select' &&
+       this.state.isDocumentGerman === 'Select' &&
       this.state.docType === 'Claim Document'
     ) {
       errorMessage =
@@ -678,7 +690,7 @@ class DocumentInfo extends React.Component {
     ) {
       errorMessage =
         errorMessage +
-        `${translate('please check your bank details')} (name)` +
+        `${translate('please check your bank details')} ${this.props.language.includes("de")&& "(Name)" || "(name)"}` +
         ' \n';
       correctFields = false;
     }
@@ -712,22 +724,25 @@ class DocumentInfo extends React.Component {
         errorMessage + translate('Please enter a birth date') + ' \n';
       correctFields = false;
     }
-    if (!correctFields) alert(errorMessage);
+    if (!correctFields) Alert.alert('',errorMessage);
     return correctFields;
   }
 
   componentDidMount() {
-    BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
+    BackHandler.addEventListener("hardwareBackPress", this.onBackPress)
   }
 
   componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
+    BackHandler.removeEventListener("hardwareBackPress", this.onBackPress)
   }
 
   onBackPress = () => {
-    if (
+
+    // Below code allows a back press on this screen when editing but returns the info obj to the global app state
+  /*   if (
       this.state.isEditing &&
-      !(this.state.renderDocTypeInfoWeb || this.state.renderGeneralInfoWeb)
+      !(this.state.renderDocTypeInfoWeb || this.state.renderGeneralInfoWeb || this.state.renderBillFromGermanyInfo || this.state.renderDatePickerInfo ||
+        this.state.renderWhoToPay)
     ) {
       if (this.checkFieldsBeforeContinue()) {
         this.props.add(this.state.infoObj);
@@ -737,8 +752,18 @@ class DocumentInfo extends React.Component {
         });
       } else return true;
     } else if (
-      !(this.state.renderDocTypeInfoWeb || this.state.renderGeneralInfoWeb)
+      !(this.state.renderDocTypeInfoWeb || this.state.renderGeneralInfoWeb || this.state.renderBillFromGermanyInfo || this.state.renderDatePickerInfo ||
+        this.state.renderWhoToPay)
     ) {
+      this.props.navigation.navigate('ClaimStack', {
+        params: {},
+        screen: 'SummaryScreen',
+      });
+    } */
+    let not_in_webview = !(this.state.renderDocTypeInfoWeb || this.state.renderGeneralInfoWeb || this.state.renderBillFromGermanyInfo || this.state.renderDatePickerInfo ||
+      this.state.renderWhoToPay)
+      if(not_in_webview && this.state.isEditing) Alert.alert('', translate('Press the show document button below to view all the pages of your document'))
+      else if (not_in_webview) {
       this.props.navigation.navigate('ClaimStack', {
         params: {},
         screen: 'SummaryScreen',
@@ -770,7 +795,6 @@ const styles = StyleSheet.create({
     color: '#E67F00',
     marginLeft: 0,
     margin: 10,
-    fontWeight: 'bold',
   },
   nameInput: {
     marginTop: 12,
@@ -781,6 +805,7 @@ const styles = StyleSheet.create({
     borderColor: '#f59b00',
     backgroundColor: '#E5ECF5',
   },
+  goBackButton:{marginLeft:10,resizeMode:'contain', height:Dimensions.get('window').height/15, width:Dimensions.get('window').width/5},
   policyInput: {
     margin: 10,
     marginLeft: 0,

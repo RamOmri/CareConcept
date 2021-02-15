@@ -59,6 +59,16 @@
   "Start":"Start",
   "Imprint":"Imprint",
   "Privacy":"Privacy",
-  "Please enter the information of the policy holder below":"Please enter the information of the policy holder below"
+  "Please enter the information of the policy holder below":"Please enter the information of the policy holder below",
 
+  "Show Document":"Show document",
+  "Press the show document button below to view all the pages of your document":"Press the 'Show document' button below to view all the pages of your document.",
+  "You can start scanning documents by pressing the scan document button below": "You can start scanning documents by pressing the \nScan document button below.",
+  "You can view and edit the document by pressing here":"\n(view and edit the document by pressing here)",
+  "Here you can edit the information you put in and view the pages of the document by pressing the Show Document button": "Here you can edit the document's information and view the pages of the document by pressing the Show document button.",
+  "How to video": "How to",
+  "Cancel":"Cancel",
+  "Flash":"Flash",
+  "document detection":"Document detection",
+  "Please wait until screen turns on before scanning":"Please wait until the screen turns on before scanning."
 }

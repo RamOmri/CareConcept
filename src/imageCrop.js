@@ -12,6 +12,8 @@ import {
   ActivityIndicator,
   Platform,
   I18nManager,
+  BackHandler,
+  DeviceEventEmitter
 } from 'react-native';
 
 import {
@@ -21,13 +23,14 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-import DocumentScanner from '@woonivers/react-native-document-scanner';
 import ImageSize from 'react-native-image-size';
 import {CropView} from 'react-native-image-crop-tools';
 import CameraRoll from '@react-native-community/cameraroll';
 import AmazingCropper, {DefaultFooter} from 'react-native-amazing-cropper';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {WebView} from 'react-native-webview';
+import ImageResizer from 'react-native-image-resizer';
+
 
 import {connect} from 'react-redux';
 import {
@@ -64,11 +67,25 @@ class imageCrop extends React.Component {
   }
 
   async componentDidMount() {
+    BackHandler.addEventListener("hardwareBackPress", this.onBackPress)
+    /* if(Platform.OS == "ios"){
+      await ImageResizer.createResizedImage( this.state.infoObj.pages[this.state.infoObj.pages.length - 1].url, 2000, 2000, "JPEG", 80)
+      .then(response => { 
+        this.state.infoObj.pages[this.state.infoObj.pages.length - 1].url = response.uri
+      })
+     } */
     await this.getImageSize(
       this.state.infoObj.pages[this.state.infoObj.pages.length - 1].url,
     );
   }
 
+  
+  componentWillUnmount() {
+    BackHandler.removeEventListener("hardwareBackPress", this.onBackPress)
+  }
+  onBackPress = () =>{
+    return true
+  }
   async onDone(croppedImageUri) {
     this.state.infoObj.pages.splice(this.state.infoObj.pages.length - 1, 1, {
       url: croppedImageUri,
@@ -91,8 +108,9 @@ class imageCrop extends React.Component {
   }
 
   onError = (err) => {
-    console.log(err);
+    alert('Something went wrong, please contact support '+ err)
   };
+  
   onContinue = () => {
     this.props.navigation.navigate('ScanStack', {
       params: {infoObj: this.state.infoObj},
@@ -162,11 +180,6 @@ class imageCrop extends React.Component {
         <React.Fragment>
          
           <View style={{flex: 1, }}>
-            {Platform.OS != 'android' && (
-              <View style={{paddingTop: getStatusBarHeight()}}>
-                <StatusBar />
-              </View>
-            )}
             <AmazingCropper
               footerComponent={<this.CustomCropperFooter />}
               onDone={(croppedImageUri) => {
@@ -201,26 +214,38 @@ class imageCrop extends React.Component {
         </View>
       );
   }
-
+ 
+ 
   CustomCropperFooter = (props) => {
+   
     return (
       <View style={{flexDirection: 'row', justifyContent: 'center',}}>
         <TouchableOpacity
-          onPress={() => {
+          onPress={async () => {
+            let imguri = this.state.infoObj.pages[this.state.infoObj.pages.length - 1]
             this.state.infoObj.pages.splice(
               this.state.infoObj.pages.length - 1,
               1,
             );
-            if (Platform.OS === 'ios')
+            let RNFS = require('react-native-fs');
+           RNFS.unlink(imguri.url)
+            .then(() => {
+              
+            })
+            // `unlink` will throw an error, if the item to unlink does not exist
+            .catch((err) => {
+              alert('Something went wrong, please clear cache of this app')
+            });
+            if (Platform.OS === 'ios'){
               this.props.navigation.push('ScanStack', {
                 params: {infoObj: this.state.infoObj},
                 screen: 'Scanner',
-              });
-            else
+              });}
+            else{
               this.props.navigation.navigate('ScanStack', {
                 params: {infoObj: this.state.infoObj},
                 screen: 'Scanner',
-              });
+              });}
           }}
           style={styles.button}>
           <Text style={styles.text}>{translate('Rescan')}</Text>
@@ -250,7 +275,7 @@ const styles = StyleSheet.create({
   button: {
     width: Dimensions.get('window').width/3.6,
     backgroundColor: '#E67F00',
-    height: Dimensions.get('window').height /13,
+    height: Dimensions.get('window').height / 15,
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf:'center',
@@ -274,7 +299,6 @@ const styles = StyleSheet.create({
   text:{
     color:'white',
     fontSize:11,
-    fontWeight:'bold'
   }
 });
 

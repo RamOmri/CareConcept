@@ -11,6 +11,8 @@ import {
   TouchableOpacity,
   Dimensions,
   I18nManager,
+  DeviceEventEmitter,
+  BackHandler
 } from 'react-native';
 
 import {
@@ -20,7 +22,6 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-import DocumentScanner from '@woonivers/react-native-document-scanner';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import {connect} from 'react-redux';
 import {addDoc} from './actions/claimActions';
@@ -53,9 +54,28 @@ class ScanPreview extends React.Component {
   }
 
   componentDidMount() {
+    BackHandler.addEventListener("hardwareBackPress", this.onBackPress)
     this.state.infoObj.pages.reverse();
   }
+  componentWillUnmount() {
+    BackHandler.removeEventListener("hardwareBackPress", this.onBackPress)
+  }
 
+
+  onBackPress = () =>{
+    return true
+  }
+  deleteCachedImage = async (path) =>{
+    let RNFS = require('react-native-fs');
+    return RNFS.unlink(path)
+      .then(() => {
+
+       })
+      // `unlink` will throw an error, if the item to unlink does not exist
+      .catch((err) => {
+        console.log(err)
+      });
+  }
   render() {
     return (
       <View style={{marginTop: 10}}>
@@ -78,7 +98,6 @@ class ScanPreview extends React.Component {
               onPress={() => {
                 if (this.state.infoObj.pages.length < 20) {
                   this.state.infoObj.pages.reverse();
-                  // this.props.navigation.reset('ScanStack', {params:{img: [{url: this.state.finalImages}]}, screen: 'Scanner'})
                   const resetAction = CommonActions.reset({
                     index: 1,
                     routes: [
@@ -89,9 +108,8 @@ class ScanPreview extends React.Component {
                     ],
                   });
                   this.props.navigation.dispatch(resetAction);
-                  // this.props.navigation.push('Scanner', {params:{img: [{url: this.state.finalImages}]}});
                 } else {
-                  alert(
+                  Alert.alert('',
                     translate(
                       'number of pages per document cannot be more than 20',
                     ),
@@ -105,8 +123,11 @@ class ScanPreview extends React.Component {
 
             <TouchableOpacity
               style={styles.button}
-              onPress={() => {
-                this.props.navigation.navigate('ClaimStack', {
+              onPress={async () => {
+                for(let i = 0; i < this.state.infoObj.pages.length; i++){
+                  await this.deleteCachedImage(this.state.infoObj.pages[i].url)
+                                }
+                  this.props.navigation.navigate('ClaimStack', {
                   params: {},
                   screen: 'SummaryScreen',
                 });
@@ -158,16 +179,16 @@ const styles = StyleSheet.create({
     aspectRatio: undefined,
   },
   button: {
-    width: Dimensions.get('window').width/2.2,
+    width: Dimensions.get('window').width/2.5,
     backgroundColor: '#E67F00',
     height: Dimensions.get('window').height / 16,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius:40,
-    margin:5
+    margin:10
   },
   buttonText: {
-    color: 'white', fontSize: 11, fontWeight:'bold'
+    color: 'white', fontSize: 13,
   },
   preview: {
     flex: 1,
