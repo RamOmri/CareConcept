@@ -94,6 +94,38 @@ export default class ScanScreen extends PureComponent {
   }
 
   componentDidMount() {
+     // Add a react navigation focus listener.
+    // Only mounts the camera when the current screen is active
+    this.props.navigation.addListener('focus', () => {
+      this.setState({ 
+        infoObj: this.props.route.params.infoObj,
+        flashEnabled: false,
+        showScannerView: false,
+        didLoadInitialLayout: false,
+        detectedRectangle: false,
+        isMultiTasking: false,
+        useScanner: true,
+        loadingCamera: true,
+        processingImage: false,
+        docScanned: false,
+        takingPicture: false,
+        overlayFlashOpacity: new Animated.Value(0),
+        device: {
+          initialized: false,
+          hasCamera: false,
+          permissionToUseCamera: false,
+          flashIsAvailable: false,
+          previewHeightPercent: 1,
+          previewWidthPercent: 1,
+        },
+        ScannerRef: React.createRef(),
+        });
+    });
+    // Add a react navigation blur listener.
+    // Removes the scanner when the screen is not active
+    this.props.navigation.addListener('blur', () => {
+      this.setState({ camera: false });
+    });
     BackHandler.addEventListener("hardwareBackPress", this.onBackPress)
     if (this.state.didLoadInitialLayout && !this.state.isMultiTasking) {
       this.turnOnCamera();
