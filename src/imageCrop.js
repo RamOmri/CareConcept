@@ -72,7 +72,6 @@ class imageCrop extends React.Component {
       await ImageResizer.createResizedImage( this.state.infoObj.pages[this.state.infoObj.pages.length - 1].url, 2000, 2000, "JPEG", 80)
       .then(response => { 
         this.state.infoObj.pages[this.state.infoObj.pages.length - 1].url = response.uri
-       console.log(response.size)
       })
      } */
     await this.getImageSize(
@@ -85,7 +84,6 @@ class imageCrop extends React.Component {
     BackHandler.removeEventListener("hardwareBackPress", this.onBackPress)
   }
   onBackPress = () =>{
-    console.log(5)
     return true
   }
   async onDone(croppedImageUri) {
@@ -110,7 +108,7 @@ class imageCrop extends React.Component {
   }
 
   onError = (err) => {
-    console.log(err);  
+    alert('Something went wrong, please contact support '+ err)
   };
   
   onContinue = () => {
@@ -216,16 +214,28 @@ class imageCrop extends React.Component {
         </View>
       );
   }
-
+ 
+ 
   CustomCropperFooter = (props) => {
+   
     return (
       <View style={{flexDirection: 'row', justifyContent: 'center',}}>
         <TouchableOpacity
-          onPress={() => {
+          onPress={async () => {
+            let imguri = this.state.infoObj.pages[this.state.infoObj.pages.length - 1]
             this.state.infoObj.pages.splice(
               this.state.infoObj.pages.length - 1,
               1,
             );
+            let RNFS = require('react-native-fs');
+           RNFS.unlink(imguri.url)
+            .then(() => {
+              
+            })
+            // `unlink` will throw an error, if the item to unlink does not exist
+            .catch((err) => {
+              alert('Something went wrong, please clear cache of this app')
+            });
             if (Platform.OS === 'ios'){
               this.props.navigation.push('ScanStack', {
                 params: {infoObj: this.state.infoObj},

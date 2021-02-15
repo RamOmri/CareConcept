@@ -90,7 +90,6 @@ class SummaryScreen extends React.Component {
   }
 
   onBackPress = () => {
-    console.log(2)
     if (!this.state.isLoading && !this.state.renderWebView) {
       this.props.navigation.goBack();
       return true
@@ -379,7 +378,6 @@ class SummaryScreen extends React.Component {
         kto_inhaber: this.props.docs[0].document.AccountHolder,
         dokument: pdfArray[i],
       };
-      //console.log(document)
       objectToSend.payload.push(document);
     }
     this.sendObject(objectToSend);
@@ -408,11 +406,10 @@ deleteCache = async (path) =>{
           .then((data) => {
             bytes = data;
           })
-          .catch((err) => console.log('here1:::::::::::::::::::: ' + err));
-
+          .catch((err) => alert('Something went wrong, please contact support ' + err));
         var embeddedImage = await pdfDoc
           .embedJpg(bytes)
-          .catch((err) => console.log('here2:::::::::::::::::::: ' + err));
+          .catch((err) => alert('Something went wrong, please contact support ' + err));
         var page = pdfDoc.addPage();
         const pdfDims = embeddedImage.scale(
           (page.getHeight() / embeddedImage.width >
@@ -471,7 +468,7 @@ deleteCache = async (path) =>{
           this.state.server_message = res;
         }
       })
-      .catch((error) => console.log('could not send ' + error));
+      .catch((error) => alert('Something went wrong, please contact support ' + error));
     if (this.state.server_message == '200') {
       let deletePath = this.state.cachePath
       this.state.cachePath = this.state.cachePath.split('/')
@@ -482,11 +479,11 @@ deleteCache = async (path) =>{
        console.log("after")
 
       let lang = this.props.language;
-      console.log(lang);
       this.setState({isLoading: false});
      this.props.deleteStateClaimInfo();
       this.props.deleteStatePolicyInfo();
       this.props.setLanguage(lang);
+      
 
       Alert.alert('',
         translate(
@@ -499,7 +496,6 @@ deleteCache = async (path) =>{
       });
     } else if (this.state.server_message != '400') {
       Alert.alert('',translate('Something went wrong sending claim Please try again'));
-      console.log(this.state.server_message);
       this.setState({isLoading: false});
     }
   }
@@ -592,7 +588,6 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-  console.log(':::::::::::::: ' + state);
   return {
     policyInfo: state.policyInfoReducers.policyInfo,
     docs: state.docReducer.docList,

@@ -159,7 +159,6 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-  //alert(JSON.stringify(state))
   return {
     language: state.policyInfoReducers.policyInfo.language,
   };

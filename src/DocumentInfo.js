@@ -158,7 +158,6 @@ class DocumentInfo extends React.Component {
       this.state.sendMoneyToContractualServices = this.state.infoObj.sendMoneyToContractualServices
       this.state.isDocumentGerman = this.state.infoObj.isDocumentGerman
       this.state.docType = this.state.infoObj.docType
-      console.log(this.props.route.params.infoObj)
       delete this.state.infoObj.key;
     }
   }
@@ -429,7 +428,6 @@ class DocumentInfo extends React.Component {
 
     if (this._calculateAge(date)[0] < 0 || this._calculateAge(date)[1] >= 100) {
       Alert.alert('',translate('Please enter a valid birth date'));
-      console.log(this.state.isDatePickerVisible)
     } else {
       let birthDate = day + '/' + month + '/' + year;
       this.state.infoObj = {
@@ -631,7 +629,6 @@ class DocumentInfo extends React.Component {
     );
   };
   checkName = (name) => {
-    console.log(name);
     if (name) {
       const utf8 =
         'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZüöäÜÖÄß0123456789 _çÇñÑëáé&;.-:';
@@ -740,7 +737,8 @@ class DocumentInfo extends React.Component {
   }
 
   onBackPress = () => {
-    console.log(3)
+
+    // Below code allows a back press on this screen when editing but returns the info obj to the global app state
   /*   if (
       this.state.isEditing &&
       !(this.state.renderDocTypeInfoWeb || this.state.renderGeneralInfoWeb || this.state.renderBillFromGermanyInfo || this.state.renderDatePickerInfo ||
@@ -762,11 +760,10 @@ class DocumentInfo extends React.Component {
         screen: 'SummaryScreen',
       });
     } */
-    if(this.state.isEditing) Alert.alert('', translate('Press the show document button below to view all the pages of your document'))
-    else if (
-      !(this.state.renderDocTypeInfoWeb || this.state.renderGeneralInfoWeb || this.state.renderBillFromGermanyInfo || this.state.renderDatePickerInfo ||
-        this.state.renderWhoToPay)
-    ) {
+    let not_in_webview = !(this.state.renderDocTypeInfoWeb || this.state.renderGeneralInfoWeb || this.state.renderBillFromGermanyInfo || this.state.renderDatePickerInfo ||
+      this.state.renderWhoToPay)
+      if(not_in_webview && this.state.isEditing) Alert.alert('', translate('Press the show document button below to view all the pages of your document'))
+      else if (not_in_webview) {
       this.props.navigation.navigate('ClaimStack', {
         params: {},
         screen: 'SummaryScreen',

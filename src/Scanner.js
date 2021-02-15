@@ -127,7 +127,6 @@ export default class ScanScreen extends PureComponent {
     return null;
   }
 onBackPress = () =>{
-  console.log(4)
   return true
 }
 
