@@ -71,7 +71,9 @@ class StartScreen extends React.Component {
           <ImageBackground
             resizeMode="contain"
             style={styles.container}
-            source={ this.props.language.includes('de') && require('./img/startScreenDe.jpg') || this.props.language.includes('en') && require('./img/startScreenEn.jpg')}
+            source={ this.props.language.includes('de') && require('./img/startScreenDe.jpg') || 
+            this.props.language.includes('en') && require('./img/startScreenEn.jpg')||
+          this.props.language.includes('zh') && require('./img/startScreenCHN.jpg')}
             style={{
               resizeMode: 'stretch',
               flex: 1,
@@ -85,7 +87,7 @@ class StartScreen extends React.Component {
             width: Dimensions.get('window').width/3.789,
             top:Dimensions.get('window').height/7.4,
             borderRadius:1000,
-            left:Dimensions.get('window').width/1.54,
+            left:Dimensions.get('window').width/1.45,
             justifyContent:'center',
             alignItems:'center'
           }
