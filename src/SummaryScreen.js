@@ -239,13 +239,21 @@ class SummaryScreen extends React.Component {
               contentContainerStyle={{
                 flexGrow: 1,
                 justifyContent: 'space-between',
-                flexDirection: 'column',
               }}>
               <FlatList
                 extraData={this.state}
                 data={this.props.docs}
                 renderItem={({item, index}) => (
-                  <TouchableOpacity
+                
+                    <View
+                      style={{
+                        marginTop: 10,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        borderBottomWidth: 3,
+                        borderBottomColor: '#004799',
+                      }}>
+                        <TouchableOpacity
                     onPress={() => {
                       let info = item;
 
@@ -255,14 +263,6 @@ class SummaryScreen extends React.Component {
                         screen: 'DocumentInfo',
                       });
                     }}>
-                    <View
-                      style={{
-                        marginTop: 10,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        borderBottomWidth: 3,
-                        borderBottomColor: '#004799',
-                      }}>
                       <Text style={styles.DocumentText}>{`${translate(
                         'This is a',
                       )} ${translate(item.document.docType)} ${translate(
@@ -271,10 +271,41 @@ class SummaryScreen extends React.Component {
                         'pages',
                       )}${translate("You can view and edit the document by pressing here")} `}
                       </Text>
-                      <Text style = {styles.DocumentText}>
-                        
-                      </Text>
-                      <Image
+                      </TouchableOpacity>
+                      <ScrollView
+                       scrollEventThrottle={200}
+                       decelerationRate="fast"
+                       pagingEnabled
+                       contentContainerStyle={{
+                        flexDirection: 'row',
+                      }}
+                       >
+                         <View
+                         style = {{flexDirection:'row'}}
+                         >
+                           <FlatList
+                            showsVerticalScrollIndicator={false}
+                            showsHorizontalScrollIndicator={false}
+                            horizontal = {true}
+                           contentContainerStyle={{alignSelf: 'flex-start'}}
+                      data={item.document.pages}
+                      renderItem={({item}) => {
+                        console.log(item.url)
+                        return (
+                          <Image
+                          source={{uri: item.url}}
+                          style={{
+                            marginTop:5,
+                            marginBottom:5,
+                            width: Dimensions.get('window').width / 1.5,
+                            height: Dimensions.get('window').height / 3,
+                            resizeMode: 'contain',
+                          }}
+                        />
+                )}} />
+                 </View>
+                      </ScrollView>
+                      {/* <Image
                         source={{uri: item.document.pages[0].url}}
                         style={{
                           flex: 1,
@@ -283,9 +314,8 @@ class SummaryScreen extends React.Component {
                           height: Dimensions.get('window').height / 3,
                           resizeMode: 'contain',
                         }}
-                      />
+                      /> */}
                     </View>
-                  </TouchableOpacity>
                 )}
               />
 
@@ -522,7 +552,9 @@ const styles = StyleSheet.create({
     marginLeft:10,
     marginRight:10,
     fontSize: 14,
-    color: '#004799',
+    color: 'white',
+    backgroundColor:'#004799',
+    borderRadius:7,
     justifyContent: 'center',
     textAlign:'center',
     alignItems: 'center',
