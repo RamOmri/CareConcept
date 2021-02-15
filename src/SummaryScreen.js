@@ -129,9 +129,13 @@ class SummaryScreen extends React.Component {
     'https://www.care-concept.de/scripte/sniplets/app_general_information_3_eng.php?navilang=eng') ||
               (this.props.language.includes('de') && (Platform.OS === 'android') &&
                 'https://www.care-concept.de/scripte/sniplets/app_general_information_3.php')||
+                (this.props.language.includes('zh') && (Platform.OS === 'android') &&
+                'https://www.care-concept.de/scripte/sniplets/app_general_information_3_chn.php?navilang=chn')||
 
                 (this.props.language.includes('en') && (Platform.OS === 'ios') &&
                 'https://www.care-concept.de/scripte/sniplets/app_general_information_3io_eng.php?navilang=eng') ||
+                (this.props.language.includes('zh') && (Platform.OS === 'ios') &&
+                'https://www.care-concept.de/scripte/sniplets/app_general_information_3io_chn.php?navilang=chn') ||
                           (this.props.language.includes('de') && (Platform.OS === 'ios') &&
                             'https://www.care-concept.de/scripte/sniplets/app_general_information_3io.php'),
                 

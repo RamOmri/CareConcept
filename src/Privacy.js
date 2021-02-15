@@ -97,7 +97,9 @@ class Privacy extends React.Component {
                 (this.props.language.includes('en') &&
                 'https://www.care-concept.de/wir_ueber_uns/datenschutz_app_eng.php?navilang=eng') ||
                 (this.props.language.includes('de') &&
-                  'https://www.care-concept.de/wir_ueber_uns/datenschutz_app.php'),
+                  'https://www.care-concept.de/wir_ueber_uns/datenschutz_app.php')||
+                  (this.props.language.includes('zh') &&
+                  'https://www.care-concept.de/wir_ueber_uns/datenschutz_app_eng.php?navilang=chn'),
             }}
             style={{marginTop: 20}}
           />

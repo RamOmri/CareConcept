@@ -167,7 +167,8 @@ class imageCrop extends React.Component {
             source={{
               uri:
                 this.props.language.includes('en') && 'https://www.care-concept.de/scripte/sniplets/app_general_information_eng.php?navilang=eng' ||
-                 this.props.language.includes('de') && "https://www.care-concept.de/scripte/sniplets/app_general_information.php"
+                 this.props.language.includes('de') && "https://www.care-concept.de/scripte/sniplets/app_general_information.php"||
+                 this.props.language.includes('en') && 'https://www.care-concept.de/scripte/sniplets/app_general_information_eng.php?navilang=chn'
             }}
             style={{marginTop: 20}}
           />

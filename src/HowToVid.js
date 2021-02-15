@@ -100,7 +100,6 @@ class HowToVid extends React.Component {
     );
   };
   render() {
- 
             return (
             <ImageBackground
                 style={styles.container}
@@ -119,9 +118,15 @@ class HowToVid extends React.Component {
             startInLoadingState
             renderLoading={this.renderLoading}
             source={{
-              uri: this.props.language.includes('de') && 'https://www.care-concept.de/bilder/CCAG_app_ios.mp4' ||
-                 this.props.language.includes('en') && "https://www.care-concept.de/bilder/CCAG_app_ios_eng.mp4"
-               
+              uri: Platform.OS === 'ios' && 
+              (this.props.language.includes('de') && 'https://www.care-concept.de/bilder/CCAG_app_ios.mp4' ||
+                 this.props.language.includes('en') && "https://www.care-concept.de/bilder/CCAG_app_ios_eng.mp4"||   
+                 this.props.language.includes('zh') && "https://www.care-concept.de/bilder/CCAG_app_ios_chn.mp4"  )  
+                 ||
+                 Platform.OS === 'android' &&
+                 (this.props.language.includes('de') && 'https://www.care-concept.de/bilder/CCAG_app.mp4' ||
+                 this.props.language.includes('en') && "https://www.care-concept.de/bilder/CCAG_app_eng.mp4"||
+                 this.props.language.includes('en') && "https://www.care-concept.de/bilder/CCAG_app_chn.mp4")
             }}
             style={{marginTop: 20}}
           />
