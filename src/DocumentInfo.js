@@ -181,7 +181,9 @@ class DocumentInfo extends React.Component {
                 onPress={() => {
                  this.onBackPress()
                 }}>
-            {!this.state.isEditing && <Image source = {this.props.language.includes('en') && require('./img/goBackEn.png') || this.props.language.includes('de') && require('./img/goBackDe.png')} 
+            {!this.state.isEditing && <Image source = {this.props.language.includes('en') && require('./img/goBackEn.png') || 
+            this.props.language.includes('de') && require('./img/goBackDe.png') || 
+            this.props.language.includes('zh') && require('./img/goBackChn.png')} 
               style = {styles.goBackButton} />}
               </TouchableOpacity>
             )}
@@ -301,7 +303,9 @@ class DocumentInfo extends React.Component {
               this.setState({renderBillFromGermanyInfo: false})
               this.setState({renderWhoToPay: false})
             }}>
-             <Image source = {this.props.language.includes('en') && require('./img/goBackEn.png') || this.props.language.includes('de') && require('./img/goBackDe.png')} 
+             <Image source = {this.props.language.includes('en') && require('./img/goBackEn.png') || 
+             this.props.language.includes('de') && require('./img/goBackDe.png') ||
+            this.props.language.includes('zh') && require('./img/goBackChn.png')} 
             style = {styles.goBackButton} />
           </TouchableOpacity>
         </View>
@@ -698,7 +702,8 @@ class DocumentInfo extends React.Component {
     ) {
       errorMessage =
         errorMessage +
-        `${translate('please check your bank details')} ${this.props.language.includes("de")&& "(Name)" || "(name)"}` +
+        `${translate('please check your bank details')} ${this.props.language.includes("de")&& "(Name)" || 
+        this.props.language.includes('en') && "(name)" || this.props.language.includes('zh') && "(姓名)"}` +
         ' \n';
       correctFields = false;
     }

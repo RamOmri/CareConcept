@@ -101,8 +101,8 @@ class StartScreen extends React.Component {
                 }}
             >
                  <View style = {{alignItems:'center', justifyContent:'center'}}>
-                    <Text style = {{color:'white', fontSize:16}}>
-                            Start
+                    <Text style = {{color:'white', fontSize:14}}>
+                            {translate("Start")}
                     </Text>
               </View>
               </TouchableOpacity>

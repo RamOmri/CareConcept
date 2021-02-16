@@ -472,7 +472,7 @@ onBackPress = () =>{
           <View style={styles.loadingContainer}>
             <View style={styles.processingContainer}>
               <ActivityIndicator color="#333333" size="large" />
-              <Text style={{ color: '#333333', fontSize: 30, marginTop: 10 }}>Processing</Text>
+              <Text style={{ color: '#333333', fontSize: 30, marginTop: 10 }}>{translate("Loading")}</Text>
             </View>
           </View>
         </View>

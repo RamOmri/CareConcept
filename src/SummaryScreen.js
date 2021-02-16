@@ -115,7 +115,9 @@ class SummaryScreen extends React.Component {
               (this.props.language.includes('en') &&
                 require('./img/goBackEn.png')) ||
               (this.props.language.includes('de') &&
-                require('./img/goBackDe.png'))
+                require('./img/goBackDe.png'))||
+                (this.props.language.includes('zh') &&
+                require('./img/goBackChn.png'))
             }
             style={styles.goBackButton}
           />
@@ -176,7 +178,18 @@ class SummaryScreen extends React.Component {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <Text style={styles.DocumentText}>
+          <Text style={{ 
+          flexDirection: 'row',
+          marginLeft:10,
+          marginRight:10,
+          fontSize: 14,
+          color: '#004799',
+          borderRadius:7,
+          justifyContent: 'center',
+          textAlign:'center',
+          alignItems: 'center',
+          marginBottom:0
+          }}>
             {translate('Please wait while we send your claim')}
           </Text>
           <ActivityIndicator size="large" color="#004799" />
@@ -207,7 +220,9 @@ class SummaryScreen extends React.Component {
                     (this.props.language.includes('en') &&
                       require('./img/editPolicyHolderEn.png')) ||
                     (this.props.language.includes('de') &&
-                      require('./img/editPolicyHolderDe.png'))
+                      require('./img/editPolicyHolderDe.png')) ||
+                      (this.props.language.includes('zh') &&
+                      require('./img/editPolicyHolderChn.png'))
                   }
                   style={{marginLeft: 10,
                     resizeMode: 'contain',
@@ -553,7 +568,7 @@ const styles = StyleSheet.create({
     marginRight:10,
     fontSize: 14,
     color: 'white',
-    backgroundColor:'#004799',
+    backgroundColor:'#f59b00',
     borderRadius:7,
     justifyContent: 'center',
     textAlign:'center',

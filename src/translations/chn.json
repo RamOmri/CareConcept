@@ -61,5 +61,11 @@
  "Thank you for uploading the documents We will contact you shortly": "谢谢您上传文档。我们会尽快联系您。\n\n重要提示: 已经上传过的单据或其它文档，请不要再邮寄或通过邮件发送。",
  "could not access camera please grant permission manually": "理赔软件无法链接到相机， 请手动设置为允许。",
  "Could not access camera please grant permission through phone settings": "理赔软件无法链接到相机， 请在手机设置上设置成允许。",
- "How to video": "操作视频演示"
+ "How to video": "操作视频演示",
+ "You can start scanning documents by pressing the scan document button below":"点击 扫描文档， 开始扫描文档",
+ "Flash": "快捷键",
+ "document detection":"自动辨认",
+ "Loading":"装货",
+ "Show Document":"显示文件",
+"You can view and edit the document by pressing here": "需要观看或改动文档请点击这里"
 }

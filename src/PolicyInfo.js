@@ -146,7 +146,9 @@ renderInfo(){
         onPress={() => {
           this.setState({renderWebView: false})
         }}>
-      <Image source = {this.props.language.includes('en') && require('./img/goBackEn.png') || this.props.language.includes('de') && require('./img/goBackDe.png')} 
+      <Image source = {this.props.language.includes('en') && require('./img/goBackEn.png') || 
+      this.props.language.includes('de') && require('./img/goBackDe.png') || 
+    this.props.language.includes('zh') && require('./img/goBackChn.png')} 
           style = {styles.goBackButton} />
       </TouchableOpacity>
       <WebView
@@ -204,7 +206,8 @@ renderInfo(){
                   this.props.navigation.goBack()
                 }}>
               <Image source = {this.props.language.includes('en') && require('./img/goBackEn.png') ||
-               this.props.language.includes('de') && require('./img/goBackDe.png')} 
+               this.props.language.includes('de') && require('./img/goBackDe.png')||
+              this.props.language.includes('zh') && require('./img/goBackChn.png')} 
               style = {styles.goBackButton} />
               </TouchableOpacity>
             )}
