@@ -78,7 +78,7 @@ const userLanguageSelect = async () =>{
   let lang = null
   await new Promise((resolve, reject) => { Alert.alert(
     "Language Selection:",
-    'Please select your language \n Bitte wählen Sie Ihre Sprache',
+    'Please select your language \n Bitte wählen Sie Ihre Sprache \n 请选择语言',
     [
       {
         text: "English",
@@ -91,6 +91,13 @@ const userLanguageSelect = async () =>{
         text: 'Deutsch',
         onPress: () =>{
           lang = {languageTag: 'de', isRTL: false};
+          resolve()
+        }
+      },
+      {
+        text: 'Chinese',
+        onPress: () =>{
+          lang = {languageTag: 'zh', isRTL: false};
           resolve()
         }
       },
