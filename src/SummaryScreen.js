@@ -449,16 +449,22 @@ deleteCache = async (path) =>{
       var pdfDoc = await PDFDocument.create();
       let pages = this.props.docs[d].document.pages.map((a) => a.url);
       cachePath = pages[0]
+
       for (let i = 0; i < pages.length; i++) {
         this.state.cachePath = pages[i]
         await RNFS.readFile(pages[i], 'base64')
           .then((data) => {
             bytes = data;
           })
-          .catch((err) => alert('Something went wrong, please contact support ' + err));
+          .catch((err) => alert('1 Something went wrong, please contact support ' + err));
+
         var embeddedImage = await pdfDoc
-          .embedJpg(bytes)
-          .catch((err) => alert('Something went wrong, please contact support ' + err));
+          .embedPng(bytes)
+          .catch((err) =>{ 
+            this.setState({isLoading: false})
+            console.log(embeddedImage)
+            alert('2 Something went wrong, please contact support ' + err)
+          });
         var page = pdfDoc.addPage();
         const pdfDims = embeddedImage.scale(
           (page.getHeight() / embeddedImage.width >
@@ -489,7 +495,6 @@ deleteCache = async (path) =>{
 
 
   async sendObject(objectToSend) {
-    var message_from_server;
     await fetch('https://www.care-concept.de/service/erstattungsannehmer.php', {
       method: 'POST',
       headers: {
@@ -524,7 +529,7 @@ deleteCache = async (path) =>{
       deletePath = deletePath.replace("/"+this.state.cachePath[this.state.cachePath.length - 1], '')
       //deletePath = deletePath.slice(0, -1)
       console.log(deletePath)
-       this.deleteCache(deletePath)
+      
        console.log("after")
 
       let lang = this.props.language;
@@ -533,7 +538,7 @@ deleteCache = async (path) =>{
       this.props.deleteStatePolicyInfo();
       this.props.setLanguage(lang);
       
-
+      await this.deleteCache(deletePath)
       Alert.alert('',
         translate(
           'Thank you for uploading the documents We will contact you shortly',
