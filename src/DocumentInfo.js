@@ -154,11 +154,13 @@ class DocumentInfo extends React.Component {
         ...this.state,
         infoObj: this.props.route.params.infoObj.document,
       };
-      this.state.sendMoneyToContractualServices = this.state.infoObj.sendMoneyToContractualServices
-      this.state.isDocumentGerman = this.state.infoObj.isDocumentGerman
+      
+      this.state.isDocumentGerman = this.state.infoObj.isDocumentGerman || "Select"
       this.state.docType = this.state.infoObj.docType
       delete this.state.infoObj.key;
+      this.state.sendMoneyToContractualServices = this.state.infoObj.sendMoneyToContractualServices || "Select"
     }
+    
   }
 
   render() {
@@ -686,7 +688,7 @@ class DocumentInfo extends React.Component {
     let correctFields = true;
     let errorMessage = '';
     if (this.state.infoObj.docType === 'Other Document')
-      this.state.infoObj.sendMoneyToContractualServices = 'Yes';
+      this.state.infoObj.sendMoneyToContractualServices == 'Yes';
 
     if (
        this.state.isDocumentGerman === 'Select' &&
