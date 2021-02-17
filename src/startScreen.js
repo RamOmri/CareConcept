@@ -83,11 +83,11 @@ class StartScreen extends React.Component {
             <TouchableOpacity
             style = {{backgroundColor: '#f59b00',
             position: 'absolute',
-            height: Dimensions.get('window').width/3.789,
-            width: Dimensions.get('window').width/3.789,
+            height: Dimensions.get('window').width/4.1,
+            width: Dimensions.get('window').width/4.1,
             top:Dimensions.get('window').height/7.4,
             borderRadius:1000,
-            left:Dimensions.get('window').width/1.45,
+            left:Dimensions.get('window').width/1.47,
             justifyContent:'center',
             alignItems:'center'
           }
@@ -101,7 +101,7 @@ class StartScreen extends React.Component {
                 }}
             >
                  <View style = {{alignItems:'center', justifyContent:'center'}}>
-                    <Text style = {{color:'white', fontSize:14}}>
+                    <Text style = {{color:'white', fontSize:12}}>
                             {translate("Start")}
                     </Text>
               </View>
