@@ -258,8 +258,10 @@ class SummaryScreen extends React.Component {
               <FlatList
                 extraData={this.state}
                 data={this.props.docs}
-                renderItem={({item, index}) => (
-                
+                renderItem={({item, index}) => {  
+                  let docNum = index
+                  return (
+                  
                     <View
                       style={{
                         marginTop: 10,
@@ -304,9 +306,32 @@ class SummaryScreen extends React.Component {
                             horizontal = {true}
                            contentContainerStyle={{alignSelf: 'flex-start'}}
                       data={item.document.pages}
-                      renderItem={({item}) => {
+                      renderItem={({item, index}) => {
                         console.log(item.url)
                         return (
+                          <TouchableOpacity
+                          onPress = {async () =>{
+                           
+                           await new Promise((resolve, reject) =>{ 
+                                Alert.alert('Delete Page',
+                                  'Would you like to delete the selected page?',
+                                  [
+                                    {text: 'Delete', onPress: () =>{ 
+                                      this.props.docs[docNum].document.pages.splice(index,1)
+                                      if(this.props.docs[docNum].document.pages.length === 0) this.props.delete(this.props.docs[docNum].key)
+                                      else this.forceUpdate()
+                                      resolve()
+                                          }},
+                                      {text:'Cancel',
+                                        onPress: () =>{
+                                          resolve()
+                                        }
+                                    }
+                                  ]
+                                  )
+                           })
+                          }}
+                          >
                           <Image
                           source={{uri: item.url}}
                           style={{
@@ -317,6 +342,7 @@ class SummaryScreen extends React.Component {
                             resizeMode: 'contain',
                           }}
                         />
+                        </TouchableOpacity>
                 )}} />
                  </View>
                       </ScrollView>
@@ -331,7 +357,7 @@ class SummaryScreen extends React.Component {
                         }}
                       /> */}
                     </View>
-                )}
+                )}}
               />
 
               <View
@@ -664,6 +690,7 @@ const mapDispatchToProps = (dispatch) => {
     deleteStateClaimInfo: () => dispatch(deleteStateClaimInfo()),
     deleteStatePolicyInfo: () => dispatch(deleteStatePolicyInfo()),
     setLanguage: (lang) => dispatch(setLanguage(lang)),
+    add: (doc) => dispatch(addDoc(doc)),
   };
 };
 
