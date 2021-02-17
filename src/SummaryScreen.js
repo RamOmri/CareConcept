@@ -458,13 +458,21 @@ deleteCache = async (path) =>{
           })
           .catch((err) => alert('1 Something went wrong, please contact support ' + err));
 
-        var embeddedImage = await pdfDoc
+        if(Platform.OS === 'android') var embeddedImage = await pdfDoc
           .embedPng(bytes)
           .catch((err) =>{ 
             this.setState({isLoading: false})
             console.log(embeddedImage)
             alert('2 Something went wrong, please contact support ' + err)
           });
+        else var embeddedImage = await pdfDoc
+        .embedJpg(bytes)
+        .catch((err) =>{ 
+          this.setState({isLoading: false})
+          console.log(embeddedImage)
+          alert('2 Something went wrong, please contact support ' + err)
+        });
+
         var page = pdfDoc.addPage();
         const pdfDims = embeddedImage.scale(
           (page.getHeight() / embeddedImage.height >
