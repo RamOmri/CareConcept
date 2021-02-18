@@ -309,9 +309,11 @@ class SummaryScreen extends React.Component {
                       renderItem={({item, index}) => {
                         console.log(item.url)
                         return (
+                          <View style = {{flexDirection:'column', alignItems:'center'}}>
+
                           <TouchableOpacity
+                          style = {styles.deleteButton}
                           onPress = {async () =>{
-                           
                            await new Promise((resolve, reject) =>{ 
                                 Alert.alert(translate("Delete Page"),
                                   translate('Would you like to delete the selected page'),
@@ -332,6 +334,10 @@ class SummaryScreen extends React.Component {
                            })
                           }}
                           >
+                            <Text style = {{color:'white'}}>
+                            {translate('Delete Page')}
+                            </Text>
+                          </TouchableOpacity>
                           <Image
                           source={{uri: item.url}}
                           style={{
@@ -342,20 +348,11 @@ class SummaryScreen extends React.Component {
                             resizeMode: 'contain',
                           }}
                         />
-                        </TouchableOpacity>
+                        </View>
+                        
                 )}} />
                  </View>
                       </ScrollView>
-                      {/* <Image
-                        source={{uri: item.document.pages[0].url}}
-                        style={{
-                          flex: 1,
-                          margin: 5,
-                          width: Dimensions.get('window').width / 1.5,
-                          height: Dimensions.get('window').height / 3,
-                          resizeMode: 'contain',
-                        }}
-                      /> */}
                     </View>
                 )}}
               />
@@ -630,6 +627,16 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     height: Dimensions.get('window').height / 15,
     width: Dimensions.get('window').width / 5,
+  },
+  deleteButton: {
+    width: Dimensions.get('window').width / 2.5,
+    backgroundColor: '#E67F00',
+    height: Dimensions.get('window').height / 28,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 40,
+    marginTop:20,
+    marginBottom:5
   },
   button: {
     width: Dimensions.get('window').width / 2.5,

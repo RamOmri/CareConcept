@@ -261,7 +261,7 @@ onBackPress = () =>{
       //  this.componentDidMount()
      alert(translate("Please wait until screen turns on before scanning"))
       }
-    }, 2000);
+    }, 8000);
     this.state.ScannerRef.current.capture();
     this.triggerSnapAnimation();
 
