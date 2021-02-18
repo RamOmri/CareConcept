@@ -685,6 +685,10 @@ class DocumentInfo extends React.Component {
   };
 
   checkFieldsBeforeContinue() {
+    let shouldCheckBankDetails = (this.state.infoObj.docType == 'Claim Document' ||
+    this.state.docType == 'Claim Document') && (this.state.sendMoneyToContractualServices == 'No' ||
+    this.state.infoObj.sendMoneyToContractualServices == 'No')
+
     let correctFields = true;
     let errorMessage = '';
     if (this.state.infoObj.docType === 'Other Document')
@@ -699,7 +703,7 @@ class DocumentInfo extends React.Component {
       correctFields = false;
     }
     if (
-      this.state.infoObj.sendMoneyToContractualServices == 'No' &&
+      shouldCheckBankDetails &&
       !this.checkName(this.state.infoObj.AccountHolder)
     ) {
       errorMessage =
@@ -710,9 +714,9 @@ class DocumentInfo extends React.Component {
       correctFields = false;
     }
     if (
-      (this.state.infoObj.sendMoneyToContractualServices == 'No' &&
+      (shouldCheckBankDetails &&
         !bic.isValid(this.state.infoObj.BIC)) ||
-      (this.state.infoObj.sendMoneyToContractualServices == 'No' &&
+      (shouldCheckBankDetails &&
         this.props.bic == '')
     ) {
       errorMessage =
@@ -723,9 +727,9 @@ class DocumentInfo extends React.Component {
     }
 
     if (
-      (this.state.infoObj.sendMoneyToContractualServices == 'No' &&
+      (shouldCheckBankDetails &&
         !IBAN.isValid(this.state.infoObj.IBAN)) ||
-      (this.state.infoObj.sendMoneyToContractualServices == 'No' &&
+      (shouldCheckBankDetails &&
         this.props.iban == '')
     ) {
       errorMessage =

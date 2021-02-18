@@ -424,6 +424,7 @@ class SummaryScreen extends React.Component {
       payload: new Array(),
     };
     for (let i = 0; i < this.props.docs.length; i++) {
+      console.log(this.props.docs[i].document.BIC + ' ' + this.props.docs[i].document.IBAN) 
       let document = {
         VNR: this.props.policyInfo.insuranceNumber,
         vorname: this.props.policyInfo.FirstName,
@@ -455,6 +456,7 @@ class SummaryScreen extends React.Component {
       };
       objectToSend.payload.push(document);
     }
+   
     this.sendObject(objectToSend);
   }
 deleteCache = async (path) =>{
