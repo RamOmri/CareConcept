@@ -313,8 +313,8 @@ class SummaryScreen extends React.Component {
                           onPress = {async () =>{
                            
                            await new Promise((resolve, reject) =>{ 
-                                Alert.alert('Delete Page',
-                                  'Would you like to delete the selected page?',
+                                Alert.alert(translate("Delete Page"),
+                                  translate('Would you like to delete the selected page'),
                                   [
                                     {text: 'Delete', onPress: () =>{ 
                                       this.props.docs[docNum].document.pages.splice(index,1)
@@ -322,7 +322,7 @@ class SummaryScreen extends React.Component {
                                       else this.forceUpdate()
                                       resolve()
                                           }},
-                                      {text:'Cancel',
+                                      {text:translate('Cancel'),
                                         onPress: () =>{
                                           resolve()
                                         }
@@ -443,13 +443,13 @@ class SummaryScreen extends React.Component {
           0,
         bic: this.props.docs[i].document.BIC || '',
         vp_geburtsdatum_tag: this.props.docs[0].document.dateStatus.split(
-          '/',
+          '-',
         )[0],
         vp_geburtsdatum_monat: this.props.docs[0].document.dateStatus.split(
-          '/',
+          '-',
         )[1],
         vp_geburtsdatum_jahr: this.props.docs[0].document.dateStatus.split(
-          '/',
+          '-',
         )[2],
         kto_inhaber: this.props.docs[0].document.AccountHolder,
         dokument: pdfArray[i],

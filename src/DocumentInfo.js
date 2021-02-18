@@ -58,7 +58,9 @@ import * as RNLocalize from 'react-native-localize';
 import i18n from 'i18n-js';
 import memoize from 'lodash.memoize'; // Use for caching/memoize for better performance
 import {WebView} from 'react-native-webview';
-import {DatePicker} from 'react-native-common-date-picker';
+//import {DatePicker} from 'react-native-common-date-picker';
+import DatePicker from 'react-native-datepicker'
+
 const translationGetters = {
   // lazy requires (metro bundler does not support symlinks)
   en: () => require('./translations/eng.json'),
@@ -372,7 +374,7 @@ class DocumentInfo extends React.Component {
           {translate('Please enter the birthdate of the insured person')}{' '}
         </Text>
         <View style = {{flexDirection:'row'}}>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={() => {
             this.setState({isDatePickerVisible: true});
           }}>
@@ -393,8 +395,46 @@ class DocumentInfo extends React.Component {
                 translate('Select')}{' '}
             </Text>
           </View>
-        </TouchableOpacity>
-        <DateTimePickerModal
+        </TouchableOpacity> */}
+
+        <DatePicker
+        style={{width: 200}}
+        date={(this.state.isEditing && this.state.infoObj.dateStatus) ||
+          this.props.date ||
+          ''}
+        mode="date"
+        onDateChange = {(date) => {
+          this.handleConfirm(date);
+        }}
+        androidMode = 'spinner'
+        placeholder= {translate('Select')}
+        format="DD-MM-YYYY"
+        minDate={this.getMaxMinDate()[1]}
+        maxDate={this.getMaxMinDate()[0]}
+        confirmBtnText= {translate("Confirm")}
+        cancelBtnText={translate("Cancel")}
+        customStyles={{
+          dateIcon: {
+            position: 'absolute',
+            left: 0,
+            top: 4,
+            marginLeft: 0,
+          },
+          dateInput: {
+            marginLeft: 36,
+            padding: 5,
+            height: 40,
+            width: 250,
+            justifyContent: 'center',
+            backgroundColor: 'white',
+            borderColor: '#f59b00',
+            borderWidth: 5,
+            borderRadius: 7,
+            
+          }
+        }}
+      />
+       {/*  <DateTimePickerModal
           isVisible={this.state.isDatePickerVisible}
           mode="date"
           locale = {(this.props.language.includes("de"))&&"de-DE"|| "en-EN"}
@@ -405,7 +445,7 @@ class DocumentInfo extends React.Component {
           onCancel={() => {
             this.setState({isDatePickerVisible: false});
           }}
-        />
+        /> */}
 
       {Platform.OS === 'android' &&  (<TouchableOpacity onPress = {()=> this.setState({renderDatePickerInfo: true})}>
         <Image source = {require('./img/questionMark.png')}
@@ -430,34 +470,29 @@ class DocumentInfo extends React.Component {
   };
 
   handleConfirm = (date) => {
-    var day = parseInt(date.getDate().toString());
-    var month = (date.getMonth() + 1).toString();
-    var year = date.getFullYear().toString();
-    if (parseInt(day) < 10) {
-      day = '0' + day;
-    }
-    if (parseInt(month) < 10) {
-      month = '0' + month;
-    }
-
-    if (this._calculateAge(date)[0] < 0 || this._calculateAge(date)[1] >= 100) {
-      Alert.alert('',translate('Please enter a valid birth date'));
-    } else {
-      let birthDate = day + '/' + month + '/' + year;
+    console.log(date)
+      let birthDate = date
       this.state.infoObj = {
         ...this.state.infoObj,
         dateStatus: birthDate,
       };
       this.setState({isDatePickerVisible: false});
       this.props.set_date(birthDate);
-    }
+    
   };
 
-  _calculateAge(birthday) {
-    // birthday is a date
-    var ageDifMs = Date.now() - birthday.getTime();
-    var ageDate = new Date(ageDifMs); // miliseconds from epoch
-    return [ageDifMs, Math.abs(ageDate.getUTCFullYear() - 1970)];
+    getMaxMinDate() {
+      let date = new Date()
+
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); 
+    var yyyy = today.getFullYear();
+    
+
+  today = dd + '-' + mm + '-' + yyyy;
+  century = dd + '-' + mm + '-' + (parseInt(yyyy) - 100).toString()
+      return [today, century]
   }
 
   renderClaimInfo() {
