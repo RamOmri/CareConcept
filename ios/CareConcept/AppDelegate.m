@@ -43,6 +43,11 @@ static void InitializeFlipper(UIApplication *application) {
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
+  
+  if (@available(iOS 14, *)) {
+  UIDatePicker *picker = [UIDatePicker appearance];
+  picker.preferredDatePickerStyle = UIDatePickerStyleWheels;
+  }
   return YES;
 }
 
