@@ -270,6 +270,7 @@ class SummaryScreen extends React.Component {
                         borderBottomWidth: 3,
                         borderBottomColor: '#004799',
                       }}>
+                        
                         <TouchableOpacity
                     onPress={() => {
                       let info = item;
@@ -280,6 +281,7 @@ class SummaryScreen extends React.Component {
                         screen: 'DocumentInfo',
                       });
                     }}>
+                      <View style ={{backgroundColor:'#f59b00', margin:10, borderRadius:5}}>
                       <Text style={styles.DocumentText}>{`${translate(
                         'This is a',
                       )} ${translate(item.document.docType)} ${translate(
@@ -288,6 +290,7 @@ class SummaryScreen extends React.Component {
                         'pages',
                       )}${translate("You can view and edit the document by pressing here")} `}
                       </Text>
+                      </View>
                       </TouchableOpacity>
                       <ScrollView
                        scrollEventThrottle={200}
