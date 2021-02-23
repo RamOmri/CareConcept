@@ -281,7 +281,7 @@ class SummaryScreen extends React.Component {
                         screen: 'DocumentInfo',
                       });
                     }}>
-                      <View style ={{backgroundColor:'#f59b00', margin:10, borderRadius:5}}>
+                      <View style ={{backgroundColor:'#f59b00', margin:10, borderRadius:8}}>
                       <Text style={styles.DocumentText}>{`${translate(
                         'This is a',
                       )} ${translate(item.document.docType)} ${translate(
@@ -649,7 +649,7 @@ const styles = StyleSheet.create({
     height: Dimensions.get('window').height / 14,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 40,
+    borderRadius: 20,
     margin: 10,
   },
   nameInput: {

@@ -26,6 +26,8 @@ import {
 
 import {WebView} from 'react-native-webview';
 
+import { Header } from 'react-navigation-stack';
+
 import {
   Menu,
   MenuOptions,
@@ -218,9 +220,10 @@ renderInfo(){
           style={styles.logo}
         />
         </View>
-        <KeyboardAvoidingView>
-          <ScrollView contentContainerStyle={{flexGrow: 1}}>
-            <View style={{flex: 1, alignItems: 'center', marginBottom: 200}}>
+      
+          <ScrollView>  
+            <KeyboardAvoidingView
+          behavior="padding" style={{flex: 1, alignItems:"center"}}>
               <Text
                 style={{
                   color: '#004799',
@@ -315,9 +318,9 @@ renderInfo(){
                   </Text>
                 </View>
               </TouchableOpacity>
-            </View>
+            </KeyboardAvoidingView>
           </ScrollView>
-        </KeyboardAvoidingView>
+        
       </ImageBackground>
     );
   }

@@ -246,7 +246,7 @@ onBackPress = () =>{
         this.props.navigation.pop()
      alert(translate("Please wait until screen turns on before scanning"))
       }
-    }, 2000);
+    }, 5000);
     this.state.ScannerRef.current.capture();
     this.triggerSnapAnimation();
 
