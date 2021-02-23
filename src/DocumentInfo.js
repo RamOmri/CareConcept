@@ -702,7 +702,7 @@ class DocumentInfo extends React.Component {
 
           if (this.state.isEditing && this.checkFieldsBeforeContinue()) {
             this.props.navigation.push('ScanStack', {
-              params: {infoObj: this.state.infoObj},
+              params: {infoObj: this.state.infoObj, isEditing:this.state.isEditing},
               screen: 'ScanPreview',
             });
           } else if (this.checkFieldsBeforeContinue()) {

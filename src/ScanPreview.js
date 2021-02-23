@@ -49,6 +49,7 @@ class ScanPreview extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isEditing: this.props.route.params.isEditing|| false,
       infoObj: this.props.route.params.infoObj,
     };
   }
@@ -80,11 +81,11 @@ class ScanPreview extends React.Component {
     return (
       <View style={{marginTop: 10}}>
         <Modal visible={true} transparent={true}>
-          {/* {Platform.OS != 'android' && (
+          {Platform.OS != 'android' && (
             <View style={{paddingTop: getStatusBarHeight()}}>
               <StatusBar />
             </View>
-          )} */}
+          )}
           <View
             style={{
               flex: 0.1,
@@ -108,11 +109,23 @@ class ScanPreview extends React.Component {
                     ],
                   }); */
                /*    this.props.navigation.dispatch(resetAction); */
+               let info = this.state.infoObj 
+               if(this.state.isEditing){
+                this.props.navigation.pop()
+                this.props.navigation.navigate('ScanStack', {
+                  params: {infoObj: info},
+                  screen: 'Scanner',
+                });
+               }
+               else{
+                
+                this.props.navigation.pop()
                   this.props.navigation.push('ScanStack', {
-                    params: {infoObj: this.state.infoObj},
+                    params: {infoObj: info},
                     screen: 'Scanner',
                   });
-                  this.props.navigation.pop()
+                  
+                }
                 } else {
                   Alert.alert('',
                     translate(
