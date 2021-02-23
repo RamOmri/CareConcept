@@ -318,17 +318,18 @@ class SummaryScreen extends React.Component {
                                 Alert.alert(translate("Delete Page"),
                                   translate('Would you like to delete the selected page'),
                                   [
-                                    {text: 'Delete', onPress: () =>{ 
+                                   
+                                      {text:translate('Cancel'),
+                                        onPress: () =>{
+                                          resolve()
+                                        }
+                                    },
+                                     {text: translate('Delete'), onPress: () =>{ 
                                       this.props.docs[docNum].document.pages.splice(index,1)
                                       if(this.props.docs[docNum].document.pages.length === 0) this.props.delete(this.props.docs[docNum].key)
                                       else this.forceUpdate()
                                       resolve()
                                           }},
-                                      {text:translate('Cancel'),
-                                        onPress: () =>{
-                                          resolve()
-                                        }
-                                    }
                                   ]
                                   )
                            })
@@ -524,6 +525,7 @@ deleteCache = async (path) =>{
 
     return pdfArray;
   }
+
 
 
   async sendObject(objectToSend) {

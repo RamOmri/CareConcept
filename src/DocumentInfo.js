@@ -414,6 +414,10 @@ class DocumentInfo extends React.Component {
         confirmBtnText= {translate("Confirm")}
         cancelBtnText={translate("Cancel")}
         customStyles={{
+          datePicker: {
+            backgroundColor: '#d1d3d8',
+            justifyContent:'center'
+            },
           dateIcon: {
             position: 'absolute',
             left: 0,

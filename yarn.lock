@@ -1501,11 +1501,6 @@
   dependencies:
     "eslint-visitor-keys" "^1.1.0"
 
-"@woonivers/react-native-document-scanner@^2.1.1":
-  "integrity" "sha512-DJVRhEOtY8I8RzcG64mmFZqaoRqnpAOjeiI2gU5XnjyIuSkURp5YnfiH21i/fOx/xLPhIuf1MRvEWK1l74F9CQ=="
-  "resolved" "https://registry.npmjs.org/@woonivers/react-native-document-scanner/-/react-native-document-scanner-2.1.1.tgz"
-  "version" "2.1.1"
-
 "abab@^2.0.3":
   "integrity" "sha512-9IK9EadsbHo6jLWIpxpR6pL0sazTXV6+SQv25ZB+F7Bj9mJNaOc4nCRabwd5M/JwmUa8idz6Eci6eKfJryPs6Q=="
   "resolved" "https://registry.npmjs.org/abab/-/abab-2.0.5.tgz"
@@ -5573,6 +5568,11 @@
   dependencies:
     "minimist" "^1.2.5"
 
+"moment@^2.22.0":
+  "integrity" "sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ=="
+  "resolved" "https://registry.npmjs.org/moment/-/moment-2.29.1.tgz"
+  "version" "2.29.1"
+
 "ms@^2.1.1":
   "integrity" "sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w=="
   "resolved" "https://registry.npmjs.org/ms/-/ms-2.1.2.tgz"
@@ -6392,6 +6392,13 @@
   "resolved" "https://registry.npmjs.org/react-native-common-date-picker/-/react-native-common-date-picker-2.3.3.tgz"
   "version" "2.3.3"
 
+"react-native-datepicker@^1.7.2":
+  "integrity" "sha1-WNCCJZGgrJsyq6CCZQIioO4pZp0="
+  "resolved" "https://registry.npmjs.org/react-native-datepicker/-/react-native-datepicker-1.7.2.tgz"
+  "version" "1.7.2"
+  dependencies:
+    "moment" "^2.22.0"
+
 "react-native-fs@^2.16.6":
   "integrity" "sha512-ZWOooD1AuFoAGY3HS2GY7Qx2LZo4oIg6AK0wbC68detxwvX75R/q9lRqThXNKP6vIo2VHWa0fYUo/SrLw80E8w=="
   "resolved" "https://registry.npmjs.org/react-native-fs/-/react-native-fs-2.16.6.tgz"
@@ -6490,6 +6497,11 @@
   "integrity" "sha512-PO99dptMocEfUSS3SM7gY6UqophaBxizKjnZ7FcEwa+H4ONVxTk310/JCXJ9vdNunomgpxHluKRXnApfm9Md1w=="
   "resolved" "https://registry.npmjs.org/react-native-popup-menu/-/react-native-popup-menu-0.15.9.tgz"
   "version" "0.15.9"
+
+"react-native-rectangle-scanner@^1.0.10":
+  "integrity" "sha512-E9YdHMaRBYXen9wQHOrNa//nZyf2AUqpV+f7v1D3SNJJjuFmqEtxB1gx9qlJCE7ut/Osh7WRCYJL+wVoXQ7S/g=="
+  "resolved" "https://registry.npmjs.org/react-native-rectangle-scanner/-/react-native-rectangle-scanner-1.0.10.tgz"
+  "version" "1.0.10"
 
 "react-native-safe-area-context@^3.1.9":
   "integrity" "sha512-wmcGbdyE/vBSL5IjDPReoJUEqxkZsywZw5gPwsVUV1NBpw5eTIdnL6Y0uNKHE25Z661moxPHQz6kwAkYQyorxA=="

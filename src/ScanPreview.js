@@ -80,11 +80,11 @@ class ScanPreview extends React.Component {
     return (
       <View style={{marginTop: 10}}>
         <Modal visible={true} transparent={true}>
-          {Platform.OS != 'android' && (
+          {/* {Platform.OS != 'android' && (
             <View style={{paddingTop: getStatusBarHeight()}}>
               <StatusBar />
             </View>
-          )}
+          )} */}
           <View
             style={{
               flex: 0.1,
@@ -98,7 +98,7 @@ class ScanPreview extends React.Component {
               onPress={() => {
                 if (this.state.infoObj.pages.length < 20) {
                   this.state.infoObj.pages.reverse();
-                  const resetAction = CommonActions.reset({
+                 /*  let resetAction = CommonActions.reset({
                     index: 1,
                     routes: [
                       {
@@ -106,8 +106,13 @@ class ScanPreview extends React.Component {
                         params: {infoObj: this.state.infoObj},
                       },
                     ],
+                  }); */
+               /*    this.props.navigation.dispatch(resetAction); */
+                  this.props.navigation.push('ScanStack', {
+                    params: {infoObj: this.state.infoObj},
+                    screen: 'Scanner',
                   });
-                  this.props.navigation.dispatch(resetAction);
+                  this.props.navigation.pop()
                 } else {
                   Alert.alert('',
                     translate(

@@ -94,20 +94,18 @@ export default class ScanScreen extends PureComponent {
   }
 
   componentDidMount() {
-     // Add a react navigation focus listener.
-    // Only mounts the camera when the current screen is active
     this.props.navigation.addListener('focus', () => {
-      this.setState({ 
-        infoObj: this.props.route.params.infoObj,
+    console.log("here")
+          this.setState({
+            infoObj: this.props.route.params.infoObj,
         flashEnabled: false,
+        docScanned: false,
         showScannerView: false,
         didLoadInitialLayout: false,
         detectedRectangle: false,
         isMultiTasking: false,
-        useScanner: true,
         loadingCamera: true,
         processingImage: false,
-        docScanned: false,
         takingPicture: false,
         overlayFlashOpacity: new Animated.Value(0),
         device: {
@@ -119,20 +117,24 @@ export default class ScanScreen extends PureComponent {
           previewWidthPercent: 1,
         },
         ScannerRef: React.createRef(),
-        });
+        
+          })
+          if (this.state.didLoadInitialLayout && !this.state.isMultiTasking) {
+            this.turnOnCamera();
+          }
+       
     });
     // Add a react navigation blur listener.
     // Removes the scanner when the screen is not active
     this.props.navigation.addListener('blur', () => {
-      this.setState({ camera: false });
+      console.log("here 2")
+      this.turnOffCamera(true)
     });
-    BackHandler.addEventListener("hardwareBackPress", this.onBackPress)
-    if (this.state.didLoadInitialLayout && !this.state.isMultiTasking) {
-      this.turnOnCamera();
-    }
+
+    
+    
   }
   componentWillUnmount() {
-    BackHandler.removeEventListener("hardwareBackPress", this.onBackPress)
     clearTimeout(this.imageProcessorTimeout);
   }
 
@@ -233,35 +235,18 @@ onBackPress = () =>{
     if (this.state.takingPicture) return;
     if (this.state.processingImage) return;
     this.setState({ takingPicture: true, processingImage: true });
-    this.imageProcessorTimeout = setTimeout(() => {
+
+    setTimeout(() => {
       if (this.state.takingPicture) {
-        this.setState({
-          infoObj: this.props.route.params.infoObj,
-      flashEnabled: false,
-      docScanned: false,
-      showScannerView: false,
-      didLoadInitialLayout: false,
-      detectedRectangle: false,
-      isMultiTasking: false,
-      loadingCamera: true,
-      processingImage: false,
-      takingPicture: false,
-      overlayFlashOpacity: new Animated.Value(0),
-      device: {
-        initialized: false,
-        hasCamera: false,
-        permissionToUseCamera: false,
-        flashIsAvailable: false,
-        previewHeightPercent: 1,
-        previewWidthPercent: 1,
-      },
-      ScannerRef: React.createRef(),
-      
-        })
-      //  this.componentDidMount()
+        console.log("here")
+        this.props.navigation.push('ScanStack', {
+          params: {infoObj: this.state.infoObj},
+          screen: 'Scanner',
+        });
+        this.props.navigation.pop()
      alert(translate("Please wait until screen turns on before scanning"))
       }
-    }, 8000);
+    }, 2000);
     this.state.ScannerRef.current.capture();
     this.triggerSnapAnimation();
 
@@ -434,24 +419,31 @@ onBackPress = () =>{
                       </Text>
                       </TouchableOpacity> 
                
-                      <TouchableOpacity
+                     
+                        {this.renderScanButton()}
                       
-                        activeOpacity={0.8}
-                        style={{
-                        alignSelf:"center",
-                        justifyContent:"center", alignItems:"center",
-                        height:100, width:100, backgroundColor:'#f59b00',
-                      borderRadius:100}}
-                        onPress={this.capture}
-                      >
-                        <Text style={{ fontSize:22, color:"white"}}>
-                         {translate("Scan")}
-                        </Text>
-                        </TouchableOpacity>
                   </View>
                   
                 </>
               );
+  }
+  renderScanButton = ()=>{
+    return(
+      <TouchableOpacity
+                      
+      activeOpacity={0.8}
+      style={{
+      alignSelf:"center",
+      justifyContent:"center", alignItems:"center",
+      height:100, width:100, backgroundColor:'#f59b00',
+    borderRadius:100}}
+      onPress={this.capture}
+    >
+      <Text style={{ fontSize:22, color:"white"}}>
+       {translate("Scan")}
+      </Text>
+      </TouchableOpacity>
+    )
   }
 
   // Renders the camera controls or a loading/processing state
@@ -472,7 +464,7 @@ onBackPress = () =>{
           <View style={styles.loadingContainer}>
             <View style={styles.processingContainer}>
               <ActivityIndicator color="#333333" size="large" />
-              <Text style={{ color: '#333333', fontSize: 30, marginTop: 10 }}>{translate("Loading")}</Text>
+              <Text style={{ color: '#333333', fontSize: 30, marginTop: 10 }}>Processing</Text>
             </View>
           </View>
         </View>

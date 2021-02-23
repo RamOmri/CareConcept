@@ -240,7 +240,8 @@ class imageCrop extends React.Component {
               this.props.navigation.push('ScanStack', {
                 params: {infoObj: this.state.infoObj},
                 screen: 'Scanner',
-              });}
+              });
+            }
             else{
               this.props.navigation.navigate('ScanStack', {
                 params: {infoObj: this.state.infoObj},

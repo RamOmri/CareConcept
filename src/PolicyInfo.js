@@ -301,7 +301,7 @@ renderInfo(){
               <TouchableOpacity
                 onPress={() => {
                   Keyboard.dismiss();
-                  if (this.checkFields()) {
+                  if (!this.checkFields()) {
                     if (Platform.OS === 'android') {
                       this.requestCameraPermissionAndroid();
                     } else {
