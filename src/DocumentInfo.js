@@ -58,8 +58,9 @@ import * as RNLocalize from 'react-native-localize';
 import i18n from 'i18n-js';
 import memoize from 'lodash.memoize'; // Use for caching/memoize for better performance
 import {WebView} from 'react-native-webview';
-import {DatePicker} from 'react-native-common-date-picker';
-import ImageResizer from 'react-native-image-resizer';
+//import {DatePicker} from 'react-native-common-date-picker';
+import DatePicker from 'react-native-datepicker'
+
 const translationGetters = {
   // lazy requires (metro bundler does not support symlinks)
   en: () => require('./translations/eng.json'),
@@ -155,11 +156,13 @@ class DocumentInfo extends React.Component {
         ...this.state,
         infoObj: this.props.route.params.infoObj.document,
       };
-      this.state.sendMoneyToContractualServices = this.state.infoObj.sendMoneyToContractualServices
-      this.state.isDocumentGerman = this.state.infoObj.isDocumentGerman
+      
+      this.state.isDocumentGerman = this.state.infoObj.isDocumentGerman || "Select"
       this.state.docType = this.state.infoObj.docType
       delete this.state.infoObj.key;
+      this.state.sendMoneyToContractualServices = this.state.infoObj.sendMoneyToContractualServices || "Select"
     }
+    
   }
 
   render() {
@@ -182,7 +185,9 @@ class DocumentInfo extends React.Component {
                 onPress={() => {
                  this.onBackPress()
                 }}>
-            {!this.state.isEditing && <Image source = {this.props.language.includes('en') && require('./img/goBackEn.png') || this.props.language.includes('de') && require('./img/goBackDe.png')} 
+            {!this.state.isEditing && <Image source = {this.props.language.includes('en') && require('./img/goBackEn.png') || 
+            this.props.language.includes('de') && require('./img/goBackDe.png') || 
+            this.props.language.includes('zh') && require('./img/goBackChn.png')} 
               style = {styles.goBackButton} />}
               </TouchableOpacity>
             )}
@@ -302,7 +307,9 @@ class DocumentInfo extends React.Component {
               this.setState({renderBillFromGermanyInfo: false})
               this.setState({renderWhoToPay: false})
             }}>
-             <Image source = {this.props.language.includes('en') && require('./img/goBackEn.png') || this.props.language.includes('de') && require('./img/goBackDe.png')} 
+             <Image source = {this.props.language.includes('en') && require('./img/goBackEn.png') || 
+             this.props.language.includes('de') && require('./img/goBackDe.png') ||
+            this.props.language.includes('zh') && require('./img/goBackChn.png')} 
             style = {styles.goBackButton} />
           </TouchableOpacity>
         </View>
@@ -324,7 +331,16 @@ class DocumentInfo extends React.Component {
                   this.state.renderDocTypeInfoWeb && 'https://www.care-concept.de/scripte/sniplets/app_general_information_2.php'||
                   this.state.renderDatePickerInfo && 'https://www.care-concept.de/scripte/sniplets/app_general_information_4.php' ||
                   this.state.renderBillFromGermanyInfo && 'https://www.care-concept.de/scripte/sniplets/app_general_information_5.php'||
-                  this.state.renderWhoToPay && 'https://www.care-concept.de/scripte/sniplets/app_general_information_6.php'),
+                  this.state.renderWhoToPay && 'https://www.care-concept.de/scripte/sniplets/app_general_information_6.php')
+                 ||
+                 this.props.language.includes('zh') &&
+                 (this.state.renderGeneralInfoWeb && 'https://www.care-concept.de/scripte/sniplets/app_general_information_3_eng.php?navilang=chn' ||
+                 this.state.renderDocTypeInfoWeb &&  'https://www.care-concept.de/scripte/sniplets/app_general_information_2_eng.php?navilang=chn' ||
+                 this.state.renderDatePickerInfo && 'https://www.care-concept.de/scripte/sniplets/app_general_information_4_eng.php?navilang=chn' || 
+                 this.state.renderBillFromGermanyInfo && 'https://www.care-concept.de/scripte/sniplets/app_general_information_5_eng.php?navilang=chn'||
+                 this.state.renderWhoToPay && 'https://www.care-concept.de/scripte/sniplets/app_general_information_6_eng.php?navilang=chn') 
+                  ,
+
             }}
             style={{marginTop: 20}}
           />
@@ -358,7 +374,7 @@ class DocumentInfo extends React.Component {
           {translate('Please enter the birthdate of the insured person')}{' '}
         </Text>
         <View style = {{flexDirection:'row'}}>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={() => {
             this.setState({isDatePickerVisible: true});
           }}>
@@ -379,8 +395,46 @@ class DocumentInfo extends React.Component {
                 translate('Select')}{' '}
             </Text>
           </View>
-        </TouchableOpacity>
-        <DateTimePickerModal
+        </TouchableOpacity> */}
+
+        <DatePicker
+        style={{width: 200}}
+        date={(this.state.isEditing && this.state.infoObj.dateStatus) ||
+          this.props.date ||
+          ''}
+        mode="date"
+        onDateChange = {(date) => {
+          this.handleConfirm(date);
+        }}
+        androidMode = 'spinner'
+        placeholder= {translate('Select')}
+        format="DD-MM-YYYY"
+        minDate={this.getMaxMinDate()[1]}
+        maxDate={this.getMaxMinDate()[0]}
+        confirmBtnText= {translate("Confirm")}
+        cancelBtnText={translate("Cancel")}
+        customStyles={{
+          dateIcon: {
+            position: 'absolute',
+            left: 0,
+            top: 4,
+            marginLeft: 0,
+          },
+          dateInput: {
+            marginLeft: 36,
+            padding: 5,
+            height: 40,
+            width: 250,
+            justifyContent: 'center',
+            backgroundColor: 'white',
+            borderColor: '#f59b00',
+            borderWidth: 5,
+            borderRadius: 7,
+            
+          }
+        }}
+      />
+       {/*  <DateTimePickerModal
           isVisible={this.state.isDatePickerVisible}
           mode="date"
           locale = {(this.props.language.includes("de"))&&"de-DE"|| "en-EN"}
@@ -391,7 +445,7 @@ class DocumentInfo extends React.Component {
           onCancel={() => {
             this.setState({isDatePickerVisible: false});
           }}
-        />
+        /> */}
 
       {Platform.OS === 'android' &&  (<TouchableOpacity onPress = {()=> this.setState({renderDatePickerInfo: true})}>
         <Image source = {require('./img/questionMark.png')}
@@ -416,34 +470,29 @@ class DocumentInfo extends React.Component {
   };
 
   handleConfirm = (date) => {
-    var day = parseInt(date.getDate().toString());
-    var month = (date.getMonth() + 1).toString();
-    var year = date.getFullYear().toString();
-    if (parseInt(day) < 10) {
-      day = '0' + day;
-    }
-    if (parseInt(month) < 10) {
-      month = '0' + month;
-    }
-
-    if (this._calculateAge(date)[0] < 0 || this._calculateAge(date)[1] >= 100) {
-      Alert.alert('',translate('Please enter a valid birth date'));
-    } else {
-      let birthDate = day + '/' + month + '/' + year;
+    console.log(date)
+      let birthDate = date
       this.state.infoObj = {
         ...this.state.infoObj,
         dateStatus: birthDate,
       };
       this.setState({isDatePickerVisible: false});
       this.props.set_date(birthDate);
-    }
+    
   };
 
-  _calculateAge(birthday) {
-    // birthday is a date
-    var ageDifMs = Date.now() - birthday.getTime();
-    var ageDate = new Date(ageDifMs); // miliseconds from epoch
-    return [ageDifMs, Math.abs(ageDate.getUTCFullYear() - 1970)];
+    getMaxMinDate() {
+      let date = new Date()
+
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); 
+    var yyyy = today.getFullYear();
+    
+
+  today = dd + '-' + mm + '-' + yyyy;
+  century = dd + '-' + mm + '-' + (parseInt(yyyy) - 100).toString()
+      return [today, century]
   }
 
   renderClaimInfo() {
@@ -671,10 +720,14 @@ class DocumentInfo extends React.Component {
   };
 
   checkFieldsBeforeContinue() {
+    let shouldCheckBankDetails = (this.state.infoObj.docType == 'Claim Document' ||
+    this.state.docType == 'Claim Document') && (this.state.sendMoneyToContractualServices == 'No' ||
+    this.state.infoObj.sendMoneyToContractualServices == 'No')
+
     let correctFields = true;
     let errorMessage = '';
     if (this.state.infoObj.docType === 'Other Document')
-      this.state.infoObj.sendMoneyToContractualServices = 'Yes';
+      this.state.infoObj.sendMoneyToContractualServices == 'Yes';
 
     if (
        this.state.isDocumentGerman === 'Select' &&
@@ -685,19 +738,20 @@ class DocumentInfo extends React.Component {
       correctFields = false;
     }
     if (
-      this.state.infoObj.sendMoneyToContractualServices == 'No' &&
+      shouldCheckBankDetails &&
       !this.checkName(this.state.infoObj.AccountHolder)
     ) {
       errorMessage =
         errorMessage +
-        `${translate('please check your bank details')} ${this.props.language.includes("de")&& "(Name)" || "(name)"}` +
+        `${translate('please check your bank details')} ${this.props.language.includes("de")&& "(Name)" || 
+        this.props.language.includes('en') && "(name)" || this.props.language.includes('zh') && "(姓名)"}` +
         ' \n';
       correctFields = false;
     }
     if (
-      (this.state.infoObj.sendMoneyToContractualServices == 'No' &&
+      (shouldCheckBankDetails &&
         !bic.isValid(this.state.infoObj.BIC)) ||
-      (this.state.infoObj.sendMoneyToContractualServices == 'No' &&
+      (shouldCheckBankDetails &&
         this.props.bic == '')
     ) {
       errorMessage =
@@ -708,9 +762,9 @@ class DocumentInfo extends React.Component {
     }
 
     if (
-      (this.state.infoObj.sendMoneyToContractualServices == 'No' &&
+      (shouldCheckBankDetails &&
         !IBAN.isValid(this.state.infoObj.IBAN)) ||
-      (this.state.infoObj.sendMoneyToContractualServices == 'No' &&
+      (shouldCheckBankDetails &&
         this.props.iban == '')
     ) {
       errorMessage =

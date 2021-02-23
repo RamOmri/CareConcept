@@ -22,7 +22,6 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-import DocumentScanner from '@woonivers/react-native-document-scanner';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import {connect} from 'react-redux';
 import {addDoc} from './actions/claimActions';
@@ -61,6 +60,8 @@ class ScanPreview extends React.Component {
   componentWillUnmount() {
     BackHandler.removeEventListener("hardwareBackPress", this.onBackPress)
   }
+
+
   onBackPress = () =>{
     return true
   }
@@ -68,8 +69,8 @@ class ScanPreview extends React.Component {
     let RNFS = require('react-native-fs');
     return RNFS.unlink(path)
       .then(() => {
-        
-      })
+
+       })
       // `unlink` will throw an error, if the item to unlink does not exist
       .catch((err) => {
         console.log(err)
@@ -124,9 +125,9 @@ class ScanPreview extends React.Component {
               style={styles.button}
               onPress={async () => {
                 for(let i = 0; i < this.state.infoObj.pages.length; i++){
-                    await this.deleteCachedImage(this.state.infoObj.pages[i].url)
-                }
-                this.props.navigation.navigate('ClaimStack', {
+                  await this.deleteCachedImage(this.state.infoObj.pages[i].url)
+                                }
+                  this.props.navigation.navigate('ClaimStack', {
                   params: {},
                   screen: 'SummaryScreen',
                 });

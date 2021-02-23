@@ -27,16 +27,6 @@ import {
 import {WebView} from 'react-native-webview';
 
 import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-import DocumentScanner from '@woonivers/react-native-document-scanner';
-import ImageSize from 'react-native-image-size';
-import {CropView} from 'react-native-image-crop-tools';
-import {
   Menu,
   MenuOptions,
   MenuOption,
@@ -156,7 +146,9 @@ renderInfo(){
         onPress={() => {
           this.setState({renderWebView: false})
         }}>
-      <Image source = {this.props.language.includes('en') && require('./img/goBackEn.png') || this.props.language.includes('de') && require('./img/goBackDe.png')} 
+      <Image source = {this.props.language.includes('en') && require('./img/goBackEn.png') || 
+      this.props.language.includes('de') && require('./img/goBackDe.png') || 
+    this.props.language.includes('zh') && require('./img/goBackChn.png')} 
           style = {styles.goBackButton} />
       </TouchableOpacity>
       <WebView
@@ -167,7 +159,9 @@ renderInfo(){
             this.props.language.includes('en') && 
             'https://www.care-concept.de/scripte/sniplets/app_general_information_eng.php?navilang=eng' ||
              this.props.language.includes('de') && 
-             "https://www.care-concept.de/scripte/sniplets/app_general_information.php"
+             "https://www.care-concept.de/scripte/sniplets/app_general_information.php"||
+             this.props.language.includes('zh') && 
+            'https://www.care-concept.de/scripte/sniplets/app_general_information_eng.php?navilang=chn'
         }}
         style={{marginTop: 20}}
       />
@@ -212,7 +206,8 @@ renderInfo(){
                   this.props.navigation.goBack()
                 }}>
               <Image source = {this.props.language.includes('en') && require('./img/goBackEn.png') ||
-               this.props.language.includes('de') && require('./img/goBackDe.png')} 
+               this.props.language.includes('de') && require('./img/goBackDe.png')||
+              this.props.language.includes('zh') && require('./img/goBackChn.png')} 
               style = {styles.goBackButton} />
               </TouchableOpacity>
             )}
@@ -410,7 +405,8 @@ renderInfo(){
           screen: 'SummaryScreen',
         });
       } else {
-        //do nothing
+        this.setState({cameraPermissionGranted: false});
+        Alert.alert('',translate('could not access camera please grant permission manually'))
       }
     } catch (err) {
       console.warn(err);

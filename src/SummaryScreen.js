@@ -28,7 +28,6 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-import DocumentScanner from '@woonivers/react-native-document-scanner';
 import ImageSize from 'react-native-image-size';
 import {CropView} from 'react-native-image-crop-tools';
 import {
@@ -45,7 +44,7 @@ import {deleteStatePolicyInfo, setLanguage} from './actions/policInfoActions';
 import {StackActions, NavigationActions} from 'react-navigation';
 import ImgToBase64 from 'react-native-image-base64';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
-import {PDFDocument} from 'pdf-lib';
+import {PDFDocument, degrees} from 'pdf-lib';
 const sha256 = require('sha256');
 var RNFS = require('react-native-fs');
 import base64 from 'react-native-base64';
@@ -116,7 +115,9 @@ class SummaryScreen extends React.Component {
               (this.props.language.includes('en') &&
                 require('./img/goBackEn.png')) ||
               (this.props.language.includes('de') &&
-                require('./img/goBackDe.png'))
+                require('./img/goBackDe.png'))||
+                (this.props.language.includes('zh') &&
+                require('./img/goBackChn.png'))
             }
             style={styles.goBackButton}
           />
@@ -130,9 +131,13 @@ class SummaryScreen extends React.Component {
     'https://www.care-concept.de/scripte/sniplets/app_general_information_3_eng.php?navilang=eng') ||
               (this.props.language.includes('de') && (Platform.OS === 'android') &&
                 'https://www.care-concept.de/scripte/sniplets/app_general_information_3.php')||
+                (this.props.language.includes('zh') && (Platform.OS === 'android') &&
+                'https://www.care-concept.de/scripte/sniplets/app_general_information_3_chn.php?navilang=chn')||
 
                 (this.props.language.includes('en') && (Platform.OS === 'ios') &&
                 'https://www.care-concept.de/scripte/sniplets/app_general_information_3io_eng.php?navilang=eng') ||
+                (this.props.language.includes('zh') && (Platform.OS === 'ios') &&
+                'https://www.care-concept.de/scripte/sniplets/app_general_information_3io_chn.php?navilang=chn') ||
                           (this.props.language.includes('de') && (Platform.OS === 'ios') &&
                             'https://www.care-concept.de/scripte/sniplets/app_general_information_3io.php'),
                 
@@ -158,6 +163,8 @@ class SummaryScreen extends React.Component {
       </View>
     );
   };
+
+
   render() {
     if (this.state.isLoading) {
       return (
@@ -171,7 +178,18 @@ class SummaryScreen extends React.Component {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <Text style={styles.DocumentText}>
+          <Text style={{ 
+          flexDirection: 'row',
+          marginLeft:10,
+          marginRight:10,
+          fontSize: 14,
+          color: '#004799',
+          borderRadius:7,
+          justifyContent: 'center',
+          textAlign:'center',
+          alignItems: 'center',
+          marginBottom:0
+          }}>
             {translate('Please wait while we send your claim')}
           </Text>
           <ActivityIndicator size="large" color="#004799" />
@@ -202,7 +220,9 @@ class SummaryScreen extends React.Component {
                     (this.props.language.includes('en') &&
                       require('./img/editPolicyHolderEn.png')) ||
                     (this.props.language.includes('de') &&
-                      require('./img/editPolicyHolderDe.png'))
+                      require('./img/editPolicyHolderDe.png')) ||
+                      (this.props.language.includes('zh') &&
+                      require('./img/editPolicyHolderChn.png'))
                   }
                   style={{marginLeft: 10,
                     resizeMode: 'contain',
@@ -234,13 +254,23 @@ class SummaryScreen extends React.Component {
               contentContainerStyle={{
                 flexGrow: 1,
                 justifyContent: 'space-between',
-                flexDirection: 'column',
               }}>
               <FlatList
                 extraData={this.state}
                 data={this.props.docs}
-                renderItem={({item, index}) => (
-                  <TouchableOpacity
+                renderItem={({item, index}) => {  
+                  let docNum = index
+                  return (
+                  
+                    <View
+                      style={{
+                        marginTop: 10,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        borderBottomWidth: 3,
+                        borderBottomColor: '#004799',
+                      }}>
+                        <TouchableOpacity
                     onPress={() => {
                       let info = item;
 
@@ -250,14 +280,6 @@ class SummaryScreen extends React.Component {
                         screen: 'DocumentInfo',
                       });
                     }}>
-                    <View
-                      style={{
-                        marginTop: 10,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        borderBottomWidth: 3,
-                        borderBottomColor: '#004799',
-                      }}>
                       <Text style={styles.DocumentText}>{`${translate(
                         'This is a',
                       )} ${translate(item.document.docType)} ${translate(
@@ -266,22 +288,74 @@ class SummaryScreen extends React.Component {
                         'pages',
                       )}${translate("You can view and edit the document by pressing here")} `}
                       </Text>
-                      <Text style = {styles.DocumentText}>
+                      </TouchableOpacity>
+                      <ScrollView
+                       scrollEventThrottle={200}
+                       decelerationRate="fast"
+                       pagingEnabled
+                       contentContainerStyle={{
+                        flexDirection: 'row',
+                      }}
+                       >
+                         <View
+                         style = {{flexDirection:'row'}}
+                         >
+                           <FlatList
+                            showsVerticalScrollIndicator={false}
+                            showsHorizontalScrollIndicator={false}
+                            horizontal = {true}
+                           contentContainerStyle={{alignSelf: 'flex-start'}}
+                      data={item.document.pages}
+                      renderItem={({item, index}) => {
+                        console.log(item.url)
+                        return (
+                          <View style = {{flexDirection:'column', alignItems:'center'}}>
+
+                          <TouchableOpacity
+                          style = {styles.deleteButton}
+                          onPress = {async () =>{
+                           await new Promise((resolve, reject) =>{ 
+                                Alert.alert(translate("Delete Page"),
+                                  translate('Would you like to delete the selected page'),
+                                  [
+                                   
+                                      {text:translate('Cancel'),
+                                        onPress: () =>{
+                                          resolve()
+                                        }
+                                    },
+                                     {text: translate('Delete'), onPress: () =>{ 
+                                      this.props.docs[docNum].document.pages.splice(index,1)
+                                      if(this.props.docs[docNum].document.pages.length === 0) this.props.delete(this.props.docs[docNum].key)
+                                      else this.forceUpdate()
+                                      resolve()
+                                          }},
+                                  ]
+                                  )
+                           })
+                          }}
+                          >
+                            <Text style = {{color:'white'}}>
+                            {translate('Delete Page')}
+                            </Text>
+                          </TouchableOpacity>
+                          <Image
+                          source={{uri: item.url}}
+                          style={{
+                            marginTop:5,
+                            marginBottom:5,
+                            width: Dimensions.get('window').width / 1.5,
+                            height: Dimensions.get('window').height / 3,
+                            resizeMode: 'contain',
+                          }}
+                        />
+                        </View>
                         
-                      </Text>
-                      <Image
-                        source={{uri: item.document.pages[0].url}}
-                        style={{
-                          flex: 1,
-                          margin: 5,
-                          width: Dimensions.get('window').width / 1.5,
-                          height: Dimensions.get('window').height / 3,
-                          resizeMode: 'contain',
-                        }}
-                      />
+                )}} />
+                 </View>
+                      </ScrollView>
                     </View>
-                  </TouchableOpacity>
-                )}
+                )}}
               />
 
               <View
@@ -348,6 +422,7 @@ class SummaryScreen extends React.Component {
       payload: new Array(),
     };
     for (let i = 0; i < this.props.docs.length; i++) {
+      console.log(this.props.docs[i].document.BIC + ' ' + this.props.docs[i].document.IBAN) 
       let document = {
         VNR: this.props.policyInfo.insuranceNumber,
         vorname: this.props.policyInfo.FirstName,
@@ -366,61 +441,69 @@ class SummaryScreen extends React.Component {
           0,
         bic: this.props.docs[i].document.BIC || '',
         vp_geburtsdatum_tag: this.props.docs[0].document.dateStatus.split(
-          '/',
+          '-',
         )[0],
         vp_geburtsdatum_monat: this.props.docs[0].document.dateStatus.split(
-          '/',
+          '-',
         )[1],
         vp_geburtsdatum_jahr: this.props.docs[0].document.dateStatus.split(
-          '/',
+          '-',
         )[2],
         kto_inhaber: this.props.docs[0].document.AccountHolder,
         dokument: pdfArray[i],
       };
       objectToSend.payload.push(document);
     }
+   
     this.sendObject(objectToSend);
   }
-
-
-  deleteCache = async (path) =>{
-    return await RNFS.unlink(path)
+deleteCache = async (path) =>{
+    return RNFS.unlink(path)
       .then(() => {
-        console.log('now deleted')
-      })
+        console.log("deleted cache: " + path)
+       })
       // `unlink` will throw an error, if the item to unlink does not exist
       .catch((err) => {
-        //console.log(err)
+        console.log(err)
       });
   }
   async makeDocumentPagesPDF() {
     var bytes;
     let pdfArray = [];
+    let cachePath;
     for (let d = 0; d < this.props.docs.length; d++) {
       var pdfDoc = await PDFDocument.create();
       let pages = this.props.docs[d].document.pages.map((a) => a.url);
-      this.state.cachePath = pages[0]
+      cachePath = pages[0]
+
       for (let i = 0; i < pages.length; i++) {
+        this.state.cachePath = pages[i]
         await RNFS.readFile(pages[i], 'base64')
           .then((data) => {
             bytes = data;
           })
-          .catch((err) => alert('Something went wrong, please contact support ' + err));
-        var embeddedImage = await pdfDoc
-          .embedJpg(bytes)
-          .catch((err) => alert('Something went wrong, please contact support ' + err));
-        var page = pdfDoc.addPage();
+          .catch((err) => alert('1 Something went wrong, please contact support ' + err));
 
+        var embeddedImage = await pdfDoc
+        .embedJpg(bytes)
+        .catch((err) =>{ 
+          this.setState({isLoading: false})
+          alert('2 Something went wrong, please contact support ' + err)
+        });
+
+        var page = pdfDoc.addPage();
         const pdfDims = embeddedImage.scale(
           (page.getHeight() / embeddedImage.height >
             page.getWidth() / embeddedImage.width &&
             page.getWidth() / embeddedImage.width) ||
             page.getHeight() / embeddedImage.height,
         );
-
+          console.log(
+            `page dims ${page.getWidth()} ${page.getHeight()} img dims: ${pdfDims.height} ${pdfDims.width}`
+          )
         page.drawImage(embeddedImage, {
-          x: page.getWidth() / 2 - pdfDims.width / 2,
-          y: page.getHeight() / 2 - pdfDims.height / 2,
+          x: page.getWidth()/2 - pdfDims.width/2,
+          y:  page.getHeight()/2 - pdfDims.height/2,
           width: pdfDims.width,
           height: pdfDims.height,
         });
@@ -435,19 +518,8 @@ class SummaryScreen extends React.Component {
     return pdfArray;
   }
 
-  //If not used then please delete
-  /* _base64ToArrayBuffer(base64) {
-    var binary_string = new Buffer.from(base64, 'base64');
-    var len = binary_string.length;
-    var bytes = new Uint8Array(len);
-    for (var i = 0; i < len; i++) {
-      bytes[i] = binary_string.charCodeAt(i);
-    }
-    return bytes.buffer;
-  } */
 
   async sendObject(objectToSend) {
-    var message_from_server;
     await fetch('https://www.care-concept.de/service/erstattungsannehmer.php', {
       method: 'POST',
       headers: {
@@ -479,16 +551,19 @@ class SummaryScreen extends React.Component {
     if (this.state.server_message == '200') {
       let deletePath = this.state.cachePath
       this.state.cachePath = this.state.cachePath.split('/')
-      deletePath = deletePath.replace('/'+this.state.cachePath[this.state.cachePath.length - 2]+'/'+this.state.cachePath[this.state.cachePath.length - 1], '')
+      deletePath = deletePath.replace("/"+this.state.cachePath[this.state.cachePath.length - 1], '')
+      //deletePath = deletePath.slice(0, -1)
       console.log(deletePath)
-     await this.deleteCache(deletePath)
+      
+       console.log("after")
+
       let lang = this.props.language;
       this.setState({isLoading: false});
-      this.props.deleteStateClaimInfo();
+     this.props.deleteStateClaimInfo();
       this.props.deleteStatePolicyInfo();
       this.props.setLanguage(lang);
       
-
+      await this.deleteCache(deletePath)
       Alert.alert('',
         translate(
           'Thank you for uploading the documents We will contact you shortly',
@@ -522,7 +597,9 @@ const styles = StyleSheet.create({
     marginLeft:10,
     marginRight:10,
     fontSize: 14,
-    color: '#004799',
+    color: 'white',
+    backgroundColor:'#f59b00',
+    borderRadius:7,
     justifyContent: 'center',
     textAlign:'center',
     alignItems: 'center',
@@ -543,6 +620,16 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     height: Dimensions.get('window').height / 15,
     width: Dimensions.get('window').width / 5,
+  },
+  deleteButton: {
+    width: Dimensions.get('window').width / 2.5,
+    backgroundColor: '#E67F00',
+    height: Dimensions.get('window').height / 28,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 40,
+    marginTop:20,
+    marginBottom:5
   },
   button: {
     width: Dimensions.get('window').width / 2.5,
@@ -605,6 +692,7 @@ const mapDispatchToProps = (dispatch) => {
     deleteStateClaimInfo: () => dispatch(deleteStateClaimInfo()),
     deleteStatePolicyInfo: () => dispatch(deleteStatePolicyInfo()),
     setLanguage: (lang) => dispatch(setLanguage(lang)),
+    add: (doc) => dispatch(addDoc(doc)),
   };
 };
 

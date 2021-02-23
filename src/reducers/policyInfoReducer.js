@@ -63,7 +63,7 @@ const policyInfoReducer = (state = initState, action) => {
       };
     case DELETE_STATE:
       return {
-        ...initState
+        ...initState,
       };
       
 

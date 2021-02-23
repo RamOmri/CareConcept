@@ -74,6 +74,13 @@
  "How to video": "Erklärvideo",
  "Flash":"Blitz",
  "document detection":"Automatische Erkennung",
- "Please wait until screen turns on before scanning":"Bitte warten Sie, bis sich der Bildschirm einschaltet, ehe Sie scannen."
+ "Please wait until screen turns on before scanning":"Bitte warten Sie, bis sich der Bildschirm einschaltet, ehe Sie scannen.",
+ "Something went wrong, please contact support":"Ein Problem ist aufgetreten. Bitte kontaktieren Sie den Support.",
+ "Loading":"Laden",
+
+ "Delete": "Löschen",
+ "Cancel":"Abbrechen",
+ "Delete Page":"Seite löschen",
+ "Would you like to delete the selected page": "Möchten Sie die ausgewählte Seite löschen?"
 
 }

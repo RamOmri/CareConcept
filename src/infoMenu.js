@@ -55,34 +55,22 @@ import * as RNLocalize from 'react-native-localize';
 import i18n from 'i18n-js';
 import memoize from 'lodash.memoize'; // Use for caching/memoize for better performance
 
-
-
 const translate = memoize(
   (key, config) => i18n.t(key, config),
   (key, config) => (config ? key + JSON.stringify(config) : key),
 );
 
-
-class HowToVid extends React.Component {
-  constructor(props) {  
+class InfoMenu extends React.Component {
+  constructor(props) {
     super(props);
 
     this.state = {
-     imprintView: false,
-     privacyView:false
+      imprintView: false,
+      privacyView: false,
     };
-    BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
+    console.log(this.props);
   }
 
- 
-  componentWillUnmount() {
-    
-    BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
-  }
-
-  onBackPress = () => {
-      return true;
-  };
   renderLoading = () => {
     return (
       <View
@@ -100,64 +88,60 @@ class HowToVid extends React.Component {
     );
   };
   render() {
-            return (
-            <ImageBackground
-                style={styles.container}
-                source={require('./img/background.jpg')}
-                style={{resizeMode: 'stretch', flex: 1}}>
-                {Platform.OS != 'android' && (
-                <View style={{paddingTop: getStatusBarHeight()}}>
-                    <StatusBar />
-                </View>
-                )}
-                <Image
-                source={require('./img/CareConceptLogo.png')}
-                style={styles.logo}
-                />
-                     <WebView
+      return (
+        <ImageBackground
+          style={styles.container}
+          source={require('./img/background.jpg')}
+          style={{resizeMode: 'stretch', flex: 1}}>
+          {Platform.OS != 'android' && (
+            <View style={{paddingTop: getStatusBarHeight()}}>
+              <StatusBar />
+            </View>
+          )}
+          <Image
+            source={require('./img/CareConceptLogo.png')}
+            style={styles.logo}
+          />
+
+          <WebView
             startInLoadingState
             renderLoading={this.renderLoading}
             source={{
-              uri: Platform.OS === 'ios' && 
-              (this.props.language.includes('de') && 'https://www.care-concept.de/bilder/CCAG_app_ios.mp4' ||
-                 this.props.language.includes('en') && "https://www.care-concept.de/bilder/CCAG_app_ios_eng.mp4"||   
-                 this.props.language.includes('zh') && "https://www.care-concept.de/bilder/CCAG_app_ios_chn.mp4"  )  
-                 ||
-                 Platform.OS === 'android' &&
-                 (this.props.language.includes('de') && 'https://www.care-concept.de/bilder/CCAG_app.mp4' ||
-                 this.props.language.includes('en') && "https://www.care-concept.de/bilder/CCAG_app_eng.mp4"||
-                 this.props.language.includes('zh') && "https://www.care-concept.de/bilder/CCAG_app_chn.mp4")
+              uri:
+                (this.props.language.includes('en') &&
+                  'https://www.care-concept.de/scripte/sniplets/app_general_information_eng.php?navilang=eng') ||
+                (this.props.language.includes('de') &&
+                  'https://www.care-concept.de/scripte/sniplets/app_general_information.php')||
+                  (this.props.language.includes('zh') &&
+                  'https://www.care-concept.de/scripte/sniplets/app_general_information_eng.php?navilang=chn'),
             }}
             style={{marginTop: 20}}
           />
-                
-            
-            </ImageBackground>
-            );
+        </ImageBackground>
+      );
     
   }
-
-
 }
 
 const styles = StyleSheet.create({
-  buttonText:{
-    color:'white',
-    fontSize:13,
+  buttonText: {
+    color: 'white',
+    fontSize: 13,
+    fontWeight: 'bold',
   },
-  buttonStyle:{
-      height:Dimensions.get('window').height/16,
-      width:Dimensions.get('window').width/1.6,
-      borderRadius:20,
-      alignSelf:'center',
-      justifyContent:'center',
-      alignItems:'center',
-      backgroundColor:'#f59b00',
-      margin:40
+  buttonStyle: {
+    height: Dimensions.get('window').height / 16,
+    width: Dimensions.get('window').width / 1.6,
+    borderRadius: 20,
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f59b00',
+    margin: 40,
   },
   logo: {
-    width:Dimensions.get('window').width/2,
-    height: Dimensions.get('window').height/9,
+    width: Dimensions.get('window').width / 2,
+    height: Dimensions.get('window').height / 9,
     marginLeft: 15,
     marginBottom: 20,
   },
@@ -171,9 +155,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return {
-  
-  };
+  return {};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(HowToVid);
+export default connect(mapStateToProps, mapDispatchToProps)(InfoMenu);

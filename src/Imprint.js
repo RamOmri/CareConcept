@@ -31,7 +31,6 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-import DocumentScanner from '@woonivers/react-native-document-scanner';
 import ImageSize from 'react-native-image-size';
 import {CropView} from 'react-native-image-crop-tools';
 import {
@@ -72,18 +71,9 @@ class Imprint extends React.Component {
      imprintView: false,
      privacyView:false
     };
-    BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
+    console.log(this.props);
   }
 
- 
-  componentWillUnmount() {
-    
-    BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
-  }
-
-  onBackPress = () => {
-      return true;
-  };
   renderLoading = () => {
     return (
       <View
@@ -120,9 +110,10 @@ class Imprint extends React.Component {
             startInLoadingState
             renderLoading={this.renderLoading}
             source={{
-              uri: this.props.language.includes('en') && 'https://www.care-concept.de/wir_ueber_uns/impressum_app_eng.php?navilang=eng' ||
-                 this.props.language.includes('de') && "https://www.care-concept.de/wir_ueber_uns/impressum_app.php"
-               
+              uri:
+                this.props.language.includes('en') && 'https://www.care-concept.de/scripte/sniplets/app_general_information_eng.php?navilang=eng' ||
+                 this.props.language.includes('de') && "https://www.care-concept.de/scripte/sniplets/app_general_information.php"||
+                 this.props.language.includes('zh') && 'https://www.care-concept.de/scripte/sniplets/app_general_information_eng.php?navilang=chn' 
             }}
             style={{marginTop: 20}}
           />
@@ -140,6 +131,7 @@ const styles = StyleSheet.create({
   buttonText:{
     color:'white',
     fontSize:13,
+    fontWeight:'bold'
   },
   buttonStyle:{
       height:Dimensions.get('window').height/16,
@@ -160,6 +152,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
+  //alert(JSON.stringify(state))
   return {
     language: state.policyInfoReducers.policyInfo.language,
   };

@@ -16,17 +16,6 @@ import {
   ImageBackground,
   BackHandler
 } from 'react-native';
-
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-import DocumentScanner from '@woonivers/react-native-document-scanner';
-import ImageSize from 'react-native-image-size';
-import ImageViewer from 'react-native-image-zoom-viewer';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {connect} from 'react-redux';
 import {setLanguage} from './actions/policInfoActions'
@@ -82,7 +71,9 @@ class StartScreen extends React.Component {
           <ImageBackground
             resizeMode="contain"
             style={styles.container}
-            source={ this.props.language.includes('de') && require('./img/startScreenDe.jpg') || this.props.language.includes('en') && require('./img/startScreenEn.jpg')}
+            source={ this.props.language.includes('de') && require('./img/startScreenDe.jpg') || 
+            this.props.language.includes('en') && require('./img/startScreenEn.jpg')||
+          this.props.language.includes('zh') && require('./img/startScreenCHN.jpg')}
             style={{
               resizeMode: 'stretch',
               flex: 1,
@@ -92,11 +83,11 @@ class StartScreen extends React.Component {
             <TouchableOpacity
             style = {{backgroundColor: '#f59b00',
             position: 'absolute',
-            height: Dimensions.get('window').width/3.789,
-            width: Dimensions.get('window').width/3.789,
+            height: Dimensions.get('window').width/4.1,
+            width: Dimensions.get('window').width/4.1,
             top:Dimensions.get('window').height/7.4,
             borderRadius:1000,
-            left:Dimensions.get('window').width/1.54,
+            left:Dimensions.get('window').width/1.47,
             justifyContent:'center',
             alignItems:'center'
           }
@@ -110,8 +101,8 @@ class StartScreen extends React.Component {
                 }}
             >
                  <View style = {{alignItems:'center', justifyContent:'center'}}>
-                    <Text style = {{color:'white', fontSize:16}}>
-                            Start
+                    <Text style = {{color:'white', fontSize:12}}>
+                            {translate("Start")}
                     </Text>
               </View>
               </TouchableOpacity>

@@ -23,14 +23,12 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-import DocumentScanner from '@woonivers/react-native-document-scanner';
 import ImageSize from 'react-native-image-size';
 import {CropView} from 'react-native-image-crop-tools';
 import CameraRoll from '@react-native-community/cameraroll';
 import AmazingCropper, {DefaultFooter} from 'react-native-amazing-cropper';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {WebView} from 'react-native-webview';
-import ImageResizer from 'react-native-image-resizer';
 
 
 import {connect} from 'react-redux';
@@ -69,12 +67,12 @@ class imageCrop extends React.Component {
 
   async componentDidMount() {
     BackHandler.addEventListener("hardwareBackPress", this.onBackPress)
-    if(Platform.OS == "ios"){
+    /* if(Platform.OS == "ios"){
       await ImageResizer.createResizedImage( this.state.infoObj.pages[this.state.infoObj.pages.length - 1].url, 2000, 2000, "JPEG", 80)
       .then(response => { 
         this.state.infoObj.pages[this.state.infoObj.pages.length - 1].url = response.uri
       })
-     }
+     } */
     await this.getImageSize(
       this.state.infoObj.pages[this.state.infoObj.pages.length - 1].url,
     );
@@ -169,7 +167,8 @@ class imageCrop extends React.Component {
             source={{
               uri:
                 this.props.language.includes('en') && 'https://www.care-concept.de/scripte/sniplets/app_general_information_eng.php?navilang=eng' ||
-                 this.props.language.includes('de') && "https://www.care-concept.de/scripte/sniplets/app_general_information.php"
+                 this.props.language.includes('de') && "https://www.care-concept.de/scripte/sniplets/app_general_information.php"||
+                 this.props.language.includes('en') && 'https://www.care-concept.de/scripte/sniplets/app_general_information_eng.php?navilang=chn'
             }}
             style={{marginTop: 20}}
           />

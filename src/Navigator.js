@@ -48,6 +48,7 @@ const translationGetters = {
   // lazy requires (metro bundler does not support symlinks)
   en: () => require('./translations/eng.json'),
   de: () => require('./translations/De.json'),
+  zh: () => require('./translations/chn.json')
 };
 
 const translate = memoize(
@@ -55,7 +56,8 @@ const translate = memoize(
   (key, config) => (config ? key + JSON.stringify(config) : key),
 );
 const setI18nConfig = async () => {
-  const {languageTag, isRTL} = ("ende".includes(RNLocalize.getLocales()[0].languageCode)) && 
+  console.log()
+  const {languageTag, isRTL} = ("endezh".includes(RNLocalize.getLocales()[0].languageCode)) && 
                                 RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) || await userLanguageSelect()
  
   // clear translation cache
@@ -76,7 +78,7 @@ const userLanguageSelect = async () =>{
   let lang = null
   await new Promise((resolve, reject) => { Alert.alert(
     "Language Selection:",
-    'Please select your language \n Bitte wählen Sie Ihre Sprache',
+    'Please select your language \n Bitte wählen Sie Ihre Sprache \n 请选择语言',
     [
       {
         text: "English",
@@ -89,6 +91,13 @@ const userLanguageSelect = async () =>{
         text: 'Deutsch',
         onPress: () =>{
           lang = {languageTag: 'de', isRTL: false};
+          resolve()
+        }
+      },
+      {
+        text: 'Chinese',
+        onPress: () =>{
+          lang = {languageTag: 'zh', isRTL: false};
           resolve()
         }
       },

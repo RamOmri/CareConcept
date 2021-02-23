@@ -54,6 +54,7 @@ export default class Scanner extends React.Component {
       isScanning: false,
       pdfScannerReference: React.createRef(),
       infoObj: this.props.route.params.infoObj,
+      isDocumentDetection:true
     };
   
   }
@@ -66,12 +67,13 @@ export default class Scanner extends React.Component {
     BackHandler.removeEventListener("hardwareBackPress", this.onBackPress)
   }
 onBackPress = () =>{
-  return true
+
 }
   async handleScannedDocument(Img, init) {
-    this.deleteCachedImage(init)
-    
-    let image = Img   
+    let image;
+    if(this.state.isDocumentDetection) image = Img
+    else image = init
+ 
     this.setState({isScanning: false});
     this.state.infoObj.pages.push({url: image});
     this.props.navigation.navigate('ScanStack', {
@@ -112,16 +114,28 @@ onBackPress = () =>{
               picture.initialImage,
             );
           }}
-          overlayColor="rgba(255,130,0, 0.7)"
+          overlayColor= {this.state.isDocumentDetection ? "rgba(255,130,0, 0.7)": "rgba(0,0,0,0)"}
           enableTorch={false}
           quality={1}
           detectionRefreshRateInMS={1}
-          detectionCountBeforeCapture={100000}
+          detectionCountBeforeCapture={-1}
 
         />
 
         <View style={{flex: 0.12}}>
           {(!this.state.isScanning && (
+
+            <View style = {{justifyContent:'center', alignItems:'center', backgroundColor:'black', flexDirection:'row'}}>
+              <TouchableOpacity
+              style={{...styles.scanButton, backgroundColor: this.state.isDocumentDetection ? 'green':"red",}}
+              onPress={() => {
+               this.setState({isDocumentDetection: !this.state.isDocumentDetection})
+              }}>
+              <Text style={{fontSize: 14, color: 'white', margin: 10, textAlign:'center'}}>
+                {translate('document detection')}
+              </Text>
+            </TouchableOpacity>
+
             <TouchableOpacity
               style={styles.scanButton}
               onPress={() => {
@@ -154,6 +168,8 @@ onBackPress = () =>{
                 {translate('Scan')}
               </Text>
             </TouchableOpacity>
+          
+          </View>
           )) || (
             <View style={{justifyContent: 'center', alignItems: 'center', backgroundColor:'black'}}>
               <Text style={styles.DocumentText}>
@@ -174,7 +190,10 @@ const styles = StyleSheet.create({
     aspectRatio: undefined,
   },
   scanButton: {
-    flex: 1,
+    width: Dimensions.get('window').width/2.5,
+    height:Dimensions.get('window').width/6,
+    margin:10,
+    borderRadius:20,
     backgroundColor: '#f59b00',
     justifyContent: 'center',
     alignItems: 'center',
