@@ -701,12 +701,12 @@ class DocumentInfo extends React.Component {
         onPress={() => {
 
           if (this.state.isEditing && this.checkFieldsBeforeContinue()) {
-            this.props.navigation.navigate('ScanStack', {
+            this.props.navigation.push('ScanStack', {
               params: {infoObj: this.state.infoObj},
               screen: 'ScanPreview',
             });
           } else if (this.checkFieldsBeforeContinue()) {
-            this.props.navigation.navigate('ScanStack', {
+            this.props.navigation.push('ScanStack', {
               params: {infoObj: this.state.infoObj},
               screen: 'Scanner',
             });

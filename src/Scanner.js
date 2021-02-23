@@ -119,9 +119,7 @@ export default class ScanScreen extends PureComponent {
         ScannerRef: React.createRef(),
         
           })
-          if (this.state.didLoadInitialLayout && !this.state.isMultiTasking) {
-            this.turnOnCamera();
-          }
+          
        
     });
     // Add a react navigation blur listener.
@@ -131,7 +129,9 @@ export default class ScanScreen extends PureComponent {
       this.turnOffCamera(true)
     });
 
-    
+    if (this.state.didLoadInitialLayout && !this.state.isMultiTasking) {
+      this.turnOnCamera();
+    }
     
   }
   componentWillUnmount() {
