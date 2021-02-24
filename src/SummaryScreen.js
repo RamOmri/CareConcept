@@ -487,36 +487,25 @@ deleteCache = async (path) =>{
           })
           .catch((err) => alert('1 Something went wrong, please contact support ' + err));
 
-        if(Platform.OS === 'android') var embeddedImage = await pdfDoc
-          .embedPng(bytes)
-          .catch((err) =>{ 
-            this.setState({isLoading: false})
-            console.log(embeddedImage)
-            alert('2 Something went wrong, please contact support ' + err)
-          });
-        else var embeddedImage = await pdfDoc
-        .embedJpg(bytes)
-        .catch((err) =>{ 
-          this.setState({isLoading: false})
-          console.log(embeddedImage)
-          alert('2 Something went wrong, please contact support ' + err)
-        });
-
+          var embeddedImage = await pdfDoc
+          .embedJpg(bytes)
+          .catch((err) => alert('Something went wrong, please contact support ' + err));
         var page = pdfDoc.addPage();
         const pdfDims = embeddedImage.scale(
-          (page.getHeight() / embeddedImage.height >
-            page.getWidth() / embeddedImage.width &&
-            page.getWidth() / embeddedImage.width) ||
-            page.getHeight() / embeddedImage.height,
+          (page.getHeight() / embeddedImage.width >
+            page.getWidth() / embeddedImage.height &&
+            page.getWidth() / embeddedImage.height) ||
+            page.getHeight() / embeddedImage.width,
         );
           console.log(
             `page dims ${page.getWidth()} ${page.getHeight()} img dims: ${pdfDims.height} ${pdfDims.width}`
           )
         page.drawImage(embeddedImage, {
-          x: page.getWidth()/2 - pdfDims.width/2,
-          y:  page.getHeight()/2 - pdfDims.height/2,
+          x: page.getWidth() / 2 - pdfDims.height / 2,
+          y:  page.getHeight(),
           width: pdfDims.width,
           height: pdfDims.height,
+          rotate: degrees(-90),
         });
       }
      
