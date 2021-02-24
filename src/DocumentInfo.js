@@ -80,7 +80,6 @@ class DocumentInfo extends React.Component {
       isDocumentGerman: 'Select',
       docType: 'Select',
       sendMoneyToContractualServices: 'Select',
-      isDatePickerVisible: false,
       renderGeneralInfoWeb: false,
       renderDocTypeInfoWeb: false,
       renderDatePickerInfo: false,
@@ -303,7 +302,6 @@ class DocumentInfo extends React.Component {
             onPress={() => {
               this.setState({renderGeneralInfoWeb: false});
               this.setState({renderDocTypeInfoWeb: false});
-              this.setState({renderDatePickerInfo: false})
               this.setState({renderBillFromGermanyInfo: false})
               this.setState({renderWhoToPay: false})
             }}>
@@ -374,31 +372,9 @@ class DocumentInfo extends React.Component {
           {translate('Please enter the birthdate of the insured person')}{' '}
         </Text>
         <View style = {{flexDirection:'row'}}>
-        {/* <TouchableOpacity
-          onPress={() => {
-            this.setState({isDatePickerVisible: true});
-          }}>
-          <View
-            style={{
-              padding: 5,
-              height: 40,
-              width: 250,
-              justifyContent: 'center',
-              backgroundColor: 'white',
-              borderColor: '#f59b00',
-              borderWidth: 5,
-              borderRadius: 7,
-            }}>
-            <Text style={{color: '#f59b00', fontSize: 14}}>
-              {(this.state.isEditing && this.state.infoObj.dateStatus) ||
-                this.props.date ||
-                translate('Select')}{' '}
-            </Text>
-          </View>
-        </TouchableOpacity> */}
 
         <DatePicker
-        style={{width: 200}}
+        style={{width: 245}}
         date={(this.state.isEditing && this.state.infoObj.dateStatus) ||
           this.props.date ||
           ''}
@@ -438,18 +414,6 @@ class DocumentInfo extends React.Component {
           }
         }}
       />
-       {/*  <DateTimePickerModal
-          isVisible={this.state.isDatePickerVisible}
-          mode="date"
-          locale = {(this.props.language.includes("de"))&&"de-DE"|| "en-EN"}
-          date={new Date()}
-          onConfirm={(date) => {
-            this.handleConfirm(date);
-          }}
-          onCancel={() => {
-            this.setState({isDatePickerVisible: false});
-          }}
-        /> */}
 
       {Platform.OS === 'android' &&  (<TouchableOpacity onPress = {()=> this.setState({renderDatePickerInfo: true})}>
         <Image source = {require('./img/questionMark.png')}
@@ -474,13 +438,11 @@ class DocumentInfo extends React.Component {
   };
 
   handleConfirm = (date) => {
-    console.log(date)
       let birthDate = date
       this.state.infoObj = {
         ...this.state.infoObj,
         dateStatus: birthDate,
       };
-      this.setState({isDatePickerVisible: false});
       this.props.set_date(birthDate);
     
   };

@@ -1,13 +1,13 @@
 {
   "Insurance Number": "保险号",
-  "Select": "选项",
+  "Select": "请选择",
   "Mr": "男",
   "Ms": "女",
   "First Name": "名",
   "Last name": "姓",
   "Please check your insurance number": "请核对您的保险号码。",
   "Continue": "继续",
-  "Salutation": "称呼",
+  "Salutation": "性别",
   "Please enter your name": "请填写姓名。",
 
   "Send": "发送申请",
