@@ -238,7 +238,7 @@ class imageCrop extends React.Component {
             });
             if (Platform.OS === 'ios'){
               this.props.navigation.push('ScanStack', {
-                params: {infoObj: this.state.infoObj},
+                params: {infoObj: this.state.infoObj, prevScreen: "imageCrop"},
                 screen: 'Scanner',
               });
             }

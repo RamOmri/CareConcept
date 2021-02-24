@@ -68,7 +68,7 @@ export default class ScanScreen extends PureComponent {
     super(props);
     this.state = {
       infoObj: this.props.route.params.infoObj,
-      prevScreen:this.props.route.params.prevScreen || "",
+      prevScreen:this.props.route.params.prevScreen,
       flashEnabled: false,
       showScannerView: false,
       didLoadInitialLayout: false,
@@ -392,7 +392,12 @@ onBackPress = () =>{
                     marginLeft:80,
                   marginRight:10, marginTop:30,}}
                       onPress={()=>{
-                        this.props.navigation.pop()
+                        console.log(this.state.prevScreen)
+                        if(this.state.prevScreen != "ScanPreview")this.props.navigation.pop()
+                        else  this.props.navigation.navigate('ScanStack', {
+                          params: {infoObj: this.state.infoObj},
+                          screen: this.state.prevScreen,
+                        });
                       }}
                     >
                       <Text style={{ fontSize:12, color:"white"}}>

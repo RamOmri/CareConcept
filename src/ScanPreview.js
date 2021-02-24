@@ -112,7 +112,7 @@ class ScanPreview extends React.Component {
                let info = this.state.infoObj 
                 this.props.navigation.pop()
                 this.props.navigation.push('ScanStack', {
-                  params: {infoObj: info, },
+                  params: {infoObj: info, prevScreen:"ScanPreview"},
                   screen: 'Scanner',
                 });
              
