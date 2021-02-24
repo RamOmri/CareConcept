@@ -110,22 +110,12 @@ class ScanPreview extends React.Component {
                   }); */
                /*    this.props.navigation.dispatch(resetAction); */
                let info = this.state.infoObj 
-               if(this.state.isEditing){
                 this.props.navigation.pop()
-                this.props.navigation.navigate('ScanStack', {
-                  params: {infoObj: info},
+                this.props.navigation.push('ScanStack', {
+                  params: {infoObj: info, },
                   screen: 'Scanner',
                 });
-               }
-               else{
-                
-                this.props.navigation.pop()
-                  this.props.navigation.push('ScanStack', {
-                    params: {infoObj: info},
-                    screen: 'Scanner',
-                  });
-                  
-                }
+             
                 } else {
                   Alert.alert('',
                     translate(

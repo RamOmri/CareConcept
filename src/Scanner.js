@@ -68,6 +68,7 @@ export default class ScanScreen extends PureComponent {
     super(props);
     this.state = {
       infoObj: this.props.route.params.infoObj,
+      prevScreen:this.props.route.params.prevScreen || "",
       flashEnabled: false,
       showScannerView: false,
       didLoadInitialLayout: false,
@@ -238,12 +239,13 @@ onBackPress = () =>{
 
     setTimeout(() => {
       if (this.state.takingPicture) {
-        console.log("here")
+        let info = this.state.infoObj
+        this.props.navigation.pop()
         this.props.navigation.push('ScanStack', {
-          params: {infoObj: this.state.infoObj},
+          params: {infoObj: info},
           screen: 'Scanner',
         });
-        this.props.navigation.pop()
+        
      alert(translate("Please wait until screen turns on before scanning"))
       }
     }, 5000);
@@ -377,29 +379,26 @@ onBackPress = () =>{
                   {this.renderFlashControl()}
             </View>
                 </View>
-                  <View style={{flexDirection:"row", justifyContent:"center",marginRight:110}}>
-                {/* 
-                  uncomment this to add a cancel or go back button
-                <TouchableOpacity
+                  <View style={{flexDirection:"row", justifyContent:"center",marginRight:110, alignItems:"center"}}>
+                
+                  <TouchableOpacity
                       
                       activeOpacity={0.8}
                       style={{
                         alignSelf:"center",
                         justifyContent:"center", alignItems:"center",
-                      height:60, width:60, backgroundColor:'#f59b00',
+                      height:50, width:100, backgroundColor: '#f59b00',
                     borderRadius:100,
-                  marginRight:20, marginTop:30}}
+                    marginLeft:80,
+                  marginRight:10, marginTop:30,}}
                       onPress={()=>{
-                        this.props.navigation.navigate('ClaimStack', {
-                          params: {isEditing: false, infoObj: this.state.infoObj},
-                          screen: 'DocumentInfo',
-                        });
+                        this.props.navigation.pop()
                       }}
                     >
                       <Text style={{ fontSize:12, color:"white"}}>
                        {translate("Cancel")}
                       </Text>
-                      </TouchableOpacity> */}
+                      </TouchableOpacity>
 
  <TouchableOpacity
                       
@@ -421,7 +420,6 @@ onBackPress = () =>{
                
                      
                         {this.renderScanButton()}
-                      
                   </View>
                   
                 </>
