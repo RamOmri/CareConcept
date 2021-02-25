@@ -52,6 +52,17 @@ const translate = memoize(
 
 export default class ScanScreen extends PureComponent {
 
+  static propTypes = {
+    cameraIsOn: PropTypes.bool,
+    onLayout: PropTypes.func,
+    onSkip: PropTypes.func,
+    onCancel: PropTypes.func,
+    onPictureTaken: PropTypes.func,
+    onPictureProcessed: PropTypes.func,
+    hideSkip: PropTypes.bool,
+    initialFilterId: PropTypes.number,
+    onFilterIdChange: PropTypes.func,
+  }
 
   static defaultProps = {
     cameraIsOn: undefined,
@@ -67,6 +78,7 @@ export default class ScanScreen extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
+      hideCamera:false,
       infoObj: this.props.route.params.infoObj,
       prevScreen:this.props.route.params.prevScreen,
       flashEnabled: false,
@@ -95,34 +107,7 @@ export default class ScanScreen extends PureComponent {
   }
 
   componentDidMount() {
-    this.props.navigation.addListener('focus', () => {
-    console.log("here")
-          this.setState({
-            infoObj: this.props.route.params.infoObj,
-        flashEnabled: false,
-        docScanned: false,
-        showScannerView: false,
-        didLoadInitialLayout: false,
-        detectedRectangle: false,
-        isMultiTasking: false,
-        loadingCamera: true,
-        processingImage: false,
-        takingPicture: false,
-        overlayFlashOpacity: new Animated.Value(0),
-        device: {
-          initialized: false,
-          hasCamera: false,
-          permissionToUseCamera: false,
-          flashIsAvailable: false,
-          previewHeightPercent: 1,
-          previewWidthPercent: 1,
-        },
-        ScannerRef: React.createRef(),
-        
-          })
-          
-       
-    });
+     
     // Add a react navigation blur listener.
     // Removes the scanner when the screen is not active
     this.props.navigation.addListener('blur', () => {
@@ -130,35 +115,16 @@ export default class ScanScreen extends PureComponent {
       this.turnOffCamera(true)
     });
 
-    if (this.state.didLoadInitialLayout && !this.state.isMultiTasking) {
-      this.turnOnCamera();
-    }
+    this.turnOnCamera()
     
   }
   componentWillUnmount() {
+    this.setState({hideCamera:true})
     clearTimeout(this.imageProcessorTimeout);
   }
 
   componentDidUpdate() {
-    if (this.state.didLoadInitialLayout) {
-      if (this.state.isMultiTasking) return this.turnOffCamera(true);
-      if (this.state.device.initialized) {
-        if (!this.state.device.hasCamera) return this.turnOffCamera();
-        if (!this.state.device.permissionToUseCamera) return this.turnOffCamera();
-      }
-
-      if (this.props.cameraIsOn === true && !this.state.showScannerView) {
-        return this.turnOnCamera();
-      }
-
-      if (this.props.cameraIsOn === false && this.state.showScannerView) {
-        return this.turnOffCamera(true);
-      }
-
-      if (this.props.cameraIsOn === undefined) {
-        return this.turnOnCamera();
-      }
-    }
+    this.turnOnCamera()
     return null;
   }
 onBackPress = () =>{
@@ -237,18 +203,7 @@ onBackPress = () =>{
     if (this.state.processingImage) return;
     this.setState({ takingPicture: true, processingImage: true });
 
-    setTimeout(() => {
-      if (this.state.takingPicture) {
-        let info = this.state.infoObj
-        this.props.navigation.pop()
-        this.props.navigation.push('ScanStack', {
-          params: {infoObj: info},
-          screen: 'Scanner',
-        });
-        
-     alert(translate("Please wait until screen turns on before scanning"))
-      }
-    }, 5000);
+    
     this.state.ScannerRef.current.capture();
     this.triggerSnapAnimation();
 
@@ -344,7 +299,22 @@ onBackPress = () =>{
               <TouchableOpacity
                 activeOpacity={0.8}
                 style={styles.cameraButton}
-                onPress={this.capture}
+                onPress={() =>{
+                  console.log(this.state)
+                  setTimeout(() => {
+                    console.log("here")
+                    if (this.state.takingPicture) {
+                      let info = this.state.infoObj
+                      this.props.navigation.pop()
+                      this.props.navigation.push('ScanStack', {
+                        params: {infoObj: info},
+                        screen: 'Scanner',
+                      });
+                      
+                   alert(translate("Please wait until screen turns on before scanning"))
+                    }
+                  }, 5000);
+                  this.capture()}}
               />
               </View>
             <View style={[styles.buttonActionGroup, { marginTop: 28 }]}>
@@ -372,6 +342,32 @@ onBackPress = () =>{
         </View>
       );
     }
+    if(this.state.docScanned) return(
+      <View style = {{alignItems:"center"}}>
+      <TouchableOpacity
+                      
+                      activeOpacity={0.8}
+                      style={{
+                        alignSelf:"center",
+                        justifyContent:"center", alignItems:"center",
+                      height:50, width:100, backgroundColor: '#f59b00',
+                    borderRadius:100,
+                  marginRight:10, marginTop:30,}}
+                      onPress={()=>{
+                        this.setState({hideCamera:true})
+                        if(this.state.prevScreen === "DocumentInfo")this.props.navigation.pop()
+                        else  this.props.navigation.navigate('ScanStack', {
+                          params: {infoObj: this.state.infoObj},
+                          screen: this.state.prevScreen,
+                        });
+                      }}
+                    >
+                      <Text style={{ fontSize:12, color:"white"}}>
+                       {translate("Cancel")}
+                      </Text>
+                      </TouchableOpacity>
+      </View>
+    );
               return (
                 <>
                 <View style ={{flex:0.93, }}>
@@ -392,7 +388,7 @@ onBackPress = () =>{
                     marginLeft:80,
                   marginRight:10, marginTop:30,}}
                       onPress={()=>{
-                        console.log(this.state.prevScreen)
+                        this.setState({hideCamera:true})
                         if(this.state.prevScreen != "ScanPreview")this.props.navigation.pop()
                         else  this.props.navigation.navigate('ScanStack', {
                           params: {infoObj: this.state.infoObj},
@@ -440,7 +436,44 @@ onBackPress = () =>{
       justifyContent:"center", alignItems:"center",
       height:100, width:100, backgroundColor:'#f59b00',
     borderRadius:100}}
-      onPress={this.capture}
+      onPress={()=>{
+        this.setState({takingPicture: true})
+        console.log("here 1")
+                  setTimeout(() => {
+                    console.log(this.state.takingPicture)
+                    if (this.state.takingPicture) {
+                      
+                      this.setState({
+                        infoObj: this.props.route.params.infoObj,
+                    flashEnabled: false,
+                    docScanned: false,
+                    showScannerView: false,
+                    didLoadInitialLayout: false,
+                    detectedRectangle: false,
+                    isMultiTasking: false,
+                    loadingCamera: true,
+                    processingImage: false,
+                    takingPicture: false,
+                    overlayFlashOpacity: new Animated.Value(0),
+                    device: {
+                      initialized: false,
+                      hasCamera: false,
+                      permissionToUseCamera: false,
+                      flashIsAvailable: false,
+                      previewHeightPercent: 1,
+                      previewWidthPercent: 1,
+                    },
+                    ScannerRef: React.createRef(),
+                    
+                      })
+                      
+                   this.imageProcessorTimeout = null
+                      
+                   alert(translate("Please wait until screen turns on before scanning"))
+                    }
+                  }, 5000);
+                  this.capture()}}
+      
     >
       <Text style={{ fontSize:22, color:"white"}}>
        {translate("Scan")}
@@ -491,6 +524,7 @@ onBackPress = () =>{
     else this.deleteCachedImage(croppedImage) */
     infoObj.pages.push({url: img});
     this.componentWillUnmount()
+    this.setState({hideCamera:true})
     this.props.navigation.navigate('ScanStack', {
       params: {infoObj: infoObj},
       screen: 'imageCrop',
@@ -592,7 +626,11 @@ onBackPress = () =>{
   }
 
   render() {
+    
     this.setState({ didLoadInitialLayout: true });
+    if (this.state.hideCamera) {
+      return null;
+    }
     return (
       <View
       style={styles.container}

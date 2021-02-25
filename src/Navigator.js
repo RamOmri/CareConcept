@@ -27,7 +27,7 @@ import Privacy from './Privacy'
 import Imprint from './Imprint'
 import HowToVid from './HowToVid'
 
-import ScanScreen from './Scanner';
+import ScanScreen from './ScanScreen';
 import ScanPreview from './ScanPreview';
 import imageCrop from './imageCrop';
 
