@@ -76,8 +76,10 @@ onBackPress = () =>{
  
     this.setState({isScanning: false});
     this.state.infoObj.pages.push({url: image});
+    let info = this.state.infoObj
+    this.props.navigation.pop()
     this.props.navigation.navigate('ScanStack', {
-      params: {infoObj: this.state.infoObj},
+      params: {infoObj: info},
       screen: 'imageCrop',
     });
     
@@ -88,7 +90,6 @@ onBackPress = () =>{
       .then(() => {
         
       })
-      // `unlink` will throw an error, if the item to unlink does not exist
       .catch((err) => {
         alert('Something went wrong, please clear cache of this app ' + err)
       });

@@ -80,10 +80,8 @@ class DocumentInfo extends React.Component {
       isDocumentGerman: 'Select',
       docType: 'Select',
       sendMoneyToContractualServices: 'Select',
-      isDatePickerVisible: false,
       renderGeneralInfoWeb: false,
       renderDocTypeInfoWeb: false,
-      renderDatePickerInfo: false,
       renderBillFromGermanyInfo: false,
       renderWhoToPay: false,
       infoObj: {
@@ -166,7 +164,7 @@ class DocumentInfo extends React.Component {
   }
 
   render() {
-    if (this.state.renderGeneralInfoWeb || this.state.renderDocTypeInfoWeb || this.state.renderDatePickerInfo || this.state.renderBillFromGermanyInfo || this.state.renderWhoToPay) {
+    if (this.state.renderGeneralInfoWeb || this.state.renderDocTypeInfoWeb || this.state.renderBillFromGermanyInfo || this.state.renderWhoToPay) {
      return this.renderQuestionInfo()
     }
     return (
@@ -303,7 +301,6 @@ class DocumentInfo extends React.Component {
             onPress={() => {
               this.setState({renderGeneralInfoWeb: false});
               this.setState({renderDocTypeInfoWeb: false});
-              this.setState({renderDatePickerInfo: false})
               this.setState({renderBillFromGermanyInfo: false})
               this.setState({renderWhoToPay: false})
             }}>
@@ -322,21 +319,18 @@ class DocumentInfo extends React.Component {
                 this.props.language.includes('en') &&
                   (this.state.renderGeneralInfoWeb && 'https://www.care-concept.de/scripte/sniplets/app_general_information_3_eng.php?navilang=eng' ||
                   this.state.renderDocTypeInfoWeb &&  'https://www.care-concept.de/scripte/sniplets/app_general_information_2_eng.php?navilang=eng' ||
-                  this.state.renderDatePickerInfo && 'https://www.care-concept.de/scripte/sniplets/app_general_information_4_eng.php?navilang=eng' || 
                   this.state.renderBillFromGermanyInfo && 'https://www.care-concept.de/scripte/sniplets/app_general_information_5_eng.php?navilang=eng'||
                   this.state.renderWhoToPay && 'https://www.care-concept.de/scripte/sniplets/app_general_information_6_eng.php?navilang=eng')
                   || 
                 this.props.language.includes('de') &&
                   (this.state.renderGeneralInfoWeb && 'https://www.care-concept.de/scripte/sniplets/app_general_information_3.php' ||              
                   this.state.renderDocTypeInfoWeb && 'https://www.care-concept.de/scripte/sniplets/app_general_information_2.php'||
-                  this.state.renderDatePickerInfo && 'https://www.care-concept.de/scripte/sniplets/app_general_information_4.php' ||
                   this.state.renderBillFromGermanyInfo && 'https://www.care-concept.de/scripte/sniplets/app_general_information_5.php'||
                   this.state.renderWhoToPay && 'https://www.care-concept.de/scripte/sniplets/app_general_information_6.php')
                  ||
                  this.props.language.includes('zh') &&
                  (this.state.renderGeneralInfoWeb && 'https://www.care-concept.de/scripte/sniplets/app_general_information_3_eng.php?navilang=chn' ||
                  this.state.renderDocTypeInfoWeb &&  'https://www.care-concept.de/scripte/sniplets/app_general_information_2_eng.php?navilang=chn' ||
-                 this.state.renderDatePickerInfo && 'https://www.care-concept.de/scripte/sniplets/app_general_information_4_eng.php?navilang=chn' || 
                  this.state.renderBillFromGermanyInfo && 'https://www.care-concept.de/scripte/sniplets/app_general_information_5_eng.php?navilang=chn'||
                  this.state.renderWhoToPay && 'https://www.care-concept.de/scripte/sniplets/app_general_information_6_eng.php?navilang=chn') 
                   ,
@@ -374,31 +368,9 @@ class DocumentInfo extends React.Component {
           {translate('Please enter the birthdate of the insured person')}{' '}
         </Text>
         <View style = {{flexDirection:'row'}}>
-        {/* <TouchableOpacity
-          onPress={() => {
-            this.setState({isDatePickerVisible: true});
-          }}>
-          <View
-            style={{
-              padding: 5,
-              height: 40,
-              width: 250,
-              justifyContent: 'center',
-              backgroundColor: 'white',
-              borderColor: '#f59b00',
-              borderWidth: 5,
-              borderRadius: 7,
-            }}>
-            <Text style={{color: '#f59b00', fontSize: 14}}>
-              {(this.state.isEditing && this.state.infoObj.dateStatus) ||
-                this.props.date ||
-                translate('Select')}{' '}
-            </Text>
-          </View>
-        </TouchableOpacity> */}
 
         <DatePicker
-        style={{width: 200}}
+        style={{width: 245}}
         date={(this.state.isEditing && this.state.infoObj.dateStatus) ||
           this.props.date ||
           ''}
@@ -434,24 +406,6 @@ class DocumentInfo extends React.Component {
           }
         }}
       />
-       {/*  <DateTimePickerModal
-          isVisible={this.state.isDatePickerVisible}
-          mode="date"
-          locale = {(this.props.language.includes("de"))&&"de-DE"|| "en-EN"}
-          date={new Date()}
-          onConfirm={(date) => {
-            this.handleConfirm(date);
-          }}
-          onCancel={() => {
-            this.setState({isDatePickerVisible: false});
-          }}
-        /> */}
-
-      {Platform.OS === 'android' &&  (<TouchableOpacity onPress = {()=> this.setState({renderDatePickerInfo: true})}>
-        <Image source = {require('./img/questionMark.png')}
-         style={{marginLeft: 10,width: 30, height: 30}}
-        />
-        </TouchableOpacity>)}
         </View>
       </View>
     );
@@ -470,20 +424,16 @@ class DocumentInfo extends React.Component {
   };
 
   handleConfirm = (date) => {
-    console.log(date)
       let birthDate = date
       this.state.infoObj = {
         ...this.state.infoObj,
         dateStatus: birthDate,
       };
-      this.setState({isDatePickerVisible: false});
       this.props.set_date(birthDate);
     
   };
 
     getMaxMinDate() {
-      let date = new Date()
-
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
     var mm = String(today.getMonth() + 1).padStart(2, '0'); 
@@ -795,7 +745,7 @@ class DocumentInfo extends React.Component {
     // Below code allows a back press on this screen when editing but returns the info obj to the global app state
   /*   if (
       this.state.isEditing &&
-      !(this.state.renderDocTypeInfoWeb || this.state.renderGeneralInfoWeb || this.state.renderBillFromGermanyInfo || this.state.renderDatePickerInfo ||
+      !(this.state.renderDocTypeInfoWeb || this.state.renderGeneralInfoWeb || this.state.renderBillFromGermanyInfo ||
         this.state.renderWhoToPay)
     ) {
       if (this.checkFieldsBeforeContinue()) {
@@ -806,7 +756,7 @@ class DocumentInfo extends React.Component {
         });
       } else return true;
     } else if (
-      !(this.state.renderDocTypeInfoWeb || this.state.renderGeneralInfoWeb || this.state.renderBillFromGermanyInfo || this.state.renderDatePickerInfo ||
+      !(this.state.renderDocTypeInfoWeb || this.state.renderGeneralInfoWeb || this.state.renderBillFromGermanyInfo  ||
         this.state.renderWhoToPay)
     ) {
       this.props.navigation.navigate('ClaimStack', {
@@ -814,7 +764,7 @@ class DocumentInfo extends React.Component {
         screen: 'SummaryScreen',
       });
     } */
-    let not_in_webview = !(this.state.renderDocTypeInfoWeb || this.state.renderGeneralInfoWeb || this.state.renderBillFromGermanyInfo || this.state.renderDatePickerInfo ||
+    let not_in_webview = !(this.state.renderDocTypeInfoWeb || this.state.renderGeneralInfoWeb || this.state.renderBillFromGermanyInfo ||
       this.state.renderWhoToPay)
       if(not_in_webview && this.state.isEditing) Alert.alert('', translate('Press the show document button below to view all the pages of your document'))
       else if (not_in_webview) {
