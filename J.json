@@ -1,6 +1,15 @@
-{"ScannerRef": {"current": {"_reactInternalFiber": [FiberNode], "_reactInternalInstance": [Object], "askForAndroidCameraForPermission": [Function _callee], "context": [Object], "props": [Object], "refs": [Object], "sendOnDeviceSetupEvent": [Function anonymous], "sendOnErrorProcessingImage": [Function anonymous], "sendOnPictureProcessedEvent": [Function anonymous], "sendOnPictureTakenEvent": [Function anonymous], "sendOnRectangleDetectedEvent": [Function anonymous], "sendOnTorchChangedEvent": [Function anonymous], "start": [Function anonymous], "state": null, "updater": [Object]}}, "detectedRectangle": false, "device": {"flashIsAvailable": false, "hasCamera": false, "initialized": false, "permissionToUseCamera": false, "previewHeightPercent": 1, "previewWidthPercent": 1},
-    
-    
+{"ScannerRef": {"current": {"_reactInternalFiber": [FiberNode], "_reactInternalInstance": [Object], "askForAndroidCameraForPermission": [Function _callee], "context": [Object], "props": [Object], "refs": [Object], "sendOnDeviceSetupEvent": [Function anonymous], "sendOnErrorProcessingImage": [Function anonymous], "sendOnPictureProcessedEvent": [Function anonymous], "sendOnPictureTakenEvent": [Function anonymous], "sendOnRectangleDetectedEvent": [Function anonymous], "sendOnTorchChangedEvent": [Function anonymous], "start": [Function anonymous], "state": null, "updater": [Object]}}, 
+
+
+
+"detectedRectangle": false,
+
+
+"device": {"flashIsAvailable": false, 
+    "hasCamera": false, "initialized": false, "permissionToUseCamera": false, 
+    "previewHeightPercent": 1, "previewWidthPercent": 1},
+
+
     "didLoadInitialLayout": true, "docScanned": false, 
     "flashEnabled": false, "hideCamera": false,
      "infoObj": {"dateStatus": "25-02-2021", "docType": "Other Document", "pages": []},
@@ -8,3 +17,18 @@
       "overlayFlashOpacity": 0, "prevScreen": "DocumentInfo", 
       "processingImage": false, "showScannerView": true, "takingPicture": false,
        "useScanner": true}
+
+
+       {"ScannerRef": {"current": {"_reactInternalFiber": [FiberNode], "_reactInternalInstance": [Object], "askForAndroidCameraForPermission": [Function _callee], "context": [Object], "props": [Object], "refs": [Object], "sendOnDeviceSetupEvent": [Function anonymous], "sendOnErrorProcessingImage": [Function anonymous], "sendOnPictureProcessedEvent": [Function anonymous], "sendOnPictureTakenEvent": [Function anonymous], "sendOnRectangleDetectedEvent": [Function anonymous], "sendOnTorchChangedEvent": [Function anonymous], "start": [Function anonymous], "state": null, "updater": [Object]}}, 
+       
+       
+       "detectedRectangle": false, 
+       
+       "device": {"flashIsAvailable": 1, "hasCamera": true, 
+        "initialized": true, "permissionToUseCamera": 1, "previewHeightPercent": 1, "previewWidthPercent": 1}, 
+
+        
+        "didLoadInitialLayout": true, "docScanned": false, "flashEnabled": false, "hideCamera": false, 
+        "infoObj": {"dateStatus": "25-02-2021", "docType": "Other Document", "pages": []}, 
+        "isMultiTasking": false, "loadingCamera": false, "overlayFlashOpacity": 0, "prevScreen": "DocumentInfo",
+         "processingImage": false, "showScannerView": true, "takingPicture": false, "useScanner": true}

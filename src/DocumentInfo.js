@@ -374,6 +374,7 @@ class DocumentInfo extends React.Component {
         <View style = {{flexDirection:'row'}}>
 
         <DatePicker
+        locale = {this.props.language.includes("en") && "en" || this.props.language.includes("de") && "de" || "zh-Hans"}
         style={{width: 245}}
         date={(this.state.isEditing && this.state.infoObj.dateStatus) ||
           this.props.date ||

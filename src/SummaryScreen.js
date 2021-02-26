@@ -420,12 +420,12 @@ class SummaryScreen extends React.Component {
     var time = Math.floor(new Date().getTime() / 1000).toString();
     let objectToSend = {
       apikey: sha256('GCrzJC4Jb.un4Gd%8njJ' + time),
-      user_language: this.props.language.includes('en') && 'eng' || 'ger',
+      user_language: this.props.language.includes('en') && 'eng' || this.props.language.includes('de') && 'ger' || this.props.language.includes('zh') && 'chn',
       timestamp: time,
       payload: new Array(),
     };
     for (let i = 0; i < this.props.docs.length; i++) {
-      console.log(this.props.docs[i].document.BIC + ' ' + this.props.docs[i].document.IBAN) 
+      let isAusLandBeleg = this.props.docs[i].document.isDocumentGerman === "No"
       let document = {
         VNR: this.props.policyInfo.insuranceNumber,
         vorname: this.props.policyInfo.FirstName,
@@ -434,7 +434,7 @@ class SummaryScreen extends React.Component {
         dokumentenart:
           (this.props.docs[i].document.docType === 'Claim Document' && 1) || 2,
         auslandsbeleg:
-          (this.props.docs[i].document.isDocumentGerman === 'Yes' && 1) || 0,
+          isAusLandBeleg ? 1 : 0,
         iban: this.props.docs[i].document.IBAN || '',
         bezahlt:
           (this.props.docs[i].document.docType === 'Claim Document' &&
@@ -443,16 +443,16 @@ class SummaryScreen extends React.Component {
             1) ||
           0,
         bic: this.props.docs[i].document.BIC || '',
-        vp_geburtsdatum_tag: this.props.docs[0].document.dateStatus.split(
+        vp_geburtsdatum_tag: this.props.docs[i].document.dateStatus.split(
           '-',
         )[0],
-        vp_geburtsdatum_monat: this.props.docs[0].document.dateStatus.split(
+        vp_geburtsdatum_monat: this.props.docs[i].document.dateStatus.split(
           '-',
         )[1],
-        vp_geburtsdatum_jahr: this.props.docs[0].document.dateStatus.split(
+        vp_geburtsdatum_jahr: this.props.docs[i].document.dateStatus.split(
           '-',
         )[2],
-        kto_inhaber: this.props.docs[0].document.AccountHolder,
+        kto_inhaber: this.props.docs[i].document.AccountHolder,
         dokument: pdfArray[i],
       };
       objectToSend.payload.push(document);

@@ -481,6 +481,7 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   nameInput: {
+    padding:5,
     marginTop: 12,
     margin: 2,
     borderWidth: 1,
@@ -490,6 +491,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#E5ECF5',
   },
   policyInput: {
+    padding:5,
     marginTop: 30,
     marginBottom: 4,
     borderWidth: 1,
