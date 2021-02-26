@@ -201,12 +201,15 @@ class DocumentInfo extends React.Component {
 
         <View style={{}}>
           <ScrollView>
-            <View
-              style={{
-                marginBottom: 130,
-                justifyContent: 'center',
-                marginLeft: 20,
-              }}>
+          <KeyboardAvoidingView
+          behavior='position'
+          keyboardVerticalOffset={-300} style={{
+            marginBottom: 50,
+            justifyContent: 'center',
+            marginLeft: 20,
+            flex:1
+          }}>
+           
               <TouchableOpacity
                 onPress={() => {
                   this.setState({renderGeneralInfoWeb: true});
@@ -281,7 +284,8 @@ class DocumentInfo extends React.Component {
               {(this.state.docType == 'Other Document' ||
                 this.state.infoObj.docType == 'Other Document') &&
                 this.renderContinue()}
-            </View>
+            
+            </KeyboardAvoidingView>
           </ScrollView>
         </View>
       </ImageBackground>
