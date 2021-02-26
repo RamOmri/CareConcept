@@ -440,6 +440,7 @@ class SummaryScreen extends React.Component {
             1) ||
           0,
         bic: this.props.docs[i].document.BIC || '',
+        versionNumber:2,
         vp_geburtsdatum_tag: this.props.docs[i].document.dateStatus.split(
           '-',
         )[0],
