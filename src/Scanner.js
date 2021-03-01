@@ -67,7 +67,7 @@ export default class Scanner extends React.Component {
     BackHandler.removeEventListener("hardwareBackPress", this.onBackPress)
   }
 onBackPress = () =>{
-
+return true
 }
   async handleScannedDocument(Img, init) {
     let image;

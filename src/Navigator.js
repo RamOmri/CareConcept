@@ -57,7 +57,7 @@ const translate = memoize(
 );
 const setI18nConfig = async () => {
   console.log()
-  const {languageTag, isRTL} = ("ende".includes(RNLocalize.getLocales()[0].languageCode)) && 
+  const {languageTag, isRTL} = ("endezh".includes(RNLocalize.getLocales()[0].languageCode)) && 
                                 RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) || await userLanguageSelect()
  
   // clear translation cache
@@ -78,7 +78,7 @@ const userLanguageSelect = async () =>{
   let lang = null
   await new Promise((resolve, reject) => { Alert.alert(
     "Language Selection:",
-    "Please select your language \n Bitte wählen Sie Ihre Sprache", // \n 请选择语言',
+    'Please select your language \n Bitte wählen Sie Ihre Sprache, \n 请选择语言',
     [
       {
         text: "English",
@@ -94,13 +94,13 @@ const userLanguageSelect = async () =>{
           resolve()
         }
       },
-     /*  {
-        text: 'Chinese',
+      {
+        text: '中文',
         onPress: () =>{
           lang = {languageTag: 'zh', isRTL: false};
           resolve()
         }
-      }, */
+      },
      
     ]
   )})
