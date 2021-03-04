@@ -419,6 +419,7 @@ class SummaryScreen extends React.Component {
       apikey: sha256('GCrzJC4Jb.un4Gd%8njJ' + time),
       user_language: this.props.language.includes('en') && 'eng' || this.props.language.includes('de') && 'ger' || this.props.language.includes('zh') && 'chn',
       timestamp: time,
+      versionNumber:3,
       payload: new Array(),
     };
     for (let i = 0; i < this.props.docs.length; i++) {
@@ -440,7 +441,6 @@ class SummaryScreen extends React.Component {
             1) ||
           0,
         bic: this.props.docs[i].document.BIC || '',
-        versionNumber:2,
         vp_geburtsdatum_tag: this.props.docs[i].document.dateStatus.split(
           '-',
         )[0],
@@ -539,6 +539,7 @@ deleteCache = async (path) =>{
           this.state.server_message = '400';
           this.setState({isLoading: false});
           this.onBackPress()
+          
           Alert.alert('',
             `${JSON.stringify(data[0].arg3)} ${translate(
               'was entered incorrectly Please fix your entry and try again',

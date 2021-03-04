@@ -67,12 +67,6 @@ class imageCrop extends React.Component {
 
   async componentDidMount() {
     BackHandler.addEventListener("hardwareBackPress", this.onBackPress)
-    /* if(Platform.OS == "ios"){
-      await ImageResizer.createResizedImage( this.state.infoObj.pages[this.state.infoObj.pages.length - 1].url, 2000, 2000, "JPEG", 80)
-      .then(response => { 
-        this.state.infoObj.pages[this.state.infoObj.pages.length - 1].url = response.uri
-      })
-     } */
     await this.getImageSize(
       this.state.infoObj.pages[this.state.infoObj.pages.length - 1].url,
     );
@@ -136,46 +130,7 @@ class imageCrop extends React.Component {
   };
 
   render() {
-    if(this.state.renderWebView){
-      return(
-        <View style={{flex: 1, backgroundColor: '#004799'}}>
-         
-          <TouchableOpacity
-            style={{
-              marginLeft: 20,
-              margin: 10,
-              backgroundColor: 'orange',
-              height: Dimensions.get('screen').height / 17,
-              width: Dimensions.get('screen').width / 4,
-              justifyContent: 'center',
-              alignItems: 'center',
-              borderTopLeftRadius: 200,
-              borderBottomLeftRadius: 200,
-            }}
-            onPress={() => {
-              this.setState({renderWebView: false})
-            }}>
-            <View>
-              <Text style={{color: 'white', fontSize: 12}}>
-                {translate('Go Back')}
-              </Text>
-            </View>
-          </TouchableOpacity>
-          <WebView
-            startInLoadingState
-            renderLoading={this.renderLoading}
-            source={{
-              uri:
-                this.props.language.includes('en') && 'https://www.care-concept.de/scripte/sniplets/app_general_information_eng.php?navilang=eng' ||
-                 this.props.language.includes('de') && "https://www.care-concept.de/scripte/sniplets/app_general_information.php"||
-                 this.props.language.includes('en') && 'https://www.care-concept.de/scripte/sniplets/app_general_information_eng.php?navilang=chn'
-            }}
-            style={{marginTop: 20}}
-          />
-        </View>
-      )
-    }
-    else if (!this.state.loading) {
+     if (!this.state.loading) {
       return (
         <React.Fragment>
          
@@ -185,7 +140,9 @@ class imageCrop extends React.Component {
               onDone={(croppedImageUri) => {
                 this.onDone(croppedImageUri);
               }}
-              onError={this.onError}
+              onError={()=>{
+                alert('es gibt ein error')
+              }}
               onCancel={() => this.onContinue()}
               imageUri={
                 this.state.infoObj.pages[this.state.infoObj.pages.length - 1]
@@ -236,16 +193,12 @@ class imageCrop extends React.Component {
             .catch((err) => {
               alert('Something went wrong, please clear cache of this app')
             });
-            if (Platform.OS === 'ios'){
-              this.props.navigation.push('ScanStack', {
-                params: {infoObj: this.state.infoObj},
-                screen: 'Scanner',
-              });}
-            else{
-              this.props.navigation.navigate('ScanStack', {
-                params: {infoObj: this.state.infoObj},
-                screen: 'Scanner',
-              });}
+            let info = this.state.infoObj
+            this.props.navigation.pop()
+            this.props.navigation.push('ScanStack', {
+              params: {infoObj: info},
+              screen: 'Scanner',
+            })
           }}
           style={styles.button}>
           <Text style={styles.text}>{translate('Rescan')}</Text>
@@ -253,7 +206,10 @@ class imageCrop extends React.Component {
         <TouchableOpacity
           onPress={() => {
             this.setState({loading: true});
-            props.onDone();
+           try{props.onDone();}
+           catch(error){
+             alert(error)
+           }
           }}
           style={styles.button}>
           <Text style={styles.text}>{translate('Crop')}</Text>

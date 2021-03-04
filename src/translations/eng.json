@@ -82,5 +82,6 @@
 
   "Delete Page":"Delete Page",
   "Would you like to delete the selected page":"Would you like to delete the selected page?",
-  "Delete":"Delete"
+  "Delete":"Delete",
+  "Name must only include latin characters":"Name must only include latin characters"
 }

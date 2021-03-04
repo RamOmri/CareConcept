@@ -441,7 +441,7 @@ class DocumentInfo extends React.Component {
     
 
   today = dd + '-' + mm + '-' + yyyy;
-  century = dd + '-' + mm + '-' + (parseInt(yyyy) - 100).toString()
+ let century = dd + '-' + mm + '-' + (parseInt(yyyy) - 100).toString()
       return [today, century]
   }
 
@@ -563,11 +563,19 @@ class DocumentInfo extends React.Component {
           placeholderTextColor="#004799"
           secureTextEntry={false}
           onChangeText={(name) => {
+            const utf8 =
+            'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZüöäÜÖÄß _çÇñÑëáé&;.-:';
+            if(name && !utf8.includes(name[name.length-1])){
+              console.log(name[name.length -1])
+              Alert.alert('', translate('Name must only include latin characters'))}
+            else{
+              console.log(name[name.length -1])
             this.props.set_AccountHolder(name);
             this.state.infoObj = {
               ...this.state.infoObj,
               AccountHolder: name,
             };
+          }
           }}
           value={
             (this.state.isEditing && this.state.infoObj.AccountHolder) ||
