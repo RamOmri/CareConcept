@@ -74,6 +74,6 @@
 "Cancel":"终止",
 "Would you like to delete the selected page":"是要删除所选择这一页吗",
 "Here you can edit the information you put in and view the pages of the document by pressing the Show Document button":"若需更改讯息，或从新浏览上传的文件，请按 „显示文件",
-"Name must only include latin characters":"名字只能用拉丁字母输入。"
-
+"Name must only include latin characters":"名字只能用拉丁字母输入。",
+"Press the show document button below to view all the pages of your document": "请按下面的显示文件按钮，来查看文件的所有页面。"
 }
