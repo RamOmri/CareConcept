@@ -150,17 +150,13 @@ return true
                         'Scan timed out, please hold phone steady and try again',
                       ),
                     );
-                    if(Platform.OS === "ios"){ 
                       this.props.navigation.pop()
                       this.props.navigation.push('ScanStack', {
                       params: {infoObj: this.state.infoObj},
                       screen: 'Scanner',
                     });
-                  }
-                  else{
-                    that.state.pdfScannerReference.current.forceUpdate();
-                    that.setState({isScanning: false});
-                  }
+                  
+                  
 
                   }
                 }, 9000);
@@ -180,6 +176,7 @@ return true
             </View>
           )}
         </View>
+        
       </React.Fragment>
     );
   }
