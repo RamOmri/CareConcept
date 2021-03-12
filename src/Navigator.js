@@ -56,7 +56,7 @@ const translate = memoize(
   (key, config) => (config ? key + JSON.stringify(config) : key),
 );
 const setI18nConfig = async () => {
-  console.log()
+  console.log(RNLocalize.getLocales()[0].languageCode)
   const {languageTag, isRTL} = ("endezh".includes(RNLocalize.getLocales()[0].languageCode)) && 
                                 RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) || await userLanguageSelect()
  
@@ -219,7 +219,7 @@ class Navigator extends React.Component{
   async componentDidMount(){
     let lang = await setI18nConfig()
     this.props.setLanguage(lang)
-    //console.log(this.props.language) <- uncomment this to get letter code from console
+    console.log(this.props.language)
     this.setState({isLangSelected:true})
   }
    render(){

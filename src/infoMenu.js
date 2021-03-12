@@ -113,7 +113,9 @@ class InfoMenu extends React.Component {
                 (this.props.language.includes('de') &&
                   'https://www.care-concept.de/scripte/sniplets/app_general_information.php')||
                   (this.props.language.includes('zh') &&
-                  'https://www.care-concept.de/scripte/sniplets/app_general_information_eng.php?navilang=chn'),
+                  'https://www.care-concept.de/scripte/sniplets/app_general_information_eng.php?navilang=chn') ||
+                  (this.props.language.includes('es') &&
+                  'https://www.care-concept.de/scripte/sniplets/app_general_information_eng.php?navilang=esp'),
             }}
             style={{marginTop: 20}}
           />
