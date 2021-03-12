@@ -368,7 +368,7 @@ onBackPress = () =>{
                 </View>
                   <View style={{flexDirection:"row", justifyContent:"center",marginRight:110, alignItems:"center"}}>
                 
-                  {this.state.prevScreen != "imageCrop" && <TouchableOpacity
+                  {!this.state.docScanned && this.state.prevScreen != "imageCrop" && <TouchableOpacity
                       
                       activeOpacity={0.8}
                       style={{
@@ -433,7 +433,7 @@ onBackPress = () =>{
                     if (this.state.takingPicture) {
                       this.resetScanner()
                       
-                   alert(translate("Please wait until screen turns on before scanning"))
+                   alert(translate("Scan timed out, please hold phone steady and try again"))
                     }
                   }, 5000);
                   this.capture()}}

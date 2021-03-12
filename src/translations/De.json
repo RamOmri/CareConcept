@@ -82,6 +82,6 @@
  "Cancel":"Abbrechen",
  "Delete Page":"Seite löschen",
  "Would you like to delete the selected page": "Möchten Sie die ausgewählte Seite löschen?",
- "Confirm":"Ok"
-
+ "Confirm":"Ok",
+ "Name must only include latin characters": "Bitte geben Sie hier nur lateinische Buchstaben ein."
 }

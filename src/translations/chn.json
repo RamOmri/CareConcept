@@ -1,4 +1,12 @@
 {
+"Please enter your salutation":"请选择称呼",
+"Delete Page": "删除这页",
+"Delete":"删除",
+"Confirm":"确认",
+"Cancel":"终止",
+"Would you like to delete the selected page":"是要删除所选择这一页吗",
+"Here you can edit the information you put in and view the pages of the document by pressing the Show Document button":"若需更改讯息，或从新浏览上传的文件，请按 „显示文件",
+"Name must only include latin characters":"名字只能用拉丁字母输入。",
   "Insurance Number": "保险号",
   "Select": "请选择",
   "Mr": "男",

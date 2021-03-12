@@ -340,7 +340,7 @@ renderInfo(){
       fieldsCorrect = false
     } 
     if (!this.checkName()) {
-      errorMessage = errorMessage + 'Please only use latin characters in your name' + ' \n'
+      errorMessage = errorMessage + translate("Name must only include latin characters") + ' \n'
       fieldsCorrect = false
     }
     

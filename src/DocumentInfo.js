@@ -147,6 +147,7 @@ class DocumentInfo extends React.Component {
         AccountHolder: this.props.AccountHolder,
       };
     }
+    console.log(this.state.infoObj)
   }
 
   check_if_editing() {
@@ -203,8 +204,8 @@ class DocumentInfo extends React.Component {
           <ScrollView>
           <KeyboardAvoidingView
           behavior='position'
-          keyboardVerticalOffset={-300} style={{
-            marginBottom: 50,
+          keyboardVerticalOffset={-330} style={{
+            marginBottom: 200,
             justifyContent: 'center',
             marginLeft: 20,
             flex:1
@@ -584,11 +585,17 @@ class DocumentInfo extends React.Component {
           placeholderTextColor="#004799"
           secureTextEntry={false}
           onChangeText={(name) => {
+            const utf8 =
+            'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZüöäÜÖÄß _çÇñÑëáé&;.-:';
+            if(name && !utf8.includes(name[name.length-1])){
+              Alert.alert('', translate('Name must only include latin characters'))}
+            else{
             this.props.set_AccountHolder(name);
             this.state.infoObj = {
               ...this.state.infoObj,
               AccountHolder: name,
             };
+          }
           }}
           value={
             (this.state.isEditing && this.state.infoObj.AccountHolder) ||
