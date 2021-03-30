@@ -117,7 +117,9 @@ class SummaryScreen extends React.Component {
               (this.props.language.includes('de') &&
                 require('./img/goBackDe.png'))||
                 (this.props.language.includes('zh') &&
-                require('./img/goBackChn.png'))
+                require('./img/goBackChn.png'))||
+                (this.props.language.includes('es') &&
+                require('./img/goBackEs.png'))
             }
             style={styles.goBackButton}
           />
@@ -130,7 +132,7 @@ class SummaryScreen extends React.Component {
               (this.props.language.includes('en') && (Platform.OS === 'android') &&
     'https://www.care-concept.de/scripte/sniplets/app_general_information_3_eng.php?navilang=eng') ||
     (this.props.language.includes('es') && (Platform.OS === 'android') &&
-    'https://www.care-concept.de/scripte/sniplets/app_general_information_3_eng.php?navilang=esp') ||
+    'https://www.care-concept.de/scripte/sniplets/app_general_information_3_esp.php?navilang=esp') ||
               (this.props.language.includes('de') && (Platform.OS === 'android') &&
                 'https://www.care-concept.de/scripte/sniplets/app_general_information_3.php')||
                 (this.props.language.includes('zh') && (Platform.OS === 'android') &&
@@ -419,9 +421,9 @@ class SummaryScreen extends React.Component {
     var time = Math.floor(new Date().getTime() / 1000).toString();
     let objectToSend = {
       apikey: sha256('GCrzJC4Jb.un4Gd%8njJ' + time),
-      user_language: this.props.language.includes('en') && 'eng' || this.props.language.includes('de') && 'ger' || this.props.language.includes('zh') && 'chn',
+      user_language: this.props.language.includes('en') && 'eng' || this.props.language.includes('de') && 'ger' || this.props.language.includes('zh') && 'chn' || this.props.language.includes('es') &&'esp',
       timestamp: time,
-      versionNumber:3,
+      versionNumber:'3.1',
       payload: new Array(),
     };
     for (let i = 0; i < this.props.docs.length; i++) {

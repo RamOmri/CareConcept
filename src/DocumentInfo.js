@@ -185,7 +185,8 @@ class DocumentInfo extends React.Component {
                 }}>
             {!this.state.isEditing && <Image source = {this.props.language.includes('en') && require('./img/goBackEn.png') || 
             this.props.language.includes('de') && require('./img/goBackDe.png') || 
-            this.props.language.includes('zh') && require('./img/goBackChn.png')} 
+            this.props.language.includes('zh') && require('./img/goBackChn.png') ||
+          this.props.language.includes('es') && require('./img/goBackEs.png')} 
               style = {styles.goBackButton} />}
               </TouchableOpacity>
             )}
@@ -306,7 +307,8 @@ class DocumentInfo extends React.Component {
             }}>
              <Image source = {this.props.language.includes('en') && require('./img/goBackEn.png') || 
              this.props.language.includes('de') && require('./img/goBackDe.png') ||
-            this.props.language.includes('zh') && require('./img/goBackChn.png')} 
+            this.props.language.includes('zh') && require('./img/goBackChn.png') ||
+          this.props.language.includes('es') && require('./img/goBackEs.png')} 
             style = {styles.goBackButton} />
           </TouchableOpacity>
         </View>
@@ -329,16 +331,16 @@ class DocumentInfo extends React.Component {
                   this.state.renderWhoToPay && 'https://www.care-concept.de/scripte/sniplets/app_general_information_6.php')
                  ||
                  this.props.language.includes('zh') &&
-                 (this.state.renderGeneralInfoWeb && 'https://www.care-concept.de/scripte/sniplets/app_general_information_3_eng.php?navilang=chn' ||
-                 this.state.renderDocTypeInfoWeb &&  'https://www.care-concept.de/scripte/sniplets/app_general_information_2_eng.php?navilang=chn' ||
-                 this.state.renderBillFromGermanyInfo && 'https://www.care-concept.de/scripte/sniplets/app_general_information_5_eng.php?navilang=chn'||
-                 this.state.renderWhoToPay && 'https://www.care-concept.de/scripte/sniplets/app_general_information_6_eng.php?navilang=chn') 
+                 (this.state.renderGeneralInfoWeb && 'https://www.care-concept.de/scripte/sniplets/app_general_information_3_chn.php?navilang=chn' ||
+                 this.state.renderDocTypeInfoWeb &&  'https://www.care-concept.de/scripte/sniplets/app_general_information_2_chn.php?navilang=chn' ||
+                 this.state.renderBillFromGermanyInfo && 'https://www.care-concept.de/scripte/sniplets/app_general_information_5_chn.php?navilang=chn'||
+                 this.state.renderWhoToPay && 'https://www.care-concept.de/scripte/sniplets/app_general_information_6_chn.php?navilang=chn') 
                  ||
                  this.props.language.includes('es') &&
-                 (this.state.renderGeneralInfoWeb && 'https://www.care-concept.de/scripte/sniplets/app_general_information_3_eng.php?navilang=esp' ||
-                 this.state.renderDocTypeInfoWeb &&  'https://www.care-concept.de/scripte/sniplets/app_general_information_2_eng.php?navilang=esp' ||
-                 this.state.renderBillFromGermanyInfo && 'https://www.care-concept.de/scripte/sniplets/app_general_information_5_eng.php?navilang=esp'||
-                 this.state.renderWhoToPay && 'https://www.care-concept.de/scripte/sniplets/app_general_information_6_eng.php?navilang=esp') 
+                 (this.state.renderGeneralInfoWeb && 'https://www.care-concept.de/scripte/sniplets/app_general_information_3_esp.php?navilang=esp' ||
+                 this.state.renderDocTypeInfoWeb &&  'https://www.care-concept.de/scripte/sniplets/app_general_information_2_esp.php?navilang=esp' ||
+                 this.state.renderBillFromGermanyInfo && 'https://www.care-concept.de/scripte/sniplets/app_general_information_5_esp.php?navilang=esp'||
+                 this.state.renderWhoToPay && 'https://www.care-concept.de/scripte/sniplets/app_general_information_6_esp.php?navilang=esp') 
                   ,
 
             }}
@@ -708,7 +710,8 @@ class DocumentInfo extends React.Component {
       errorMessage =
         errorMessage +
         `${translate('please check your bank details')} ${this.props.language.includes("de")&& "(Name)" || 
-        this.props.language.includes('en') && "(name)" || this.props.language.includes('zh') && "(姓名)"}` +
+        this.props.language.includes('en') && "(name)" || this.props.language.includes('zh') && "(姓名)" || 
+        this.props.language.includes('es') && "nombre"} ` +
         ' \n';
       correctFields = false;
     }

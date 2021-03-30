@@ -73,6 +73,7 @@ class StartScreen extends React.Component {
             style={styles.container}
             source={ this.props.language.includes('de') && require('./img/startScreenDe.jpg') || 
             this.props.language.includes('en') && require('./img/startScreenEn.jpg')||
+            this.props.language.includes('es') && require('./img/startScreenEs.jpg')||
           this.props.language.includes('zh') && require('./img/startScreenCHN.jpg')}
             style={{
               resizeMode: 'stretch',

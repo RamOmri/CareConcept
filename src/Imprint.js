@@ -114,7 +114,7 @@ class Imprint extends React.Component {
                 this.props.language.includes('en') && 'https://www.care-concept.de/wir_ueber_uns/impressum_app_eng.php?navilang=eng' ||
                  this.props.language.includes('de') && "https://www.care-concept.de/wir_ueber_uns/impressum_app.php"||
                  this.props.language.includes('zh') && 'https://www.care-concept.de/wir_ueber_uns/impressum_app_chn.php?navilang=chn'||
-                 this.props.language.includes('es') && 'https://www.care-concept.de/wir_ueber_uns/impressum_app_chn.php?navilang=esp'  
+                 this.props.language.includes('es') && 'https://www.care-concept.de/wir_ueber_uns/impressum_app_esp.php?navilang=esp'  
             }}
             style={{marginTop: 20}}
           />
