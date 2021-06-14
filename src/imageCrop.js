@@ -51,7 +51,6 @@ const translate = memoize(
   (key, config) => (config ? key + JSON.stringify(config) : key),
 );
 
-
 class imageCrop extends React.Component {
   constructor(props) {
     super(props);

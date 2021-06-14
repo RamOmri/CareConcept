@@ -91,7 +91,6 @@ class Imprint extends React.Component {
     );
   };
   render() {
- 
             return (
             <ImageBackground
                 style={styles.container}
