@@ -117,7 +117,9 @@ class SummaryScreen extends React.Component {
               (this.props.language.includes('de') &&
                 require('./img/goBackDe.png'))||
                 (this.props.language.includes('zh') &&
-                require('./img/goBackChn.png'))
+                require('./img/goBackChn.png')) ||
+                (this.props.language.includes('es') &&
+                require('./img/goBackEs.png'))
             }
             style={styles.goBackButton}
           />
@@ -139,7 +141,9 @@ class SummaryScreen extends React.Component {
                 (this.props.language.includes('zh') && (Platform.OS === 'ios') &&
                 'https://www.care-concept.de/scripte/sniplets/app_general_information_3io_chn.php?navilang=chn') ||
                           (this.props.language.includes('de') && (Platform.OS === 'ios') &&
-                            'https://www.care-concept.de/scripte/sniplets/app_general_information_3io.php'),
+                            'https://www.care-concept.de/scripte/sniplets/app_general_information_3io.php')||
+                            (this.props.language.includes('es') && (Platform.OS === 'ios') &&
+                'https://www.care-concept.de/scripte/sniplets/app_general_information_3io_esp.php?navilang=esp') ,
                 
           }}
           style={{marginTop: 20}}
@@ -222,7 +226,9 @@ class SummaryScreen extends React.Component {
                     (this.props.language.includes('de') &&
                       require('./img/editPolicyHolderDe.png')) ||
                       (this.props.language.includes('zh') &&
-                      require('./img/editPolicyHolderChn.png'))
+                      require('./img/editPolicyHolderChn.png'))||
+                      (this.props.language.includes('es') &&
+                      require('./img/editPolicyHolderEs.png'))
                   }
                   style={{marginLeft: 10,
                     resizeMode: 'contain',
@@ -382,7 +388,7 @@ class SummaryScreen extends React.Component {
                     }
                   }}>
                   <View style={styles.button}>
-                    <Text style={{color: 'white', fontSize: 10}}>
+                    <Text style={{color: 'white', fontSize: Dimensions.get("window").width/25}}>
                       {translate('Scan Document')}
                     </Text>
                   </View>
@@ -402,7 +408,7 @@ class SummaryScreen extends React.Component {
                     }
                   }}>
                   <View style={styles.button}>
-                    <Text style={{color: 'white', fontSize: 10}}>
+                    <Text style={{color: 'white', fontSize: Dimensions.get("window").width/25}}>
                       {translate('Send')}
                     </Text>
                   </View>
@@ -420,9 +426,11 @@ class SummaryScreen extends React.Component {
     var time = Math.floor(new Date().getTime() / 1000).toString();
     let objectToSend = {
       apikey: sha256('GCrzJC4Jb.un4Gd%8njJ' + time),
-      user_language: this.props.language.includes('en') && 'eng' || this.props.language.includes('de') && 'ger' || this.props.language.includes('zh') && 'chn',
+      user_language: this.props.language.includes('en') && 'eng' || this.props.language.includes('de') && 'ger' || this.props.language.includes('zh') && 'chn'||
+      this.props.language.includes("es")&&"esp",
+      platform: Platform.OS,
       timestamp: time,
-      versionNumber:3,
+      versionNumber:"2.3",
       payload: new Array(),
     };
     for (let i = 0; i < this.props.docs.length; i++) {

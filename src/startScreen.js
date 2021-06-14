@@ -73,7 +73,8 @@ class StartScreen extends React.Component {
             style={styles.container}
             source={ this.props.language.includes('de') && require('./img/startScreenDe.jpg') || 
             this.props.language.includes('en') && require('./img/startScreenEn.jpg')||
-          this.props.language.includes('zh') && require('./img/startScreenCHN.jpg')}
+          this.props.language.includes('zh') && require('./img/startScreenCHN.jpg')|| 
+        this.props.language.includes("es") && require("./img/startScreenEs.jpg")}
             style={{
               resizeMode: 'stretch',
               flex: 1,
@@ -101,7 +102,7 @@ class StartScreen extends React.Component {
                 }}
             >
                  <View style = {{alignItems:'center', justifyContent:'center'}}>
-                    <Text style = {{color:'white', fontSize:12}}>
+                    <Text style = {{color:'white', fontSize:Dimensions.get("window").width/22}}>
                             {translate("Start")}
                     </Text>
               </View>

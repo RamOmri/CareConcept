@@ -121,7 +121,8 @@ class HowToVid extends React.Component {
               uri: Platform.OS === 'ios' && 
               (this.props.language.includes('de') && 'https://www.care-concept.de/bilder/CCAG_app_ios.mp4' ||
                  this.props.language.includes('en') && "https://www.care-concept.de/bilder/CCAG_app_ios_eng.mp4"||   
-                 this.props.language.includes('zh') && "https://www.care-concept.de/bilder/CCAG_app_ios_chn.mp4"  )  
+                 this.props.language.includes('zh') && "https://www.care-concept.de/bilder/CCAG_app_ios_chn.mp4" ||
+                 this.props.language.includes('es') && "https://www.care-concept.de/bilder/CCAG_app_ios_esp.mp4" )  
                  ||
                  Platform.OS === 'android' &&
                  (this.props.language.includes('de') && 'https://www.care-concept.de/bilder/CCAG_app.mp4' ||

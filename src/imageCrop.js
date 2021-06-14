@@ -168,7 +168,9 @@ class imageCrop extends React.Component {
               uri:
                 this.props.language.includes('en') && 'https://www.care-concept.de/scripte/sniplets/app_general_information_eng.php?navilang=eng' ||
                  this.props.language.includes('de') && "https://www.care-concept.de/scripte/sniplets/app_general_information.php"||
-                 this.props.language.includes('en') && 'https://www.care-concept.de/scripte/sniplets/app_general_information_eng.php?navilang=chn'
+                 this.props.language.includes('zh') && 'https://www.care-concept.de/scripte/sniplets/app_general_information_eng.php?navilang=chn'||
+                 this.props.language.includes('es') && "https://www.care-concept.de/bilder/CCAG_app_ios_esp.mp4"
+
             }}
             style={{marginTop: 20}}
           />
@@ -299,7 +301,7 @@ const styles = StyleSheet.create({
   },
   text:{
     color:'white',
-    fontSize:11,
+    fontSize:Dimensions.get("window").width/28,
   }
 });
 
